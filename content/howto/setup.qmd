@@ -6,7 +6,7 @@ metadata-files:
 order: 1
 ---
 
-Follow [Step 1a](#step-1a-use-the-sefsc-documentation-quarto-skeleton-template-to-create-your-own-forked-repository) below if you do not yet have a GitHub repository and would like to start a new one with gh-pages. If you already have a repository to which you would like to add a new gh-pages branch with the SEFSC documentation template, start with [Step 1b](#step-1b-add-a-new-orphan-branch-to-an-existing-repository).
+Follow [Step 1a](#step-1a-use-the-sefsc-documentation-quarto-skeleton-template-to-create-your-own-forked-repository) below if you do not yet have a GitHub repository and would like to start a new one with gh-pages. If you already have a repository to which you would like to add a new gh-pages branch with the SEFSC documentation template, start with [Step 1b](#step-1b-add-sefsc-documentation-quarto-skeleton-to-an-existing-repository).
 
 ### Step 1a: Use the SEFSC-documentation-quarto-skeleton template to create your own forked repository
 
@@ -88,7 +88,7 @@ This is slightly more involved, but the overall workflow is as follows: We will 
    git remote set-url origin <old-url>
    ```
    
-   where `<old-url>` is the URL of the original repo retrieved in [Step 1b](#step-1b-add-a-new-orphan-branch-to-an-existing-repository).3.
+   where `<old-url>` is the URL of the original repo retrieved in [Step 1b](#step-1b-add-sefsc-documentation-quarto-skeleton-to-an-existing-repository).3.
 
 8. In a web browser, navigate to the repo to which you just added the `gh-pages` and `docs` branches. Click the "Settings" tab, then "Pages" on left sidebar.
 
