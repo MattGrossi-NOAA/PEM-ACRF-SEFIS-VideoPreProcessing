@@ -26,16 +26,16 @@ This is done on the GitHub website.  These steps assume you already have a GitHu
 
    <img width="335" alt="image" src="https://ioos.github.io/clone.png">
 
-### Step 1b: Add a new orphan branch to an existing repository
+### Step 1b: Add SEFSC-documentation-quarto-skeleton to an existing repository
 
-An *orphan branch* in GitHub is a branch whose commit history is independent of all other branches in the repo. This is useful for GitHub Pages because we can keep the website files separate from any project code and can work on either the website or the project code independently from each other. GitHub Pages are customarily saved in branches named "gh-pages", and this repo uses a `docs` branch for the website files. We need need to create both of these in the existing rep. Start with the `gh-pages` branch, and then repeat for `docs`.
+This is slightly more involved, but the overall workflow is as follows: We will create two new orphan branches in the existing repository, a `gh-pages` branch from which to deploy the site, and a `docs` branch to house the website files. (An *orphan branch* in GitHub is a branch whose commit history is independent of all other branches in the repo. This is useful for GitHub Pages because we can keep the website files separate from any project code and can work on either the website or the project code independently from each other.) We will then clone the `docs` branch only from the [SEFSC-documentation-quarto]({{< meta website.repo-url >}}) repo, activate GitHub Pages, and push the new branches to the remote repo.
 
-1. Navigate to your local copy of the repository
+1. Navigate to your local copy of the repository.
 
-2. Create a new orphan branch and remove the git commit history that is automatically generated.
+2. [Create a new `gh-pages` orphan branch](https://stackoverflow.com/questions/34100048/create-empty-branch-on-github) and remove the git commit history that is automatically generated.
 
    ```bash
-   git checkout --orphan gh-pages
+   git switch --orphan gh-pages
    git rm -rf .
    rm .gitignore
    ```
@@ -44,7 +44,20 @@ An *orphan branch* in GitHub is a branch whose commit history is independent of 
    There may or may not be a `.gitignore` file to delete. If not, do not worry.
    :::
 
-3. We need to temporarily set the remote origin to the SEFSC documentation repo. First, note the existing remote origin URL so that we can restore it later. It can be retrieved with the command:
+3. Commit and push the new branch to the remote repo:
+
+   ```bash
+   git commit --allow-empty -m "Initial commit on new orphan branch"
+   git push origin gh-pages
+   ```
+
+4. Now create a new `docs` branch to house the documentation files. We'll create this as an orphan branch as well because its commit history is independent of any other branch in the repo.
+
+   ```bash
+   git switch --orphan docs
+   ```
+
+5. We need to temporarily set the remote origin to the SEFSC documentation repo. First, note the existing remote origin URL so that we can restore it later. It can be retrieved with the command:
 
    ```bash
    git remote -v
@@ -60,16 +73,16 @@ An *orphan branch* in GitHub is a branch whose commit history is independent of 
    To find this new URL, navigate to the [SEFSC-documentation-quarto-skeleton]({{< meta website.repo-url >}}){target="_blank" rel="noopener"} repo in a web browser and click on the green "< > Code" button.
    :::
 
-4. Make sure you're on your *local* `gh-pages` branch and then pull the contents of the `gh-pages` branch of *SEFSC-documentation-quarto-skeleton* repo
+6. Make sure you're on your *local* `doc` branch and then pull the contents of the `docs` branch of *SEFSC-documentation-quarto-skeleton* repo:
 
    ```bash
-   git checkout gh-pages
-   git pull origin gh-pages
+   git checkout docs
+   git pull origin docs
    ```
    
    Use `ls -la` to verify that you now have all of the files and directories from the skeleton repo.
 
-5. Change the local remote origin back to the original repo
+7. Change the local remote origin back to the original repo
 
    ```bash
    git remote set-url origin <old-url>
@@ -77,33 +90,37 @@ An *orphan branch* in GitHub is a branch whose commit history is independent of 
    
    where `<old-url>` is the URL of the original repo retrieved in [Step 1b](#step-1b-add-a-new-orphan-branch-to-an-existing-repository).3.
 
-6. Push this new branch to the remote repo
+8. In a web browser, navigate to the repo to which you just added the `gh-pages` and `docs` branches. Click the "Settings" tab, then "Pages" on left sidebar.
 
-   ```bash
-   git push origin gh-pages
-   ```
-
-7. In a web browser, navigate to the repo to which you just added a `gh-pages` branch. Click the "Settings" tab, then "Pages" on left sidebar.
-
-8. In the "Build and deployment" section, under "Source", select "Deploy from branch" from the dropdown menu. 
+9. In the "Build and deployment" section, under "Source", select "Deploy from branch" from the dropdown menu. 
 
    :::{.callout-note}
    If your repo belongs to you (as opposed to belonging to an organization), it must be a public repo for this be available.
    :::
 
-9. Under "Branch", select "gh-pages" from the dropdown menu. Leave the directory as "/(root)" and click "Save".
+10. Under "Branch", select "gh-pages" from the dropdown menu. Leave the directory as "/(root)" and click "Save".
 
    <img width="540" alt="image" src="https://user-images.githubusercontent.com/2545978/196808262-3d2262be-b9b5-4897-bba5-fc2f056dd335.png">
 
-10. While still within "Settings", click "Actions" on the left sidebar, then "General".
+11. While still within "Settings", click "Actions" on the left sidebar, then "General".
 
-11. Under "Workflow permissions", select "Read and write permissions" to allow GitHub Actions to modify the repository, then click "Save".
+12. Under "Workflow permissions", select "Read and write permissions" to allow GitHub Actions to modify the repository, then click "Save".
 
     <img width="719" alt="image" src="https://user-images.githubusercontent.com/2545978/196808404-0c075fcf-db03-4516-88dd-3143b9fca475.png">
 
-12. At the top of this page, you should see a banner saying "Your site is now live at..." with the URL of your documentation page. Launch the page to be sure. It should look exactly like the [SEFSC-documentation-quarto-skeleton page](https://sefsc.github.io/SEFSC-documentation-quarto-skeleton/) but with a URL pointing to your project.
+13. At the top of this page, you should see a banner saying "Your site is now live at..." with the URL of your documentation page. Note this URL.
 
-13. Repeat steps 1-6, replacing "gh-pages" with "docs" to create a `docs` branch for the website files.
+14. Back on your local computer, push the new `docs` branch to the remote repo:
+
+    ```bash
+    git push origin docs
+    ```
+   
+15. Allow a couple minutes for website to build and then launch the URL from the previous step to be sure. It should look exactly like the [SEFSC-documentation-quarto-skeleton page](https://sefsc.github.io/SEFSC-documentation-quarto-skeleton/) but with a URL pointing to your project.
+   
+    :::{.callout-note}
+    GitHub Pages can take a few minutes to build and deploy, depending on how many pages need to be created. This is done automatically using GitHub Actions when changes are pushed to the `docs` branch. On the repo landing page, switch to the `docs` branch. The header of the panel displaying the contents of the repo contains your GitHub username followed by the most recent commit message. A green check mark will appear next to these when the GitHub Actions have run successfully, indicating the page is ready to be viewed. A brown dot will appear while the scripts are running, and a red "X" indicates the scripts failed. You can click on any of these symbols to view the execution log.
+    :::
 
 You should now have at least three local branches: the `gh-pages` and `docs` branches you just created, and whatever branch(es) you had originally (*e.g.*,`main`, `master`, *etc.*). Verify using `git branch --all`. Likewise, your remote repository should now have new `gh-pages` and `docs` branches as well as the original branches, and they should contain a copy of the SEFSC documentation template files and subdirectories.
 
