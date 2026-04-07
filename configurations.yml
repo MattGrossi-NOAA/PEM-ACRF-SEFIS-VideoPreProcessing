@@ -1,0 +1,41 @@
+# PATH SETTINGS
+# -------------
+# Use forward slashes (/) or double backslashes (\\) for Windows paths
+
+# Parent folder containing subfolders for each set of videos (e.g., T60253002_A)
+input_directory: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
+
+# Where the stitched videos will be saved
+output_directory: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
+
+# Path to the "time-on-bottom" CSV file and column names (adjust as needed)
+csv_path: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos\\SEFIS test vids.csv"
+col_foldername: "foldername"
+col_timebottom: "timebottom"
+
+
+# PROCESSING SETTINGS
+# -------------------
+# These settings control how the videos are processed. Adjust as needed.
+
+# Reprocess mode: If true, existing stitched videos will be overwritten.
+# Otherwise, skips folders where the output file already exists.
+reprocess: true
+
+# Diagnostic mode: If true, runs in diagnostic mode which prints the video cut
+# times and embeds the time into the video itself, which is independent of the
+# video player's time stamp, to verify splicing.
+diagnostic_mode: true
+
+# Set to true to use GPU acceleration with NVIDIA hardware
+# (requires compatible ffmpeg build and NVIDIA GPU)
+use_gpu: true
+
+
+# VIDEO PROCESSING UTILITIES
+# --------------------------
+# These should not need to be changed once set.
+
+# Point to your portable ffmpeg.exe (e.g., in a folder on your Desktop)
+ffmpeg_path:  "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\software\\ffmpeg-2026-04-01-git-eedf8f0165-essentials_build\\ffmpeg-2026-04-01-git-eedf8f0165-essentials_build\\bin\\ffmpeg.exe"
+ffprobe_path: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\software\\ffmpeg-2026-04-01-git-eedf8f0165-essentials_build\\ffmpeg-2026-04-01-git-eedf8f0165-essentials_build\\bin\\ffprobe.exe"
