@@ -19,11 +19,7 @@ Key Features:
         chronological continuity.
 
 Usage:
-    1. Configure 'configurations.yml' with paths for `FFmpeg`, `CSV`, and 
-       video directories.
-    2. Ensure the CSV contains 'foldername' and 'timebottom' columns (or
-       specify the column names in the configuration file).
-    3. Run the script: `python clip-and-stitch.py`
+    `python clip-and-stitch.py path/to/name-of-configuration-file.yml`
 
 Required Dependencies:
     * pandas: For CSV data management.
@@ -45,8 +41,21 @@ import yaml
 import os
 import re
 import json
+import argparse
 import subprocess
 from tqdm import tqdm
+
+def parse_args():
+    """Parses command-line arguments."""
+    parser = argparse.ArgumentParser(description="GoPro Clip-and-Stitch Utility")
+    parser.add_argument(
+        "config_path",
+        type=str,
+        nargs="?",
+        default="configurations.yml",
+        help="Path to the YAML configuration file (default: configurations.yml)"
+    )
+    return parser.parse_args()
 
 def load_config(config_path='configurations.yml'):
     """Loads the YAML configuration file."""
@@ -147,9 +156,9 @@ def get_gopro_sort_key(filename):
         return (int(rec_id), int(chapter))
     return (0, 0)
 
-def process_deployments():
+def process_deployments(config_path):
     # 1. SETUP & VALIDATION
-    config = load_config()
+    config = load_config(config_path)
     os.makedirs(config['output_directory'], exist_ok=True)
     
     # SETTINGS THAT CAN ALSO BE OVERRIDDEN IN THE YAML CONFIG FILE
@@ -398,5 +407,9 @@ def process_deployments():
                 log.write(f"ERROR in {folder_id}: {result.stderr}\n")
 
 if __name__ == "__main__":
-    process_deployments()
+    # Parse command-line arguments
+    args = parse_args()
+
+    # Launch the script
+    process_deployments(config_path=args.config_path)
     print("Processing Complete. Check processing_log.txt for details.")
