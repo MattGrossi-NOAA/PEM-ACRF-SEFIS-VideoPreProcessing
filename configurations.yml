@@ -3,13 +3,13 @@
 # Use forward slashes (/) or double backslashes (\\) for Windows paths
 
 # Parent folder containing subfolders for each set of videos (e.g., T60253002_A)
-input_directory: "C:\\Users\\user.name\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
+input_directory: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
 
 # Where the stitched videos will be saved
-output_directory: "C:\\Users\\user.name\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
+output_directory: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos"
 
 # Path to the "time-on-bottom" CSV file and column names (adjust as needed)
-csv_path: "C:\\Users\\user.name\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos\\SEFIS test vids.csv"
+csv_path: "C:\\Users\\matt.grossi\\Documents\\gh-repos\\PEM-ACRF-SEFIS-VideoPreProcessing\\_videos\\SEFIS test vids.csv"
 col_foldername: "foldername"
 col_timebottom: "timebottom"
 
@@ -25,6 +25,10 @@ reprocess: false
 # Diagnostic mode: If true, prints the video cut times to the console and
 # embeds a timestamp into the video.
 diagnostic_mode: false
+
+# Clear log: If true, clears the log file at the start of each run. Otherwise,
+# appends to the existing log. Defaults to false.
+clear_log: true
 
 # Whether to use GPU acceleration (requires compatible ffmpeg build and GPU)
 use_gpu: true

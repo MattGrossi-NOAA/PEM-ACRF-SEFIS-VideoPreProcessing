@@ -37,7 +37,7 @@ Note:    Gemini Coding Partner was used to assist with developing this code. The
          Fisheries staff.
 """
 
-# from datetime import timedelta
+from datetime import datetime
 import pandas as pd
 import shutil
 import yaml
@@ -184,6 +184,9 @@ def get_gopro_sort_key(filename):
     return (0, 0)
 
 def process_deployments(config_path):
+    # Strip quotes that Windows adds when dragging/dropping files
+    config_path = config_path.strip('"')
+    
     # 1. SETUP & VALIDATION
     config = load_config(config_path)
     os.makedirs(config['output_directory'], exist_ok=True)
@@ -193,8 +196,13 @@ def process_deployments(config_path):
     ffprobe_exe = get_ffmpeg_command(config, "ffprobe")
 
     # SETTINGS THAT CAN ALSO BE OVERRIDDEN IN THE YAML CONFIG FILE
-    # Video file extension (default: ".MP4")
+    # Set defaults
     config['video_extension'] = config.get('video_extension', '.MP4')
+    config['log_file'] = config.get('log_file', 'processing_log.txt')
+    config['clear_log'] = config.get('clear_log', False)
+    config['reprocess'] = config.get('reprocess', False)
+    config['diagnostic_mode'] = config.get('diagnostic_mode', False)
+    config['use_gpu'] = config.get('use_gpu', False)
 
     # Video quality setting (18 is high quality, 23 is standard)
     config['quality_crf'] = config.get('quality_crf', 18)
@@ -203,23 +211,32 @@ def process_deployments(config_path):
     # available memory is below this threshold.
     config['min_gb_required'] = config.get('min_gb_required', 10)
 
-    # Log file
-    config['log_file'] = config.get('log_file', 'processing_log.txt')
-
     # Check Disk Space
     total, used, free = shutil.disk_usage(config['output_directory'])
     if free // (2**30) < config['min_gb_required']:
         print(f"WARNING: Low disk space ({free // (2**30)}GB remaining).")
+
+    # Initialize the session in the log file, wiping it clean if desired.
+    mode = "w" if config['clear_log'] else "a"
+    with open(config['log_file'], mode) as log:
+        log.write(f"{'#'*60}\n")
+        log.write(f"SESSION START: {datetime.now()}\n")
+        log.write(f"CONFIGURATION: {config_path}\n")
+        for key, value in config.items():
+            log.write(f"  {key}: {value}\n")
+        log.write(f"{'#'*60}\n\n")
 
     # Load CSV with encoding fallback
     try:
         df = pd.read_csv(config['csv_path'], encoding='utf-8')
     except UnicodeDecodeError:
         df = pd.read_csv(config['csv_path'], encoding='ISO-8859-1')
+    if len(df) == 0:
+        print("ERROR: CSV file appears to be empty.")
+        return
 
     # Clean CSV: Strip whitespace from headers and folder names
     df.columns = df.columns.str.strip()
-    df[config['col_foldername']] = df[config['col_foldername']].astype(str).str.strip()
 
     # Check for duplicates in foldername
     if df[config['col_foldername']].duplicated().any():
@@ -228,14 +245,23 @@ def process_deployments(config_path):
 
     # 2. ITERATE THROUGH EACH VIDEO FOLDER
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Total Progress"):
-        folder_id = row[config['col_foldername']]
-        time_bottom_str = row[config['col_timebottom']]
+        folder_id = str(row[config['col_foldername']]).strip()
+        time_bottom_str = str(row[config['col_timebottom']]).strip()
+
+        # Input directory
         folder_path = os.path.join(config['input_directory'], folder_id)
+        if not os.path.exists(folder_path):
+            with open(config['log_file'], "a") as log:
+                log.write(f"SKIP: Folder {folder_path} not found.\n")
+            continue
+
         output_path = os.path.join(config['output_directory'],
                                    f"{folder_id}{config['video_extension']}")
 
         # Skip if output exists and reprocess is false
         if not config['reprocess'] and os.path.exists(output_path):
+            with open(config['log_file'], "a") as log:
+                log.write(f"{os.path.basename(output_path)} exists and reprocess is set to False. Nothing to process. Skipping.\n")
             continue
 
         # Skip and log any folder listed in the CSV that doesn't exist in the
@@ -294,6 +320,12 @@ def process_deployments(config_path):
                     't': rel_end - rel_start
                 })
             cumulative_time = file_end
+
+        # If no footage matches the 24-minute window, log and skip
+        if not needed_files:
+            with open(config['log_file'], "a") as log:
+                log.write(f"SKIP: {folder_id} - No footage found for the requested time window.\n")
+            continue
 
         # 5. FFmpeg COMMAND
         # Trim each file INDIVIDUALLY before stitching:
