@@ -42,6 +42,7 @@ import pandas as pd
 import shutil
 import yaml
 import os
+import sys
 import re
 import json
 import argparse
@@ -125,6 +126,29 @@ def get_fps_from_metadata(metadata):
             
     return 29.97  # Fallback if no video stream is found
 
+def get_ffmpeg_command(config, tool="ffmpeg"):
+    """
+    Finds ffmpeg or ffprobe. Checks local folder, then config, then system.
+    Compatible with Windows (.exe) and Mac/Linux (no extension).
+    """
+    # Detect the file extension based on the OS
+    extension = ".exe" if sys.platform.startswith("win") else ""
+    executable_name = f"{tool}{extension}"
+
+    # 1. Check local folder created by setup
+    local_path = os.path.join(os.getcwd(), "ffmpeg", "bin", executable_name)
+    if os.path.exists(local_path):
+        return local_path
+        
+    # 2. Fallback to config file
+    config_key = f"{tool}_path"
+    config_val = config.get(config_key)
+    if config_val and os.path.exists(config_val):
+        return config_val
+        
+    # 3. Last resort: assume it is in the system PATH
+    return tool
+
 def timestamp_to_seconds(ts_str, fps):
     """Converts HH:MM:SS:FF (frames) to total seconds (float)."""
     parts = ts_str.split(':')
@@ -164,6 +188,10 @@ def process_deployments(config_path):
     config = load_config(config_path)
     os.makedirs(config['output_directory'], exist_ok=True)
     
+    # Get FFmpeg paths
+    ffmpeg_exe = get_ffmpeg_command(config, "ffmpeg")
+    ffprobe_exe = get_ffmpeg_command(config, "ffprobe")
+
     # SETTINGS THAT CAN ALSO BE OVERRIDDEN IN THE YAML CONFIG FILE
     # Video file extension (default: ".MP4")
     config['video_extension'] = config.get('video_extension', '.MP4')
@@ -237,7 +265,7 @@ def process_deployments(config_path):
             full_p = os.path.join(folder_path, f)
             dur, _, fps = get_video_metadata(
                 file_path=full_p,
-                ffprobe_path=config['ffprobe_path']
+                ffprobe_path=ffprobe_exe
                 )
             file_data.append({'path': full_p, 'duration': dur, 'fps': fps})
 
@@ -308,8 +336,23 @@ def process_deployments(config_path):
         # Build the filter string: e.g., `[0:v][1:v]concat=n=2:v=1[outv]`:
         # concatenate video (v) from files 0-1 into 1 video from the 2 inputs
         if config.get('diagnostic_mode'):
-            # Safeguard against missing fonts on Windows systems
-            font_path = r"C\:/Windows/Fonts/arial.ttf"
+            # Safeguard against missing fonts on Windows systems with
+            # OS-specific font selections
+            if sys.platform.startswith("win"):
+                # Windows needs the escaped colon for the drive letter
+                font_path = r"C\:/Windows/Fonts/arial.ttf"
+            elif sys.platform == "darwin":
+                # Standard macOS font path
+                font_path = "/Library/Fonts/Arial.ttf"
+            else:
+                # Standard Linux (Ubuntu/Debian) path
+                font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+
+            # Check if the font actually exists before trying to use it
+            # (On Linux/Mac, we need to remove the FFmpeg escapes to check with Python)
+            check_path = font_path.replace(r"C\:", "C:").replace("\\", "")
+            if not os.path.exists(check_path) and not sys.platform.startswith("win"):
+                 print("WARNING: Default font not found. Diagnostic text may fail.")
 
             # Add a diagnostic timestamp overlay in the top-left corner of the
             # video with format HH:MM:SS:FF
@@ -392,7 +435,7 @@ def process_deployments(config_path):
         #   -an: exclude audio from new file
         #   -t: duration of the output video (1440 seconds = 24 minutes)
         cmd = [
-            config['ffmpeg_path'], "-y"
+            ffmpeg_exe, "-y"
         ] + input_args + [
             "-filter_complex", filter_str,
             "-map", maparg,
