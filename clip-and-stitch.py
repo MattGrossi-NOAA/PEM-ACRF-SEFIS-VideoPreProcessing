@@ -19,7 +19,7 @@ Key Features:
         chronological continuity.
 
 Usage:
-    `python clip-and-stitch.py path/to/name-of-configuration-file.yml`
+    python clip-and-stitch.py path/to/name-of-configuration-file.yml
 
 Required Dependencies:
     * pandas: For CSV data management.
@@ -28,10 +28,13 @@ Required Dependencies:
     * FFmpeg/ffprobe: Must be installed and accessible via system path 
         or config file.
 
-Author:  matt.grossi@noaa.gov with assistance from NOAA Google Gemini
-         Coding Partner
+Author:  matt.grossi@noaa.gov with creation and refactoring assistance from
+         Google Gemini Coding Partner
 Project: Southeast Fishery Independent Survey (SEFIS)
 Version: 2026.0.1
+Note:    Gemini Coding Partner was used to assist with developing this code. The
+         code has been reviewed, edited, validated, and documented by NOAA
+         Fisheries staff.
 """
 
 # from datetime import timedelta
