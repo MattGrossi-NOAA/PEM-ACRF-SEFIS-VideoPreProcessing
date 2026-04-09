@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using the utility – SEFIS Video Pre-Processing (clip-and-stitch)</title>
+<title>Using the Utility – SEFIS Video Pre-Processing (clip-and-stitch)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -336,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/usage.html">Using the utility</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/usage.html">Using the Utility</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -391,13 +391,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/configuration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Configuring the Model</span></a>
+ <span class="menu-text">Configuration Settings</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/usage.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Using the utility</span></a>
+ <span class="menu-text">Using the Utility</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -439,9 +439,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/usage.html">Using the utility</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/usage.html">Using the Utility</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Using the utility</h1>
+<h1 class="title">Using the Utility</h1>
 <p class="subtitle lead">Clipping and stitching GoPro videos from SEFIS video surveys</p>
 </div>
 
@@ -459,15 +459,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>There are multiple ways to set up and use this utility, depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
+<p>There are multiple ways to use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
 <section id="no-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="no-command-line">No command line</h3>
-<p>The easiest way to launch the utility on Windows is to use the <code>process_videos.bat</code> file. You will be prompted to select the configurations YAML file to use, and the script will run according to the settings specified in that file.</p>
-<p>Alternatively, the <code>process_videos_dragndrop.bat</code> file will open a Windows Command Prompt terminal and prompt you to drag and drop the configurations YAML file into the terminal. Open a File Explorer window, navigate to the desired YAML file, and drag it into the terminal. The script will then run according to the settings specified in that file.</p>
+<p>The easiest way to launch the utility on Windows is to use the <code>process_videos.bat</code> file. You will be prompted to select the configurations YAML file to use, and the script will then run according to the settings specified in that file.</p>
+<p>Alternatively, the <code>process_videos_dragndrop.bat</code> file will open a Windows Command Prompt terminal and prompt you to drag and drop the configurations YAML file into the terminal. Open a File Explorer window, navigate to the desired YAML file, and drag it into the terminal as instructed. The script will then run according to the settings specified in that file.</p>
 </section>
 <section id="rstudio-and-r" class="level3">
 <h3 class="anchored" data-anchor-id="rstudio-and-r">RStudio and R</h3>
-<p>For users comfortable using R and RStudio, the <code>process_videos.R</code> script can be run directly from RStudio. Open the project in RStudio and run the <code>process_videos.R</code> script. You will be prompted to select the configurations YAML file to use, and the script will run according to the settings specified in that file.</p>
+<p>For users comfortable using R and RStudio, the <code>process_videos.R</code> script can be run directly from RStudio. Open the project in RStudio and run the <code>process_videos.R</code> script. You will be prompted to select the configurations YAML file to use, and the script will then run according to the settings specified in that file.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="A note for R users">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -478,13 +478,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The <code>process_videos.R</code> script is a launcher/wrapper script that runs the Python video processing utility <code>process_videos.py</code>. It is pre-configured to use the ‘Private Library’ (Virtual Environment) created during setup. You don’t need to manually activate anything; just double-click the Rscript file and provide your configuration file when prompted.</p>
+<p>The <code>process_videos.R</code> script is a launcher/wrapper script that runs the Python video processing utility <code>process_videos.py</code>. It is pre-configured to use the “Private Library” (Virtual Environment) created during setup. You don’t need to manually activate anything; just double-click the Rscript file and provide your configuration file when prompted.</p>
 </div>
 </div>
 </section>
 <section id="python-and-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="python-and-command-line">Python and command line</h3>
-<p>Advanced users comfortable with command line and Python can run the <code>process_videos.py</code> script directly from the command line. Open a command line terminal and navigate to the project directory. Activate the Python virtual environment <a href="../content/setup.html#python-and-command-line">created at setup</a>:</p>
+<p>Users comfortable with command line and Python can run the <code>process_videos.py</code> script directly from the command line.</p>
+<ol type="1">
+<li><p>Open a command line terminal and navigate to the project directory. Activate the Python virtual environment <a href="../content/setup.html#python-and-command-line">created at setup</a> depending on your operating system and the method you used to create the virtual environment.</p>
+<p>For <code>pip</code> environments:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>pip environment in Windows Command Prompt</strong></pre>
@@ -503,28 +506,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="pip environment in Linux or Mac Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>Or, for <code>conda</code> environments:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>conda environment</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate video-processing-venv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Then execute the <code>process_videos.py</code> script, passing the path to the desired configurations YAML file as an argument:</p>
+</div></li>
+<li><p>Execute the <code>process_videos.py</code> script, passing the path to the desired configurations YAML file as an argument:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> process_videos.py path/to/config.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>No other arguments are needed. The script will run according to the settings specified in the YAML file.</p>
-<p>When finished, deactivate the virtual environment:</p>
+<p>No other arguments are needed. The script will run according to the settings specified in the YAML file.</p></li>
+<li><p>When finished, deactivate the virtual environment:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>pip environment</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">deactivate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+<p>or</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>conda environment</strong></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+</div></li>
+</ol>
 
 
 </section>
@@ -945,8 +951,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/configuration.html" class="pagination-link" aria-label="Configuring the Model">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Configuring the Model</span>
+      <a href="../content/configuration.html" class="pagination-link" aria-label="Configuration Settings">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Configuration Settings</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

@@ -390,13 +390,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/configuration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Configuring the Model</span></a>
+ <span class="menu-text">Configuration Settings</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/usage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Using the utility</span></a>
+ <span class="menu-text">Using the Utility</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -441,7 +441,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/setup.html">Getting Started</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Getting Started</h1>
-<p class="subtitle lead">Creating and configuration a Python virtual environment</p>
+<p class="subtitle lead">Installation and Setup</p>
 </div>
 
 
@@ -468,14 +468,14 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to <a href="../content/usage.html">Using the Model</a>.</p>
+<p>The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to <a href="configurations.qmd">Configurations</a> or <a href="../content/usage.html">Using the Utility</a>.</p>
 </div>
 </div>
-<p>There are multiple ways to set up and use this utility, depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
+<p>There are multiple ways to set up and use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
 <section id="no-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="no-command-line">No command line</h3>
 <ol type="1">
-<li><p><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing"><strong>Download the repository</strong></a> by clicking the green “Code” button at and selecting “Download ZIP.” Extract the contents of the ZIP file to a local directory.</p>
+<li><p><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing"><strong>Download the repository</strong></a> by clicking the green “Code” button and selecting “Download ZIP.” Extract the contents of the ZIP file to a local directory.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -486,79 +486,73 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This method does not allow for version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible. See below.</p>
+<p>This method does not support version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible as described below.</p>
 </div>
 </div></li>
-<li><p><strong>Setup the environment and install dependencies</strong>: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the <code>setup.bat</code> file. This will do three things behind the scenes:</p>
+<li><p><strong>Set up the environment and install dependencies</strong>: Open File Explorer (Windows) and navigate to the newly extracted project directory. Run (double-click) the <code>setup.bat</code> file. This will do three things behind the scenes:</p>
 <ol type="1">
 <li>Create a Python virtual environment in the project directory (called <code>.venv</code>) for package management.</li>
 <li>Install the required Python dependencies (from <code>requirements.txt</code>) into the virtual environment.</li>
 <li>Download and extract <code>ffmpeg</code> into the project directory. This contains two utilities, <code>ffmpeg</code> and <code>ffprobe</code>, which are used for video processing and metadata extraction, respectively.</li>
 </ol></li>
-<li><p><strong>Use the model</strong> as described in <a href="../content/usage.html">Using the Model</a>.</p></li>
+<li><p><strong>Use the utility</strong> as described in <a href="../content/usage.html">Using the Utility</a>.</p></li>
 </ol>
 </section>
 <section id="rstudio-and-r" class="level3">
 <h3 class="anchored" data-anchor-id="rstudio-and-r">RStudio and R</h3>
-<p>These instructions are for users comfortable using R, RStudio, and Git version control, but unfamiliar with Python.</p>
+<p>For users comfortable using R, RStudio, and Git version control, but unfamiliar with Python or command line:</p>
 <ol type="1">
 <li><p><strong>Clone the repository</strong> directly into RStudio: Create a new project, select “Version Control”, then “Git.” Paste the URL of this repository (<code>https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing</code>) into the “Repository URL” field, enter a name for the local project directory, and select a local directory to clone the repository into. This will create a new RStudio project with all of the files in this repository.</p></li>
 <li><p><strong>Setup the environment and install dependencies</strong>: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the <code>setup.bat</code> file, as above.</p></li>
-<li><p><strong>Use the model</strong> as described in <a href="../content/usage.html">Using the Model</a>.</p></li>
+<li><p><strong>Use the utility</strong> as described in <a href="../content/usage.html">Using the Utility</a>.</p></li>
 </ol>
 </section>
 <section id="python-and-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="python-and-command-line">Python and command line</h3>
 <p>Much of the following is carried out using command line. In the instructions below, “command line terminal” or “terminal” refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell. These use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in <a href="#git">Git for Windows</a> and allows UNIX commands to be used instead of DOS.</p>
 <ol type="1">
-<li><p><strong>Install Git</strong>, if needed: if the <a href="https://git-scm.com/downloads">Git CLI</a> is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing</p>
+<li><p><strong>Install Git, if needed</strong>: If the <a href="https://git-scm.com/downloads">Git CLI</a> is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This should display the version of git installed on the system.</p>
 <p>If needed, download and install the <a href="https://git-scm.com/downloads">Git CLI</a> before continuing. This does not need administrative privileges to install at the user level. Confirm that it has been installed by opening a command line terminal and entering <code>git --version</code>.</p></li>
-<li><p><strong>Clone the repository</strong>: Open a command line terminal and navigate to the directory where you want to clone the repository. Clone the repo into that directory:</p>
+<li><p><strong>Clone the repository</strong>: Open a command line terminal and navigate to the directory where you want to clone the repository. To clone all of the repo contents into the current directory, use:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>if you want all of the repo contents in the current directory, or</p>
+<p>or, if you want the repo contents to be downloaded into a new subdirectory called <code>PEM-ACRF-SEFIS-VideoPreProcessing</code>, use:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>if you want the repo contents to be downloaded into a new subdirectory called <code>?meta:repo.name</code>. This is just personal preference. (Note the difference between the two commands is the dot <code>.</code> at the end.)</p></li>
-<li><p><strong>Setup the environment and install dependencies</strong>: Run the <code>setup.bat</code> file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,</p>
+<p>This is just personal preference. (Note the difference between the two commands is the dot <code>.</code> at the end.)</p></li>
+<li><p><strong>Set up the environment and install dependencies</strong>: Run the <code>setup.bat</code> file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Create and activate a Python virtual environment and install the package dependencies. The <code>setup.bat</code> file creates an environment named <code>.venv</code>, but you can call it whatever you want. For example,</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>pip environment</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
 <pre><strong>Windows Command Prompt</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Windows Command Prompt"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv\Scripts\activate</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Windows Command Prompt"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv\Scripts\activate</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Git Bash</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Git Bash"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/Scripts/activate</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Git Bash"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/Scripts/activate</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>Linux or Mac Terminal</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Linux or Mac Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Linux or Mac Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>or, if using <a href="https://www.anaconda.com/">Anaconda</a>:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>conda environment</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">--name</span> video-processing-venv python=3.14 <span class="at">--file</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">--name</span> video-processing-venv python=3.14 <span class="at">--file</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -570,23 +564,23 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you plan to use the <code>process_videos.bat</code> or <code>launcher.R</code> provided in the repo, you must use a <code>pip</code> environment named <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.</p>
+<p>If you plan to use the <code>process_videos.bat</code> or <code>launcher.R</code> provided in the repo, you must use a <code>pip</code> environment named <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.</p>
 </div>
 </div></li>
-<li><p><strong>Use the model</strong> as described in <a href="../content/usage.html">Using the Model</a>.</p></li>
+<li><p><strong>Use the utility</strong> as described in <a href="../content/usage.html">Using the Utility</a>.</p></li>
 <li><p>When finished, deactivate the virtual environment:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>pip environment</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">deactivate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">deactivate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>or</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>conda environment</strong></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 </ol>
 

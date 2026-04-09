@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Configuring the Model – SEFIS Video Pre-Processing (clip-and-stitch)</title>
+<title>Configuration Settings – SEFIS Video Pre-Processing (clip-and-stitch)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -336,7 +336,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuring the Model</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuration Settings</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -391,13 +391,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/configuration.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Configuring the Model</span></a>
+ <span class="menu-text">Configuration Settings</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../content/usage.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Using the utility</span></a>
+ <span class="menu-text">Using the Utility</span></a>
   </div>
 </li>
           <li class="sidebar-item sidebar-item-section">
@@ -437,9 +437,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuring the Model</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuration Settings</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Configuring the Model</h1>
+<h1 class="title">Configuration Settings</h1>
 <p class="subtitle lead">Using the <code>configurations.yml</code> file</p>
 </div>
 
@@ -464,7 +464,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The directory where the new stitched video should be saved</li>
 </ol>
 <p>These and other configuration options are detailed <a href="index.qmd#options">in the docs</a>.</p>
-<p>The configuration file is a YAML file structured as <code>key: value</code> pairs. The order in which these entries are presented in the file does not matter, but <a href="index.qmd#options">all keys need to be included and match exactly</a> as expected. For example:</p>
+<p>The configuration file is a YAML file structured as <code>key: value</code> pairs. The order in which these entries are presented in the file does not matter, but <a href="index.qmd#options">all keys need to be included and match exactly</a> as expected (unless otherwise noted <a href="index.qmd#options">in the docs</a>). For example:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>configurations.yml</strong></pre>
@@ -504,13 +504,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>There are two schools of thought when it comes to organizing configuration files. It is ultimately up to the user to choose whichever convention is best for them.</p>
 <section id="option-1-alongside-the-script" class="level4">
 <h4 class="anchored" data-anchor-id="option-1-alongside-the-script">Option 1: Alongside the script</h4>
-<p>Storing the <code>configurations.yml</code> file in the same directory as the processing script is advantageous when <a href="../content/usage.html#running-the-model">running the model</a> because you will not need to include the full directory path when you specify which configuration file to use. Since you will be executing the model script from the directory that script resides, the system will automatically find the <code>configurations.yml</code> file in that same directory.</p>
+<p>Storing the <code>configurations.yml</code> file in the same directory as the processing script is advantageous when <a href="../content/usage.html">running the utility</a> because you will not need to include the full directory path when you specify which configuration file to use. Since you will be executing the utility from the directory that script resides, the system will automatically find the <code>configurations.yml</code> file in that same directory.</p>
 <p>The disadvantage to this option is that your directory may quickly become cluttered with different configuration files for different processing sessions.</p>
 </section>
 <section id="option-2-alongside-the-data" class="level4">
 <h4 class="anchored" data-anchor-id="option-2-alongside-the-data">Option 2: Alongside the data</h4>
 <p>One might opt instead to store the <code>configurations.yml</code> file in the same directory as the videos to be processed or the directory where the new video will be written out. This is helpful for documenting workflows and ensuring reproducibility since it will be easy to see how a given data set was processed.</p>
-<p>The disadvantage to this option is that it will require the full directory path to be included when <a href="../content/usage.html#running-the-model">running the model</a> if executing in command line and specifying the configuration file to use.</p>
+<p>The disadvantage to this option is that it will require the full directory path to be included when <a href="../content/usage.html">running the utility</a> if executing in command line and specifying the configuration file to use.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -950,8 +950,8 @@ Note
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/usage.html" class="pagination-link" aria-label="Using the utility">
-        <span class="nav-page-text">Using the utility</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/usage.html" class="pagination-link" aria-label="Using the Utility">
+        <span class="nav-page-text">Using the Utility</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
