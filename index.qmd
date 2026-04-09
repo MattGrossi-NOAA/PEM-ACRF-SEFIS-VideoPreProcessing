@@ -45,7 +45,7 @@ All user options are contained in a config YAML file (called `configurations.yml
 |:-----------------|:---------------------------------------------------------|
 `input_directory`  | Path to parent folder containing subfolders for set of videos. The subfolders should be named according to the deployment name (e.g., `DEPLOYMENT_001`), which will be used to name the new video file, and should contain all of the video files for that deployment.
 `output_directory` | Path to folder where the new video file will be saved. The new video will automatically be named according to the deployment name (e.g., `DEPLOYMENT_001.MP4`).
-`csv_path`         | Path to the "time-on-bottom" CSV file. This file should contain entries for each deployment (subfolder) in rows with deployment name in one column and "time-on-bottom" in a separate column. Any other columns will be ignored.
+`csv_path`         | Path to (including name) of the "time-on-bottom" CSV metadata file. This file should contain entries for each deployment (subfolder) in rows with deployment name in one column and "time-on-bottom" in a separate column. Any other columns will be ignored.
 `col_foldername`   | Column name for the column containing the deployment or folder name. Defaults to `foldername` but can be changed here if needed.
 `col_timebottom`   | Column name for the column containing the "time-on-bottom" timestamps. Defaults to `time_on_bottom` but can be changed here if needed.
 : Paths and associated settings
@@ -55,6 +55,7 @@ All user options are contained in a config YAML file (called `configurations.yml
 `reprocess`        | If true, existing stitched videos will be overwritten. Otherwise, skips folders where the output file already exists. Defaults to false.
 `diagnostic_mode`  | If true, runs in diagnostic mode which prints the video cut times and embeds the time into the video itself, which is independent of the video player's time stamp, to verify splicing. Defaults to false.
 `use_gpu`          | Whether to use GPU acceleration, if available. Requires GPU hardware and compatible `ffmpeg` build (see [below](#dependencies)). Defaults to false. 
+`clear_log`        | If true, clears the log file at the start of each run. Otherwise, appends to the existing log file. Defaults to false.
 : Processing settings
 
 | Key              | Description                                              |
@@ -63,9 +64,21 @@ All user options are contained in a config YAML file (called `configurations.yml
 `ffprobe_path`     | Path to the executable `ffprobe` utility (see [below](#dependencies)).
 : Video processing utilities. These should not need to be changed once set but may vary between computers and users.
 
+| Key              | Description                                              |
+|:-----------------|:---------------------------------------------------------|
+`video_extension`  | The file extension for the video files to be processed. Defaults to `.MP4`.
+`log_file`         | Path to and name of the log file where processing information will be recorded. Defaults to `./process.log` (present working directory).
+`quality_crf`      | Constant Rate Factor (CRF) for video encoding quality. Lower values mean better quality: 18 is high quality, 23 is standard. Defaults to 23.
+`min_gb_required`  | Minimum required free disk space in GB to start processing. Script will warn if available space is below this threshold. Defaults to 10.
+: Additional settings that can be adjusted if needed or as desired. These can be omitted from the configuration file if the default values are acceptable.
+
 
 ::: {.callout-important title="A note on file paths"}
-Use forward slashes (/) or double backslashes (\\) for Windows paths to avoid issues with escape characters. For example, `C:/Users/username/Documents/configurations.yaml` or `C:\\Users\\username\\Documents\\configurations.yaml`.
+Use double quotation marks and forward slashes (/) or double backslashes (\\) for Windows paths to avoid issues with escape characters and spaces. For example, `"C:/Users/user.name/Documents/configurations.yaml"` or `"C:\\Users\\user.name\\Documents\\configurations.yaml"`.
+:::
+
+::: {.callout-note title="A note on naming conventions"}
+It is best practice to avoid spaces and special characters other than underscores and hyphens in directory and file names to avoid issues with file paths. For this project, this applies to video files, the CSV metadata file, configuration files, and relevant directory names.
 :::
 
 ## Dependencies

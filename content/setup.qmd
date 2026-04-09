@@ -7,22 +7,102 @@ order: 1
 ---
 
 :::{.callout-note}
-The instructions on this page only need to be carried out once. If you have already installed the required dependencies and created a virtual environment, skip ahead to [Using the Model](usage.qmd).
+The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to [Using the Model](usage.qmd).
 :::
+
+There are multiple ways to set up and use this utility, depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
+
+### No command line
+
+1. [**Download the repository**]({{< meta website.repo-url >}}) by clicking the green "Code" button at and selecting "Download ZIP." Extract the contents of the ZIP file to a local directory.
+
+   ::: {.callout-warning}
+   This method does not allow for version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible. See below.
+   :::
+
+2. **Setup the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the `setup.bat` file. This will do three things behind the scenes:
+
+    1. Create a Python virtual environment in the project directory (called `.venv`) for package management.
+    2. Install the required Python dependencies (from `requirements.txt`) into the virtual environment.
+    3. Download and extract `ffmpeg` into the project directory. This contains two utilities, `ffmpeg` and `ffprobe`, which are used for video processing and metadata extraction, respectively.
+
+3. **Use the model** as described in [Using the Model](usage.qmd).
+
+### RStudio and R
+
+These instructions are for users comfortable using R, RStudio, and Git version control, but unfamiliar with Python.
+
+1. **Clone the repository** directly into RStudio: Create a new project, select "Version Control", then "Git." Paste the URL of this repository (`{{< meta website.repo-url >}}`) into the "Repository URL" field, enter a name for the local project directory, and select a local directory to clone the repository into. This will create a new RStudio project with all of the files in this repository.
+
+2. **Setup the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the `setup.bat` file, as above.
+
+3. **Use the model** as described in [Using the Model](usage.qmd).
+
+### Python and command line
 
 Much of the following is carried out using command line. In the instructions below, "command line terminal" or "terminal" refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell. These use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in [Git for Windows](#git) and allows UNIX commands to be used instead of DOS.
 
-### Software Installation
+1. **Install Git**, if needed: if the [Git CLI](https://git-scm.com/downloads) is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing
 
-#### git
+   ```bash
+   git --version
+   ```
 
-If the [Git CLI](https://git-scm.com/downloads) is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing
+   This should display the version of git installed on the system.
 
-```bash
-git --version
-```
+   If needed, download and install the [Git CLI](https://git-scm.com/downloads) before continuing. This does not need administrative privileges to install at the user level. Confirm that it has been installed by opening a command line terminal and entering `git --version`.
 
-This should display the version of git installed on the system.
+2. **Clone the repository**: Open a command line terminal and navigate to the directory where you want to clone the repository. Clone the repo into that directory:
 
-If needed, download and install the [Git CLI](https://git-scm.com/downloads) before continuing. This does not need administrative privileges to install at the user level. Confirm that it has been installed by opening a command line terminal and entering `git --version`.
+   ```bash
+   git clone {{< meta website.repo-url >}} .
+   ```
 
+   if you want all of the repo contents in the current directory, or 
+   
+   ```bash
+   git clone {{< meta website.repo-url >}}
+   ```
+
+   if you want the repo contents to be downloaded into a new subdirectory called `{{< meta repo.name >}}`. This is just personal preference. (Note the difference between the two commands is the dot `.` at the end.)
+  
+3. **Setup the environment and install dependencies**: Run the `setup.bat` file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,
+
+   ```bash
+   cd "c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"
+   ```
+   
+   Create a Python virtual environment. The `setup.bat` file creates an environment named `.venv`, but you can call it whatever you want. For example,
+
+   ```bash
+   python -m venv .venv
+   ```
+
+   ::: {.callout-important}
+   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must name the virtual environment `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.
+   :::
+
+   Activate the virtual environment and install the dependencies from the provided `requirements.txt` file:
+
+   ```{.bash filename="Windows Command Prompt"}
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+   
+   ```{.bash filename="Git Bash"}
+   source .venv/Scripts/activate
+   pip install -r requirements.txt
+   ```
+   
+   ```{.bash filename="Linux or Mac Terminal"}
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+4. **Use the model** as described in [Using the Model](usage.qmd).
+
+5. When finished, deactivate the virtual environment:
+
+   ```bash
+   deactivate
+   ```

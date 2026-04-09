@@ -1,6 +1,0 @@
----
-title: Acknowledgments
-order: 8
----
-
-The original [NOAA-quarto-simple-python](https://github.com/nmfs-opensci/NOAA-quarto-simple-python) repo and GitHub Action was created by Eli Holmes of the NOAA Northwest Fisheries Science Center. It was based on the tutorial by Openscapes [quarto-website-tutorial](https://github.com/Openscapes/quarto-website-tutorial) by Julia Lowndes and Stefanie Butland. The repo was modified into a template for use at the Southeast Fisheries Science Center by Matt Grossi of the NOAA Southeast Fisheries Science Center.
