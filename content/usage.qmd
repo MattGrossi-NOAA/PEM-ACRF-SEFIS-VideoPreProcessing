@@ -1,61 +1,69 @@
 ---
-title: Using the utility
+title: Using the Utility
 subtitle: Clipping and stitching GoPro videos from SEFIS video surveys
 metadata-files:
   - ../_metadata.yml
 order: 4
 ---
 
-There are multiple ways to set up and use this utility, depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
+There are multiple ways to use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
 
 ### No command line
 
-The easiest way to launch the utility on Windows is to use the `process_videos.bat` file. You will be prompted to select the configurations YAML file to use, and the script will run according to the settings specified in that file.
+The easiest way to launch the utility on Windows is to use the `process_videos.bat` file. You will be prompted to select the configurations YAML file to use, and the script will then run according to the settings specified in that file.
 
-Alternatively, the `process_videos_dragndrop.bat` file will open a Windows Command Prompt terminal and prompt you to drag and drop the configurations YAML file into the terminal. Open a File Explorer window, navigate to the desired YAML file, and drag it into the terminal. The script will then run according to the settings specified in that file.
+Alternatively, the `process_videos_dragndrop.bat` file will open a Windows Command Prompt terminal and prompt you to drag and drop the configurations YAML file into the terminal. Open a File Explorer window, navigate to the desired YAML file, and drag it into the terminal as instructed. The script will then run according to the settings specified in that file.
 
 ### RStudio and R
 
-For users comfortable using R and RStudio, the `process_videos.R` script can be run directly from RStudio. Open the project in RStudio and run the `process_videos.R` script. You will be prompted to select the configurations YAML file to use, and the script will run according to the settings specified in that file.
+For users comfortable using R and RStudio, the `process_videos.R` script can be run directly from RStudio. Open the project in RStudio and run the `process_videos.R` script. You will be prompted to select the configurations YAML file to use, and the script will then run according to the settings specified in that file.
 
 ::: {.callout-note title="A note for R users"}
-The `process_videos.R` script is a launcher/wrapper script that runs the Python video processing utility `process_videos.py`. It is pre-configured to use the 'Private Library' (Virtual Environment) created during setup. You don't need to manually activate anything; just double-click the Rscript file and provide your configuration file when prompted.
+The `process_videos.R` script is a launcher/wrapper script that runs the Python video processing utility `process_videos.py`. It is pre-configured to use the "Private Library" (Virtual Environment) created during setup. You don't need to manually activate anything; just double-click the Rscript file and provide your configuration file when prompted.
 :::
 
 ### Python and command line
 
-Advanced users comfortable with command line and Python can run the `process_videos.py` script directly from the command line. Open a command line terminal and navigate to the project directory. Activate the Python virtual environment [created at setup](setup.qmd#python-and-command-line):
+Users comfortable with command line and Python can run the `process_videos.py` script directly from the command line.
 
-```{.bash filename="pip environment in Windows Command Prompt"}
-.venv\Scripts\activate
-```
+1. Open a command line terminal and navigate to the project directory. Activate the Python virtual environment [created at setup](setup.qmd#python-and-command-line) depending on your operating system and the method you used to create the virtual environment.
+
+   For `pip` environments:
+
+   ```{.bash filename="pip environment in Windows Command Prompt"}
+   .venv\Scripts\activate
+   ```
    
-```{.bash filename="pip environment in Git Bash"}
-source .venv/Scripts/activate
-```
+   ```{.bash filename="pip environment in Git Bash"}
+   source .venv/Scripts/activate
+   ```
    
-```{.bash filename="pip environment in Linux or Mac Terminal"}
-source .venv/bin/activate
-```
+   ```{.bash filename="pip environment in Linux or Mac Terminal"}
+   source .venv/bin/activate
+   ```
 
-```{.bash filename="conda environment"}
-conda activate video-processing-venv
-```
+   Or, for `conda` environments:
 
-Then execute the `process_videos.py` script, passing the path to the desired configurations YAML file as an argument:
+   ```{.bash filename="conda environment"}
+   conda activate video-processing-venv
+   ```
 
-```bash
-python process_videos.py path/to/config.yaml
-```
+2. Execute the `process_videos.py` script, passing the path to the desired configurations YAML file as an argument:
 
-No other arguments are needed. The script will run according to the settings specified in the YAML file.
+   ```bash
+   python process_videos.py path/to/config.yaml
+   ```
 
-When finished, deactivate the virtual environment:
+   No other arguments are needed. The script will run according to the settings specified in the YAML file.
 
-```{.bash filename="pip environment"}
-deactivate
-```
+3. When finished, deactivate the virtual environment:
 
-```{.bash filename="conda environment"}
-conda deactivate
-```
+   ```{.bash filename="pip environment"}
+   deactivate
+   ```
+
+   or
+
+   ```{.bash filename="conda environment"}
+   conda deactivate
+   ```

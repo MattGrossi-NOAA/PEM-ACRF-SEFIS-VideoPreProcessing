@@ -1,48 +1,48 @@
 ---
 title: Getting Started
-subtitle: Creating and configuration a Python virtual environment
+subtitle: Installation and Setup
 metadata-files:
   - ../_metadata.yml
 order: 1
 ---
 
 :::{.callout-note}
-The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to [Using the Model](usage.qmd).
+The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to [Configurations](configurations.qmd) or [Using the Utility](usage.qmd).
 :::
 
-There are multiple ways to set up and use this utility, depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
+There are multiple ways to set up and use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
 
 ### No command line
 
-1. [**Download the repository**]({{< meta website.repo-url >}}) by clicking the green "Code" button at and selecting "Download ZIP." Extract the contents of the ZIP file to a local directory.
+1. [**Download the repository**]({{< meta website.repo-url >}}) by clicking the green "Code" button and selecting "Download ZIP." Extract the contents of the ZIP file to a local directory.
 
    ::: {.callout-warning}
-   This method does not allow for version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible. See below.
+   This method does not support version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible as described below.
    :::
 
-2. **Setup the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the `setup.bat` file. This will do three things behind the scenes:
+2. **Set up the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly extracted project directory. Run (double-click) the `setup.bat` file. This will do three things behind the scenes:
 
     1. Create a Python virtual environment in the project directory (called `.venv`) for package management.
     2. Install the required Python dependencies (from `requirements.txt`) into the virtual environment.
     3. Download and extract `ffmpeg` into the project directory. This contains two utilities, `ffmpeg` and `ffprobe`, which are used for video processing and metadata extraction, respectively.
 
-3. **Use the model** as described in [Using the Model](usage.qmd).
+3. **Use the utility** as described in [Using the Utility](usage.qmd).
 
 ### RStudio and R
 
-These instructions are for users comfortable using R, RStudio, and Git version control, but unfamiliar with Python.
+For users comfortable using R, RStudio, and Git version control, but unfamiliar with Python or command line:
 
 1. **Clone the repository** directly into RStudio: Create a new project, select "Version Control", then "Git." Paste the URL of this repository (`{{< meta website.repo-url >}}`) into the "Repository URL" field, enter a name for the local project directory, and select a local directory to clone the repository into. This will create a new RStudio project with all of the files in this repository.
 
 2. **Setup the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly created project directory. Run (double-click) the `setup.bat` file, as above.
 
-3. **Use the model** as described in [Using the Model](usage.qmd).
+3. **Use the utility** as described in [Using the Utility](usage.qmd).
 
 ### Python and command line
 
 Much of the following is carried out using command line. In the instructions below, "command line terminal" or "terminal" refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell. These use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in [Git for Windows](#git) and allows UNIX commands to be used instead of DOS.
 
-1. **Install Git**, if needed: if the [Git CLI](https://git-scm.com/downloads) is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing
+1. **Install Git, if needed**: If the [Git CLI](https://git-scm.com/downloads) is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing
 
    ```bash
    git --version
@@ -52,31 +52,27 @@ Much of the following is carried out using command line. In the instructions bel
 
    If needed, download and install the [Git CLI](https://git-scm.com/downloads) before continuing. This does not need administrative privileges to install at the user level. Confirm that it has been installed by opening a command line terminal and entering `git --version`.
 
-2. **Clone the repository**: Open a command line terminal and navigate to the directory where you want to clone the repository. Clone the repo into that directory:
+2. **Clone the repository**: Open a command line terminal and navigate to the directory where you want to clone the repository. To clone all of the repo contents into the current directory, use:
 
    ```bash
    git clone {{< meta website.repo-url >}} .
    ```
 
-   if you want all of the repo contents in the current directory, or 
+   or, if you want the repo contents to be downloaded into a new subdirectory called `{{< meta repo-name >}}`, use: 
    
    ```bash
    git clone {{< meta website.repo-url >}}
    ```
 
-   if you want the repo contents to be downloaded into a new subdirectory called `{{< meta repo.name >}}`. This is just personal preference. (Note the difference between the two commands is the dot `.` at the end.)
+   This is just personal preference. (Note the difference between the two commands is the dot `.` at the end.)
   
-3. **Setup the environment and install dependencies**: Run the `setup.bat` file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,
+3. **Set up the environment and install dependencies**: Run the `setup.bat` file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,
 
    ```bash
    cd "c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"
    ```
    
    Create and activate a Python virtual environment and install the package dependencies. The `setup.bat` file creates an environment named `.venv`, but you can call it whatever you want. For example,
-
-   ```{.bash filename="pip environment"}
-   python -m venv .venv
-   ```
 
    ```{.bash filename="Windows Command Prompt"}
    python -m venv .venv
@@ -103,10 +99,10 @@ Much of the following is carried out using command line. In the instructions bel
    ```
 
    ::: {.callout-important}
-   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must use a `pip` environment named `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.
+   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must use a `pip` environment named `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.
    :::
 
-3. **Use the model** as described in [Using the Model](usage.qmd).
+3. **Use the utility** as described in [Using the Utility](usage.qmd).
 
 4. When finished, deactivate the virtual environment:
 
