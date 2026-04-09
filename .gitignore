@@ -13,3 +13,8 @@
 jovyan
 README.html
 README_files/
+
+**/*.quarto_ipynb
+
+*log*.txt
+ffmpeg/

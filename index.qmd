@@ -1,20 +1,35 @@
 ---
 title: "Read the Docs"
-subtitle: "Python utility for clipping and splicing GoPro video from SEFIS video surveys"
+subtitle: "Python utility for clipping and stitching GoPro video from SEFIS video surveys"
 page-layout: full
 ---
 
-This is a simple Python utility used for merging GoPro videos collected during SEFIS video surveys. GoPro cameras are deployed for about an hour at a time and record continuously during this period, but the video files are automatically split into 4GB chunks by GoPro video processing software, which each file containing about 15 minutes of footage. Current protocol involves processing a 24-minute video segment from each deployment relative to the time the camera reaches the bottom.
-
 ## About
+
+This is a Python utility used for merging GoPro videos collected during SEFIS video surveys. GoPro cameras are deployed and record continuously for about an hour at a time, but the video files are automatically split into 4GB chunks by GoPro video processing software, with each file containing approximately 15 minutes of footage. Current science protocol involves processing a 24-minute video segment from each deployment relative to the time the camera reaches the bottom:
+
+* Video folders are named using a "collection number" consisting of a combination of a project code, year, collection, and camera.
+* Each folder is a single deployment of a trap with a camera. Each folder contains a board file (a brief video prior to deployment showing metadata information) and a number of underwater video files.
+* A metadata CSV file contains a "time on bottom" time stamp for each unique identifying collection number indicating the elapsed time from when the video files start to when the trap lands on the bottom .
+* The objective is to extract a segment of video **starting exactly 8 minutes** after the trap lands on bottom and **ending 24 minute later**, or 32 minutes after the trap lands on bottom. This involves slicing some videos and stitching relevant segments together.
+* The new stitched video is named exactly like the folder containing the files (*i.e.*, the collection number).
 
 This script does three things:
 
-1. Determines where in the collection of videos for a given deployment the desired 24-minute segment is located using a `csv` file containing timestamps for when the camera reached the bottom
-2. Clips the relevant portion of partial videos at the appropriate start and end times
-3. Stitches the required videos together into a single video file for each deployment.
+1. Determines where in the collection of deployment videos the desired 24-minute segment is located using the CSV metadata file containing timestamps for when the camera reached the bottom and metadata extracted from the video files themselves (*e.g.*, duration, frame rate, *etc.*)
+2. Clips the relevant portion of partial videos at the appropriate start and end times, as needed
+3. Stitches the required videos together into a single video file for each deployment
 
-An optional diagnostic mode can be used to embed the video timestamp into the video frames (formatted HH:MM:SS:FF) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. Engaging diagnostic mode will also print out a table of the splice times for each deployment to the console including where in the original video files the segments were taken.
+Some key features:
+
+* **Frame-Accurate Seeking:** Uses `FFmpeg` filters to ensure exact millisecond alignment across GoPro chapter seams.
+* **NTSC Correction:** Automatically[^1] handles 29.97 fps (30000/1001) timing to prevent timecode drift in long deployments.
+* **Diagnostic Overlays:** Provides optional burned-in timecode with `HH:MM:SS:FF` format for frame-by-frame verification.
+* **GoPro Logic:** Intelligently sorts chapters (GX01, GX02) to maintain chronological continuity.
+
+[^1]: The frame rate is extracted from the video metadata, rather than being hard-coded into the script, in an effort to make the utility camera-agnostic.
+
+An optional diagnostic mode can be used to embed a true authoritative video timestamp into the video frames (formatted `HH:MM:SS:FF`) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. This embedded timestamp is fundamentally independent of the timestamp shown in most video players, which is merely a count from the start of the video. A video player would not know, for example, if a bad stitching operation inadvertently skips a frame or chunk of frames. Engaging diagnostic mode will also print out a table of the splice times for each deployment to the console including where in the original video files the segments were taken. To assess the performance of the script, compare the frames in the new video at and around the splice times ("NEW VIDEO TIME") to the appropriate timestamps in the corresponding source files ("SOURCE TIMESTAMP"). If, for example, the stitch caused the same file to be read twice, the video player clock will keep advancing but the embedded timestamp in the video will reset or stutter, indicating a problem with the splice. If the splice is correct, the embedded timestamp will advance monotonically across the splice.
 
 ::: {.callout-note}
 This table is always added to a log file even when diagnostic mode is off, but printing to the screen can be helpful for troubleshooting and verifying the splice times.

@@ -72,37 +72,50 @@ Much of the following is carried out using command line. In the instructions bel
    cd "c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"
    ```
    
-   Create a Python virtual environment. The `setup.bat` file creates an environment named `.venv`, but you can call it whatever you want. For example,
+   Create and activate a Python virtual environment and install the package dependencies. The `setup.bat` file creates an environment named `.venv`, but you can call it whatever you want. For example,
 
-   ```bash
+   ```{.bash filename="pip environment"}
    python -m venv .venv
    ```
 
-   ::: {.callout-important}
-   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must name the virtual environment `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.
-   :::
-
-   Activate the virtual environment and install the dependencies from the provided `requirements.txt` file:
-
    ```{.bash filename="Windows Command Prompt"}
+   python -m venv .venv
    .venv\Scripts\activate
    pip install -r requirements.txt
    ```
    
    ```{.bash filename="Git Bash"}
+   python -m venv .venv
    source .venv/Scripts/activate
    pip install -r requirements.txt
    ```
    
    ```{.bash filename="Linux or Mac Terminal"}
+   python -m venv .venv
    source .venv/bin/activate
    pip install -r requirements.txt
    ```
 
-4. **Use the model** as described in [Using the Model](usage.qmd).
+   or, if using [Anaconda](https://www.anaconda.com/):
 
-5. When finished, deactivate the virtual environment:
+   ```{.bash filename="conda environment"}
+   conda create --name video-processing-venv python=3.14 --file requirements.txt
+   ```
 
-   ```bash
+   ::: {.callout-important}
+   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must use a `pip` environment named `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.
+   :::
+
+3. **Use the model** as described in [Using the Model](usage.qmd).
+
+4. When finished, deactivate the virtual environment:
+
+   ```{.bash filename="pip environment"}
    deactivate
+   ```
+
+   or
+
+   ```{.bash filename="conda environment"}
+   conda deactivate
    ```

@@ -1,5 +1,5 @@
 ---
-title: Gemini Workflow Planning
+title: "Appendix A: Gemini Workflow Planning"
 subtitle: Video Clipping and Stitching Workflow
 author:
    - matt.grossi@noaa.gov
@@ -8,6 +8,8 @@ date: 2026-04-01
 format:
   html:
     css: styles.css
+toc: false
+order: 1
 ---
 
 ::: {.callout-note}
@@ -987,3 +989,235 @@ To make sure everything is working before you run the main Python script:
    3. Type `-version` after the path and hit Enter.
 
 If you see a wall of text starting with `ffmpeg version...`, you are officially ready to go!
+
+::: {.gray-background}
+### Prompt
+Please explain, in non-technical terms, the following arguments passed to `cmd` above:
+        #     -map: select the output from the filter
+        #     -c:v: video codec
+        #     -crf: quality setting for the encoder
+Do not merely copy/paste from the docs; I need to understand the docs so I know what this routine is doing.
+:::
+
+### Coding partner
+
+Think of FFmpeg like a massive, automated film studio. You’ve handed it several raw tapes (your GoPro files), and you've given the "Director" a list of instructions on how to cut and paste them. These arguments are the specific orders that ensure the final product actually makes it onto the screen in the right way.
+
+Here is what those specific commands are doing in plain English:
+
+1. **`-map "[outv]"` (The Final Selection)**
+
+Imagine you are in a professional kitchen with several mixing bowls. You’ve combined your ingredients (video clips) into a specific bowl and stuck a label on it called `[outv]` (short for "Output Video").
+
+Without the `-map` command, FFmpeg is like a confused waiter who doesn't know which bowl to bring to the table. It might try to grab the original audio from File 1, or it might get overwhelmed and grab nothing at all (resulting in that 1 KB file).
+
+**In short:** `-map "[outv]"` tells FFmpeg: "Ignore all the raw ingredients and the messy scraps on the counter. Take the specific finished product inside the `[outv]` bowl and put it in the final file."
+
+2. **`-c:v` (The Video Translator)**
+
+**Codec** stands for **Co**der/**Dec**oder. Think of this as the "language" or "shorthand" the computer uses to write the video data.
+
+Raw video is massive—too big for any hard drive. A codec is a set of instructions on how to "shrink" that video while keeping it playable.
+
+* `libx264` is like standard English: almost every computer and phone in the world understands it.
+
+* `h264_nvenc` is the same language, but written by a specialized "speed-writer" (your NVIDIA GPU) to get the job done 10 times faster.
+
+**In short:** `-c:v` tells FFmpeg: "Which 'translator' should I use to write this final video file?"
+
+3. **`-crf` (The Quality-to-Size Goal)**
+
+**CRF** (Constant Rate Factor) is like a "Quality Guarantee" slider.
+
+Instead of telling the computer exactly how much data to use every second (which is hard because a static shot of a board file needs less data than a shot of moving fish), you tell it: "I want the video to look *this* good; you figure out how much space it needs."
+
+* **A low number (like 0–18):** This is "High Fidelity." You’re telling the encoder, "Don't take any shortcuts. Keep every tiny detail of the sand and water, even if the file ends up being large."
+
+* **A high number (like 30–50):** This is "Draft Mode." You’re saying, "I don't care if it looks a bit blurry or 'blocky'; just make the file as small as possible."
+
+**In short:** `-crf` is the "Master Quality" setting. It balances how much detail you want to keep versus how much disk space you want to save.
+
+**Why this routine is different now**
+
+In the previous (failed) routine, we were just "taping" files together and hoping the computer could figure out where the 8-minute mark was.
+
+In this new routine, by using these arguments with a **Filter Complex**, we are:
+
+1. Opening each file individually.
+
+2. Measuring exactly where to cut.
+
+3. "Developing" those pieces into a brand-new stream (`[outv]`).
+
+4. Ensuring that specific stream is mapped correctly to the output.
+
+This is why the files won't be 1 KB anymore—we are forcing FFmpeg to actually "draw" the frames into the new file rather than just moving metadata around.
+
+::: {.gray-background}
+### Prompt
+What does `'[0:v][1:v][2:v]concat=n=3:v=1[outv]'` mean? This is passed to `-filter-complex` argument.
+:::
+
+### Coding partner
+
+This string is the "blueprint" for the assembly line we’ve built inside FFmpeg. In the previous step, we told FFmpeg to open several files; now, this string tells it exactly how to stitch them together into one continuous ribbon.
+
+Let's break it down piece by piece using the "Label" analogy.
+
+1. **The Input Labels: `[0:v][1:v][2:v]`**
+
+In FFmpeg, every file you open is assigned a number starting at 0.
+
+* `[0:v]` means: "Take the **video** (v) from the **first** file (0)."
+
+* `[1:v]` means: "Take the **video** (v) from the **second** file (1)."
+
+* `[2:v]` means: "Take the **video** (v) from the **third** file (2)."
+
+Think of these as "Post-it notes" stuck onto the specific video streams we want to use. We are lining them up at the start of the assembly line.
+
+2. **The Action: `concat`**
+
+This is the name of the "machine" we are sending those videos into. `concat` is short for concatenate, which is just a fancy way of saying "link these together end-to-end."
+
+3. **The Settings: `n=3:v=1`**
+
+These are the instructions for the `concat` machine so it knows what to expect:
+
+* `n=3`: "Hey machine, I am handing you 3 separate input segments." (If you had 5 files, this would be `n=5`).
+
+* `v=1`: "I want you to produce 1 single video stream as the result."
+
+4. **The Output Label: `[outv]`**
+
+This is the most important part for the `-map` command we discussed earlier. After the `concat` machine finishes "taping" the three clips together, it needs to put a label on the finished product so other parts of the script can find it.
+
+We decided to name that finished product `[outv]` (Output Video). You could technically name it `[final_movie]` or `[strawberry_shortcake]`, as long as you use the exact same name in your `-map` command later.
+
+**Putting it all together:**  
+
+When you read `[0:v][1:v][2:v]concat=n=3:v=1[outv]`, you are saying:
+
+> "Take the video from my first three files `[0:v][1:v][2:v]`, run them through the stitching machine `concat`, tell the machine there are 3 pieces and to make 1 final video `n=3:v=1`, and slap a label on the result called `[outv]`."
+
+This is why your code now works: by explicitly labeling the "pipes," FFmpeg no longer gets confused about which frames belong to which file. It treats them as a single sequence of images before it ever tries to write them to your hard drive.
+
+::: {.gray-background}
+### Prompt
+Please explain the various components of this string:
+
+```
+drawtext_filter = (
+    f"[outv]drawtext=fontfile='{font_path}':"
+    r"text='%{eif\:t/3600\:d\:2}\:%{eif\:mod(t/60,60)\:d\:2}\:%{eif\:mod(t,60)\:d\:2}\:%{eif\:" + str(fps) + r"*mod(t,1)\:d\:2}':"
+    "x=10:y=10:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.5[diagout]"
+)
+```
+
+:::
+
+### Coding partner
+
+This string is essentially a series of instructions for a "painter" (the **drawtext** filter) to draw a frame-accurate clock onto every image in your video. Because FFmpeg uses colons to separate its own commands, many of the colons inside the clock are "escaped" with backslashes (`\:`) so FFmpeg doesn't get confused.
+
+Here is the breakdown of the components, separated by their function:
+
+1. **The Labels (The "Pipes")**
+
+   * `[outv]`: This is the input label. It tells the filter to take the video coming out of the previous `concat` step and bring it into this filter.
+   * `[diagout]`: This is the output label. It gives the "new" video (the one with the clock) a name so the script can find it later for the final save.
+   
+2. **General Settings**
+
+   * `drawtext`: The name of the filter.
+   * `fontfile='{font_path}'`: Points to the specific `.ttf` file (like Arial) on your computer.
+   * `x=10:y=10`: The coordinates. This places the text 10 pixels from the left and 10 pixels from the top.
+   * `fontsize=48:fontcolor=white`: Sets the size and color of the text.
+   * `box=1:boxcolor=black@0.5`: This draws a semi-transparent black rectangle behind the white text to make it readable regardless of the background.
+   
+3. **The "Clock" Math (Text Expansion)**
+
+The content inside `text='...'` is where the magic happens. The `%{...}` syntax tells FFmpeg: "Evaluate the math inside these brackets for every single frame.
+
+"The function `eif` (Evaluate Integer Format) is used four times to build the **HH:MM:SS:FF** format. The syntax `\:d\:2` at the end of each `eif` tells FFmpeg to **format as a decimal** and a**lways use 2 digits** (so 5 becomes "05").
+
+| Component | Math | Explanation |
+|:----------|:-----|:---------------|
+**Hours**   | `t/3600`              | Takes the current time in seconds (`t`) and divides by 3600.
+**Minutes** | `mod(t/60, 60)`       | Finds the remainder of total minutes divided by 60.
+**Seconds** | `mod(t, 60)`          | Finds the remainder of total seconds divided by 60.
+**Frames**  | `str(fps) * mod(t,1)` | Takes the fraction of the current second (e.g., `.5`) and multiplies it by your frame rate (29.97) to get the frame number.
+
+
+4. **Python-Specific Formatting**
+
+You’ll notice the string uses three different Python techniques to keep things clean:
+
+* `f"..."` **(f-string)**: Used at the beginning to inject your variable `{font_path}` into the string.
+* `r"..."` **(raw-string)**: Used for the math section. The `r` tells Python: "Treat all these backslashes as literal text; don't try to interpret them." If we didn't use `r`, Python might think `\:` is a special command.
+* `+ str(fps) +`: Because the `fps` needs to be a specific number (29.97) inside the FFmpeg math, we "pause" the string, stick the number in, and then restart the string.
+
+**The result on your screen:**  
+
+Instead of a confusing mess of math, you see a clean, professional-looking **00:08:30:15** that updates perfectly 29.97 times every second.
+
+:::{.gray-background}
+### Prompt
+Now I would like to generate help doc text at the top of the file formatted according to standard python requirements. Do not assume anything you do not know; ask me questions as needed (e.g., author, etc.).
+:::
+
+### Coding partner
+
+I’d be happy to draft that for you! A well-documented script is like a clean lab bench—it makes the actual work much smoother.
+
+To make this "standard," we’ll follow **PEP 257** (docstring conventions) and **PEP 8**. This module-level docstring will live at the very top of your `.py` file so that anyone running `help()` on your script gets a clear overview.
+
+To ensure this is accurate, I have a few questions to fill in the blanks:
+
+1. **Author/Contact:** Who should be listed as the author (Name/Email/Lab)?
+
+2. **Project Name:** Does this script belong to a specific research project (e.g., "The Fish Behavior Study 2026")?
+
+3. **Version/Date:** What is the current version number or today's date?
+
+4. **License:** How is this code licensed (e.g., MIT, Proprietary, Creative Commons)?
+
+5. **Environment Requirements:** Beyond Python and FFmpeg, are there specific OS requirements we should mention (e.g., "Tested on Windows 10/11")?
+
+::: {.gray-background}
+### Prompt
+[P]lease confirm that [all of these Python and R files] are OS-agnostic. In other words, the script will still work in Mac or Linux environments. Particularly the first quote stripping.
+:::
+
+### Coding partner
+
+Yes, I can confirm that the logic provided is **OS-agnostic**. The Python script is designed to handle the differences between Windows, macOS, and Linux gracefully.
+
+1. **The Quote Stripping (`.strip('"')`)**
+
+This is perfectly safe and highly recommended for cross-platform scripts.
+
+* **On Windows:** When a user drags and drops a file into a terminal or a `.bat` prompt, Windows often wraps the path in double quotes (**e.g.**, `"C:\Users\Fish Lab\config.yml"`). If you pass those quotes directly to `open()`, Python will look for a filename that literally starts and ends with a quote mark and fail to find it.
+* **On macOS/Linux:** While these systems typically use backslashes or single quotes for escaping in the shell, Python's `.strip('"')` only removes characters if they exist. If there are no double quotes, the string remains unchanged. It is a non-destructive operation on all platforms.
+
+2. **Cross-Platform Path Handling**
+
+The rest of the script maintains OS-agnosticism through these standard practices:
+
+* `os.path.join`: This automatically uses a backslash (`\`) on Windows and a forward slash (`/`) on Mac/Linux, ensuring paths are always valid.
+* `sys.platform`: As we implemented in the `get_ffmpeg_command` function, the script explicitly checks the OS to decide whether to look for `ffmpeg.exe` (Windows) or just `ffmpeg` (Mac/Linux).
+* **Standard Libraries:** Tools like `pandas`, ya`ml, and `tqdm` are cross-platform by design.
+
+**Why OS Consistency Matters for Your Data**
+
+The primary reason to ensure this script works identically across all systems is to protect the **scientific integrity** of your survey video.
+
+The NTSC (National Television System Committee) was the body that established the standards used for your GoPro's video timing. Because the NTSC introduced a **29.97 fps** ($30000/1001$) frame rate in 1953 to make color broadcasts compatible with older black-and-white sets, the math required to clip your videos is not based on whole numbers.
+
+By using a single, OS-agnostic Python script, you ensure that:
+
+* A researcher on a Mac in the office
+* A technician on a Windows laptop in the field
+* A server running Linux for batch processing
+
+...all calculate the "8-minute-on-bottom" start time to the exact same frame. This eliminates "Software Drift" that might occur if different labs used different platform-specific tools to perform the same task.
