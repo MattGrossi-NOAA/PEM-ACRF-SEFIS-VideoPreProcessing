@@ -207,8 +207,8 @@ def process_deployments(config_path):
     # Video quality setting (18 is high quality, 23 is standard)
     config['quality_crf'] = config.get('quality_crf', 18)
     
-    # Minimum memory required to run script (in GB). Script will warn if
-    # available memory is below this threshold.
+    # Minimum disk space required to run script (in GB). Script will warn if
+    # available space is below this threshold.
     config['min_gb_required'] = config.get('min_gb_required', 10)
 
     # Check Disk Space
