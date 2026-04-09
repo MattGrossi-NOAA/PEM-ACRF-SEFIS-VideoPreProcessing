@@ -14,6 +14,8 @@ The easiest way to launch the utility on Windows is to use the `process_videos.b
 
 Alternatively, the `process_videos_dragndrop.bat` file will open a Windows Command Prompt terminal and prompt you to drag and drop the configurations YAML file into the terminal. Open a File Explorer window, navigate to the desired YAML file, and drag it into the terminal as instructed. The script will then run according to the settings specified in that file.
 
+In either case, status updates, errors or warnings, and instructions will be printed in the terminal window that opens when the file is run, so be sure to check there if you are expecting output of any kind.
+
 ### RStudio and R
 
 For users comfortable using R and RStudio, the `process_videos.R` script can be run directly from RStudio. Open the project in RStudio and run the `process_videos.R` script. You will be prompted to select the configurations YAML file to use, and the script will then run according to the settings specified in that file.
