@@ -14,7 +14,7 @@ order: 1
 
 ::: {.callout-note}
 
-The following exchange with Gemini Coding Partner helped frame the problem and design the workflow solution. Gray boxes indicate user prompts. The "Coding Partner" is the Gemini Large Language Model (LLM) implementation designed to help users design, write, and debug code while ensuring they understand the "why" behind every step. It is not perfect and may ask clarifying questions that seem obvious to a human, but this is part of the process to ensure the final solution is robust and well-understood. All LLM output was reviewed, tested, and refined for accuracy and correctness by a NOAA scientist.
+The following exchange with Gemini Coding Partner helped frame the problem and design the workflow solution. The "Coding Partner" is the Gemini Large Language Model (LLM) implementation designed to help users design, write, and debug code while ensuring they understand the "why" behind every step. It is not perfect and may ask clarifying questions that seem obvious to a human, but this is part of the process to ensure the final solution is robust and well-understood. Gray boxes indicate user prompts, while "Coding partner" headings indicate LLM responses. All LLM output was reviewed, tested, and refined for accuracy and correctness by a NOAA scientist. 
 
 This page is non-exhaustive and omits troubleshooting or refactoring exchanges that helped fix problems or modify design.
 :::
@@ -234,21 +234,7 @@ Since you don't have admin privileges, we will use a "**Portable FFmpeg**" appro
 
 To keep things user-friendly, here is how I envision your config file looking. This allows the user to change folder paths and column names easily.
 
-```{.yaml filename="configurations.yml"}
-# Path settings
-input_directory: "C:/Videos/Deployments"
-output_directory: "C:/Videos/Processed_Clips"
-ffmpeg_path: "C:/Users/YourName/Desktop/ffmpeg/bin/ffmpeg.exe"
-
-# CSV settings
-csv_path: "C:/Data/deployment_log.csv"
-col_foldername: "foldername"
-col_timebottom: "timebottom"
-
-# Processing settings
-use_gpu: true  # Set to false if no NVIDIA card is present
-quality_crf: 18 # 0 is lossless, 18 is visually transparent, 23 is default
-```
+***Early version file redacted for brevity.***
 
 **Handling the Timestamp Mystery**  
 
@@ -356,23 +342,7 @@ The script will follow this pipeline to ensure it handles your requirements prec
 
 I have incorporated your feedback regarding extensions and reprocessing:
 
-```{.yaml filename="configurations.yml"}
-# Path settings
-input_directory: "C:/Videos/Deployments"
-output_directory: "C:/Videos/Processed_Clips"
-ffmpeg_path: "C:/FFmpeg/bin/ffmpeg.exe" # Point to the .exe in your user folder
-
-# CSV settings
-csv_path: "C:/Data/deployment_log.csv"
-col_foldername: "foldername"
-col_timebottom: "timebottom"
-
-# Processing settings
-video_extension: ".MP4"  # The script will search case-insensitively
-reprocess: false         # If false, skips folders where output already exists
-use_gpu: true            # Set to true for NVIDIA, false for CPU
-quality_crf: 18          # Visual quality (18 is high quality)
-```
+***Early version file redacted for brevity.***
 
 **Clarifying the Timestamp Logic**
 
@@ -557,188 +527,13 @@ Below is the complete solution. I have structured this to be "portable," meaning
 
 Create this file in the same folder as the script. It allows users to change settings without touching the code.
 
-```{.yaml filename="configurations.yml"}
-# PATH SETTINGS
-# Use forward slashes (/) or double backslashes (\\) for Windows paths
-input_directory: "C:/Videos/Deployments"
-output_directory: "C:/Videos/Processed_Clips"
-# Point to your portable ffmpeg.exe (e.g., in a folder on your Desktop)
-ffmpeg_path: "C:/Users/Public/ffmpeg/bin/ffmpeg.exe"
-ffprobe_path: "C:/Users/Public/ffmpeg/bin/ffprobe.exe"
-
-# CSV SETTINGS
-csv_path: "C:/Data/deployment_log.csv"
-col_foldername: "foldername"
-col_timebottom: "timebottom"
-
-# PROCESSING SETTINGS
-video_extension: ".MP4"
-reprocess: false  # If false, skips folders where the output file already exists
-use_gpu: true     # Set to true for NVIDIA hardware acceleration
-quality_crf: 18   # 18 is high quality, 23 is standard
-min_gb_required: 10 # Script will warn if disk space is below this
-
-# LOGGING
-log_file: "processing_log.txt"
-```
+***Early version file redacted for brevity.***
 
 2. **The Python Script (`clip_processor.py`)**
 
 This script uses `pandas` for data, `tqdm` for the progress bar, and `subprocess` to talk to FFmpeg.
 
-```{.python filename="clip_processor.py"}
-import os
-import yaml
-import pandas as pd
-import subprocess
-import json
-import shutil
-from datetime import timedelta
-from tqdm import tqdm
-
-def load_config(config_path='configurations.yml'):
-    """Loads the YAML configuration file."""
-    with open(config_path, 'r') as f:
-        return yaml.safe_load(f)
-
-def get_video_metadata(file_path, ffprobe_path):
-    """Uses ffprobe to get internal creation time and duration of a video."""
-    cmd = [
-        ffprobe_path, "-v", "quiet", "-print_format", "json",
-        "-show_format", "-show_streams", file_path
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    data = json.loads(result.stdout)
-    
-    # Extract duration and creation time
-    duration = float(data['format']['duration'])
-    # GoPro creation_time is usually in format tags
-    creation_time = data['format'].get('tags', {}).get('creation_time', '1970-01-01T00:00:00Z')
-    
-    return duration, creation_time
-
-def timestamp_to_seconds(ts_str):
-    """Converts HH:MM:SS:CC (centiseconds) to total seconds (float)."""
-    parts = ts_str.split(':')
-    h, m, s, c = map(int, parts)
-    return h * 3600 + m * 60 + s + (c / 100.0)
-
-def process_deployments():
-    # 1. SETUP & VALIDATION
-    config = load_config()
-    os.makedirs(config['output_directory'], exist_ok=True)
-    
-    # Check Disk Space
-    total, used, free = shutil.disk_usage(config['output_directory'])
-    if free // (2**30) < config['min_gb_required']:
-        print(f"WARNING: Low disk space ({free // (2**30)}GB remaining).")
-
-    # Load CSV with encoding fallback
-    try:
-        df = pd.read_csv(config['csv_path'], encoding='utf-8')
-    except UnicodeDecodeError:
-        df = pd.read_csv(config['csv_path'], encoding='ISO-8859-1')
-
-    # Clean CSV: Strip whitespace from headers and folder names
-    df.columns = df.columns.str.strip()
-    df[config['col_foldername']] = df[config['col_foldername']].astype(str).str.strip()
-
-    # Check for duplicates in foldername
-    if df[config['col_foldername']].duplicated().any():
-        print("ERROR: Duplicate folder names found in CSV. Aborting.")
-        return
-
-    # 2. ITERATE THROUGH CSV ROWS
-    for _, row in tqdm(df.iterrows(), total=len(df), desc="Total Progress"):
-        folder_id = row[config['col_foldername']]
-        time_bottom_str = row[config['col_timebottom']]
-        folder_path = os.path.join(config['input_directory'], folder_id)
-        output_path = os.path.join(config['output_directory'], f"{folder_id}.mp4")
-
-        # Skip if output exists and reprocess is false
-        if not config['reprocess'] and os.path.exists(output_path):
-            continue
-
-        if not os.path.exists(folder_path):
-            with open(config['log_file'], "a") as log:
-                log.write(f"SKIP: Folder {folder_id} not found.\n")
-            continue
-
-        # 3. GATHER & SORT FILES
-        video_files = [f for f in os.listdir(folder_path) 
-                       if f.upper().endswith(config['video_extension'].upper())]
-        
-        if not video_files:
-            with open(config['log_file'], "a") as log:
-                log.write(f"SKIP: No videos in {folder_id}.\n")
-            continue
-
-        file_data = []
-        for f in video_files:
-            full_p = os.path.join(folder_path, f)
-            dur, c_time = get_video_metadata(full_p, config['ffprobe_path'])
-            file_data.append({'path': full_p, 'duration': dur, 'ctime': c_time})
-
-        # Sort by internal creation time
-        file_data.sort(key=lambda x: x['ctime'])
-
-        # 4. CALCULATE TIMELINE
-        start_seconds = timestamp_to_seconds(time_bottom_str) + 480 # +8 mins
-        end_seconds = start_seconds + 1440 # +24 mins
-        
-        # Determine which files are needed
-        cumulative_time = 0
-        needed_files = []
-        for data in file_data:
-            file_start = cumulative_time
-            file_end = cumulative_time + data['duration']
-            
-            # Check if this file overlaps with our 8min-32min window
-            if file_end > start_seconds and file_start < end_seconds:
-                needed_files.append(data['path'])
-            
-            cumulative_time = file_end
-
-        if cumulative_time < end_seconds:
-            with open(config['log_file'], "a") as log:
-                log.write(f"SKIP: {folder_id} total duration is shorter than 32 mins.\n")
-            continue
-
-        # 5. FFmpeg STITCH AND CLIP
-        # Build a temporary file list for FFmpeg concat demuxer
-        list_file = f"list_{folder_id}.txt"
-        with open(list_file, "w") as f:
-            for p in needed_files:
-                # FFmpeg requires paths with forward slashes or escaped backslashes
-                f.write(f"file '{p.replace('\\', '/')}'\n")
-
-        # Choose encoder based on GPU setting
-        encoder = "h264_nvenc" if config['use_gpu'] else "libx264"
-        
-        # FFmpeg Command
-        # -f concat: joins files
-        # -ss: seeks to the start point (relative to the start of the concatenated stream)
-        # -t: duration of the clip (24 mins = 1440 seconds)
-        # -an: removes audio
-        cmd = [
-            config['ffmpeg_path'], "-y", "-f", "concat", "-safe", "0", 
-            "-ss", str(start_seconds - (cumulative_time - sum(d['duration'] for d in file_data if d['path'] not in needed_files))), 
-            "-i", list_file, 
-            "-t", "1440", 
-            "-c:v", encoder, "-crf", str(config['quality_crf']), 
-            "-an", output_path
-        ]
-        
-        # Note: Math for -ss inside concat can be tricky; 
-        # simpler to use a filter_complex for absolute precision if files are variable.
-        # Below is a simplified command for the 24m clip:
-        subprocess.run(cmd, capture_output=True)
-        os.remove(list_file)
-
-if __name__ == "__main__":
-    process_deployments()
-    print("Processing Complete. Check processing_log.txt for details.")
-```
+***Early version script redacted for brevity.***
 
 **Implementation Instructions**
 
@@ -1141,12 +936,12 @@ The content inside `text='...'` is where the magic happens. The `%{...}` syntax 
 
 "The function `eif` (Evaluate Integer Format) is used four times to build the **HH:MM:SS:FF** format. The syntax `\:d\:2` at the end of each `eif` tells FFmpeg to **format as a decimal** and a**lways use 2 digits** (so 5 becomes "05").
 
-| Component | Math | Explanation |
-|:----------|:-----|:---------------|
-**Hours**   | `t/3600`              | Takes the current time in seconds (`t`) and divides by 3600.
-**Minutes** | `mod(t/60, 60)`       | Finds the remainder of total minutes divided by 60.
-**Seconds** | `mod(t, 60)`          | Finds the remainder of total seconds divided by 60.
-**Frames**  | `str(fps) * mod(t,1)` | Takes the fraction of the current second (e.g., `.5`) and multiplies it by your frame rate (29.97) to get the frame number.
+| Component | Math      | Explanation                                         |
+|:----------|:----------|:----------------------------------------------------|
+| Hours     | `t/3600`              | Takes the current time in seconds (`t`) and divides by 3600.
+| Minutes   | `mod(t/60, 60)`       | Finds the remainder of total minutes divided by 60.
+| Seconds   | `mod(t, 60)`          | Finds the remainder of total seconds divided by 60.
+| Frames    | `str(fps) * mod(t,1)` | Takes the fraction of the current second (e.g., `.5`) and multiplies it by your frame rate (29.97) to get the frame number.
 
 
 4. **Python-Specific Formatting**
@@ -1221,3 +1016,5 @@ By using a single, OS-agnostic Python script, you ensure that:
 * A server running Linux for batch processing
 
 ...all calculate the "8-minute-on-bottom" start time to the exact same frame. This eliminates "Software Drift" that might occur if different labs used different platform-specific tools to perform the same task.
+
+*Edited for brievery.*
