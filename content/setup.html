@@ -468,10 +468,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to <a href="configurations.qmd">Configurations</a> or <a href="../content/usage.html">Using the Utility</a>.</p>
+<p>The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to <a href="../content/configuration.html">Configurations</a> or <a href="../content/usage.html">Using the Utility</a>.</p>
 </div>
 </div>
-<p>There are multiple ways to set up and use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
+<p>There are multiple ways to set up this utility depending on one’s familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:</p>
 <section id="no-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="no-command-line">No command line</h3>
 <ol type="1">
@@ -486,7 +486,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This method does not support version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible as described below.</p>
+<p>This method does not support version control, so you will not be able to easily update the utility as improvements are made. Cloning the repo, as described <a href="#python-and-command-line">below</a>, is recommended instead.</p>
 </div>
 </div></li>
 <li><p><strong>Set up the environment and install dependencies</strong>: Open File Explorer (Windows) and navigate to the newly extracted project directory. Run (double-click) the <code>setup.bat</code> file. This will do three things behind the scenes:</p>
@@ -509,7 +509,7 @@ Warning
 </section>
 <section id="python-and-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="python-and-command-line">Python and command line</h3>
-<p>Much of the following is carried out using command line. In the instructions below, “command line terminal” or “terminal” refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell. These use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in <a href="#git">Git for Windows</a> and allows UNIX commands to be used instead of DOS.</p>
+<p>In the instructions below, “command line terminal” or “terminal” refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell, both of which use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in <a href="#git">Git for Windows</a> and allows UNIX commands to be used instead of DOS.</p>
 <ol type="1">
 <li><p><strong>Install Git, if needed</strong>: If the <a href="https://git-scm.com/downloads">Git CLI</a> is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -519,7 +519,7 @@ Warning
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing .</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>or, if you want the repo contents to be downloaded into a new subdirectory called <code>PEM-ACRF-SEFIS-VideoPreProcessing</code>, use:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This is just personal preference. (Note the difference between the two commands is the dot <code>.</code> at the end.)</p></li>
+<p>(This is just personal preference. Note the difference between the two commands is the dot <code>.</code> at the end.)</p></li>
 <li><p><strong>Set up the environment and install dependencies</strong>: Run the <code>setup.bat</code> file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Create and activate a Python virtual environment and install the package dependencies. The <code>setup.bat</code> file creates an environment named <code>.venv</code>, but you can call it whatever you want. For example,</p>
@@ -564,11 +564,11 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you plan to use the <code>process_videos.bat</code> or <code>launcher.R</code> provided in the repo, you must use a <code>pip</code> environment named <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.</p>
+<p>If you plan to use the <code>process_videos.bat</code> or <code>process_videos.R</code> provided in the repo, you must use a <code>pip</code> environment named <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.</p>
 </div>
 </div></li>
 <li><p><strong>Use the utility</strong> as described in <a href="../content/usage.html">Using the Utility</a>.</p></li>
-<li><p>When finished, deactivate the virtual environment:</p>
+<li><p><strong>Deactivate the virtual environment</strong> when finished:</p>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>pip environment</strong></pre>

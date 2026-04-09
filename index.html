@@ -484,7 +484,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Diagnostic Overlays:</strong> Provides optional burned-in timecode with <code>HH:MM:SS:FF</code> format for frame-by-frame verification.</li>
 <li><strong>GoPro Logic:</strong> Intelligently sorts chapters (GX01, GX02) to maintain chronological continuity.</li>
 </ul>
-<p>An optional diagnostic mode can be used to embed an authoritative video timestamp into the video frames (formatted <code>HH:MM:SS:FF</code>) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. This embedded timestamp is fundamentally independent of the timestamp shown in most video players, which is merely a count from the start of the video. A video player would not know, for example, if a bad stitching operation inadvertently skips a frame or chunk of frames. Engaging diagnostic mode will also print out a table of the splice times for each deployment to the console including where in the original video files the segments were taken. To assess the performance of the script, compare the frames in the new video at and around the splice times (“NEW VIDEO TIME”) to the appropriate timestamps in the corresponding source files (“SOURCE TIMESTAMP”). If, for example, the stitch caused the same file to be read twice, the video player clock will keep advancing but the embedded timestamp in the video will reset or stutter, indicating a problem with the splice. If the splice is correct, the embedded timestamp will advance monotonically across the splice.</p>
+<p>An optional diagnostic mode can be used to embed an authoritative video timestamp into the video frames (formatted <code>HH:MM:SS:FF</code>) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. This embedded timestamp is fundamentally independent of the timestamp shown in most video players, which is merely a count from the start of the video. A video player would not know, for example, if a bad stitching operation inadvertently skips a frame or chunk of frames. Engaging diagnostic mode will also print out a table of the stitch times for each deployment to the console including where in the original video files the segments were taken. To assess the performance of the script, compare the frames in the new video at and around the stitch times (“NEW VIDEO TIME”) to the appropriate clip timestamps in the corresponding source files (“SOURCE TIMESTAMP”). If, for example, the stitch caused the same file to be read twice, the video player clock will keep advancing but the embedded timestamp in the video will reset or stutter. If the stitch is correct, the embedded timestamp will advance monotonically across the stitch.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -502,10 +502,10 @@ Note
 <section id="usage" class="level3">
 <h3 class="anchored" data-anchor-id="usage">Usage</h3>
 <p>Running the script is straightforward. After activating the appropriate Python environment, simply call the script from the command line specifying the configuration YAML file to use:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> clip_and_splice.py configurations.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> clip_and_stitch.py configurations.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>If the configuration file is not co-located with the script, simply include the path to the file so that the script knows where to find it:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> clip_and_splice.py path/to/configurations.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Helper files are also included for users unfamiliar or uncomfortable with command line. For more information and instructions, see <a href="./content/usage.html">Using the Model</a>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> clip_and_stitch.py path/to/configurations.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Helper files are also included for users unfamiliar or uncomfortable with command line. For more information and instructions, see <a href="./content/usage.html">Using the Utility</a>.</p>
 </section>
 <section id="options" class="level3">
 <h3 class="anchored" data-anchor-id="options">Options</h3>
@@ -533,7 +533,7 @@ Note
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>csv_path</code></td>
-<td style="text-align: left;">Path (including name) of the “time-on-bottom” CSV metadata file. This file should contain entries for each deployment (subfolder) in rows with deployment name in one column and “time-on-bottom” in a separate column. Any other columns will be ignored. Note that directory and file names are case-sensitive on some operating systems.</td>
+<td style="text-align: left;">Path (including name) of the “time-on-bottom” CSV metadata file. This file should contain entries for each deployment (subfolder) in rows with collection number in one column and “time-on-bottom” in a separate column. All other columns will be ignored. Note that directory and file names are case-sensitive on some operating systems.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>col_foldername</code></td>
@@ -541,7 +541,7 @@ Note
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>col_timebottom</code></td>
-<td style="text-align: left;">Column name for the column containing the “time-on-bottom” timestamps. Defaults to <code>time_on_bottom</code> but can be changed here if needed. Expected format is `HH:MM:SS:FF``.</td>
+<td style="text-align: left;">Column name for the column containing the “time-on-bottom” timestamps. Defaults to <code>timebottom</code> but can be changed here if needed. Expected format of the timestamps is `HH:MM:SS:FF``.</td>
 </tr>
 </tbody>
 </table>
@@ -613,7 +613,7 @@ Note
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>log_file</code></td>
-<td style="text-align: left;">Path to and name of the log file where processing information will be recorded. Defaults to <code>./process.log</code> (present working directory).</td>
+<td style="text-align: left;">Path to and name of the log file where processing information will be recorded. Defaults to <code>./processing-log.txt</code> (in the present working directory).</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>quality_crf</code></td>
@@ -625,13 +625,13 @@ Note
 </tr>
 </tbody>
 </table>
-<div class="callout callout-style-default callout-important callout-titled" title="A note on file paths">
+<div class="callout callout-style-default callout-tip callout-titled" title="A note on file paths">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span>A note on file paths
+<span class="screen-reader-only">Tip</span>A note on file paths
 </div>
 </div>
 <div class="callout-body-container callout-body">
