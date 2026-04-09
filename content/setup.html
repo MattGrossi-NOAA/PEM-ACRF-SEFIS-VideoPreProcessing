@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Getting Started – SEFIS Video Pre-Processing Documentation</title>
+<title>Getting Started – SEFIS Video Pre-Processing (clip-and-stitch)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -284,7 +284,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">SEFIS Video Pre-Processing Documentation</span>
+    <span class="navbar-title">SEFIS Video Pre-Processing (clip-and-stitch)</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -399,12 +399,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Using the utility</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/gemini.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Gemini Workflow Planning</span></a>
+  <a href="../content/Appendices/gemini.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Appendix A: Gemini Workflow Planning</span></a>
   </div>
 </li>
+      </ul>
+  </li>
       </ul>
   </li>
     </ul>
@@ -511,8 +522,44 @@ Warning
 <p>if you want the repo contents to be downloaded into a new subdirectory called <code>?meta:repo.name</code>. This is just personal preference. (Note the difference between the two commands is the dot <code>.</code> at the end.)</p></li>
 <li><p><strong>Setup the environment and install dependencies</strong>: Run the <code>setup.bat</code> file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">"c:/Users/user.name/Documents/PEM-ACRF-SEFIS-VideoPreProcessing"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Create a Python virtual environment. The <code>setup.bat</code> file creates an environment named <code>.venv</code>, but you can call it whatever you want. For example,</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Create and activate a Python virtual environment and install the package dependencies. The <code>setup.bat</code> file creates an environment named <code>.venv</code>, but you can call it whatever you want. For example,</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pip environment</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Windows Command Prompt</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Windows Command Prompt"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv\Scripts\activate</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Git Bash</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Git Bash"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/Scripts/activate</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>Linux or Mac Terminal</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Linux or Mac Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> venv .venv</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>or, if using <a href="https://www.anaconda.com/">Anaconda</a>:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>conda environment</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">--name</span> video-processing-venv python=3.14 <span class="at">--file</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -523,34 +570,24 @@ Important
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>If you plan to use the <code>process_videos.bat</code> or <code>launcher.R</code> provided in the repo, you must name the virtual environment <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.</p>
+<p>If you plan to use the <code>process_videos.bat</code> or <code>launcher.R</code> provided in the repo, you must use a <code>pip</code> environment named <code>.venv</code> and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct location of the virtual environment.</p>
 </div>
-</div>
-<p>Activate the virtual environment and install the dependencies from the provided <code>requirements.txt</code> file:</p>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Windows Command Prompt</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" data-filename="Windows Command Prompt"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">.venv\Scripts\activate</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Git Bash</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Git Bash"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/Scripts/activate</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Linux or Mac Terminal</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-filename="Linux or Mac Terminal"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> .venv/bin/activate</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div></li>
 <li><p><strong>Use the model</strong> as described in <a href="../content/usage.html">Using the Model</a>.</p></li>
 <li><p>When finished, deactivate the virtual environment:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">deactivate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>pip environment</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" data-filename="pip environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">deactivate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>or</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>conda environment</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="conda environment"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div></li>
 </ol>
 
 

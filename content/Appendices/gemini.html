@@ -10,7 +10,7 @@
 <meta name="author" content="Google Gemini (NOAA implementation)">
 <meta name="dcterms.date" content="2026-04-01">
 
-<title>Gemini Workflow Planning – SEFIS Video Pre-Processing Documentation</title>
+<title>Appendix A: Gemini Workflow Planning – SEFIS Video Pre-Processing (clip-and-stitch)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -64,28 +64,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../content/usage.html" rel="prev">
-<link href="../theme/images/favicon.png" rel="icon" type="image/png">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark-7cd8905afccf9e4aff4836e42671a711.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/usage.html" rel="prev">
+<link href="../../theme/images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-7cd8905afccf9e4aff4836e42671a711.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -147,7 +147,7 @@ window.Quarto = {
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed fullcontent quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -316,8 +316,8 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">SEFIS Video Pre-Processing Documentation</span>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">SEFIS Video Pre-Processing (clip-and-stitch)</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -368,7 +368,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/gemini.html">Gemini Workflow Planning</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../../content/Appendices/gemini.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/Appendices/gemini.html">Appendix A: Gemini Workflow Planning</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -382,9 +382,9 @@ window.Quarto = {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../../index.html" class="sidebar-logo-link">
+      <img src="../../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       <div class="sidebar-tools-main tools-wide">
     <a href="https://noaa.gov" title="NOAA Home" class="quarto-navigation-tool px-1" aria-label="NOAA Home"><i class="bi bi-house"></i></a>
@@ -410,34 +410,45 @@ window.Quarto = {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/setup.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Getting Started</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/mount.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/mount.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Mounting a Drive</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/configuration.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/configuration.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Configuring the Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/usage.html" class="sidebar-item-text sidebar-link">
+  <a href="../../content/usage.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Using the utility</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/gemini.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Gemini Workflow Planning</span></a>
+  <a href="../../content/Appendices/gemini.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Appendix A: Gemini Workflow Planning</span></a>
   </div>
 </li>
+      </ul>
+  </li>
       </ul>
   </li>
     </ul>
@@ -445,43 +456,14 @@ window.Quarto = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#prompt" id="toc-prompt" class="nav-link active" data-scroll-target="#prompt">Prompt</a></li>
-  <li><a href="#coding-partner" id="toc-coding-partner" class="nav-link" data-scroll-target="#coding-partner">Coding partner</a></li>
-  <li><a href="#prompt-1" id="toc-prompt-1" class="nav-link" data-scroll-target="#prompt-1">Prompt</a></li>
-  <li><a href="#coding-partner-1" id="toc-coding-partner-1" class="nav-link" data-scroll-target="#coding-partner-1">Coding partner</a></li>
-  <li><a href="#prompt-2" id="toc-prompt-2" class="nav-link" data-scroll-target="#prompt-2">Prompt</a></li>
-  <li><a href="#coding-partner-2" id="toc-coding-partner-2" class="nav-link" data-scroll-target="#coding-partner-2">Coding partner</a></li>
-  <li><a href="#prompt-3" id="toc-prompt-3" class="nav-link" data-scroll-target="#prompt-3">Prompt</a></li>
-  <li><a href="#coding-partner-3" id="toc-coding-partner-3" class="nav-link" data-scroll-target="#coding-partner-3">Coding partner</a></li>
-  <li><a href="#prompt-4" id="toc-prompt-4" class="nav-link" data-scroll-target="#prompt-4">Prompt</a></li>
-  <li><a href="#coding-partner-4" id="toc-coding-partner-4" class="nav-link" data-scroll-target="#coding-partner-4">Coding partner</a></li>
-  <li><a href="#prompt-5" id="toc-prompt-5" class="nav-link" data-scroll-target="#prompt-5">Prompt</a></li>
-  <li><a href="#coding-partner-5" id="toc-coding-partner-5" class="nav-link" data-scroll-target="#coding-partner-5">Coding partner</a></li>
-  <li><a href="#prompt-6" id="toc-prompt-6" class="nav-link" data-scroll-target="#prompt-6">Prompt</a></li>
-  <li><a href="#coding-partner-6" id="toc-coding-partner-6" class="nav-link" data-scroll-target="#coding-partner-6">Coding partner</a></li>
-  <li><a href="#prompt-7" id="toc-prompt-7" class="nav-link" data-scroll-target="#prompt-7">Prompt</a></li>
-  <li><a href="#coding-partner-7" id="toc-coding-partner-7" class="nav-link" data-scroll-target="#coding-partner-7">Coding partner</a></li>
-  <li><a href="#prompt-8" id="toc-prompt-8" class="nav-link" data-scroll-target="#prompt-8">Prompt</a></li>
-  <li><a href="#coding-partner-8" id="toc-coding-partner-8" class="nav-link" data-scroll-target="#coding-partner-8">Coding partner</a></li>
-  <li><a href="#prompt-9" id="toc-prompt-9" class="nav-link" data-scroll-target="#prompt-9">Prompt</a></li>
-  <li><a href="#coding-partner-9" id="toc-coding-partner-9" class="nav-link" data-scroll-target="#coding-partner-9">Coding partner</a></li>
-  <li><a href="#prompt-10" id="toc-prompt-10" class="nav-link" data-scroll-target="#prompt-10">Prompt</a></li>
-  <li><a href="#coding-partner-10" id="toc-coding-partner-10" class="nav-link" data-scroll-target="#coding-partner-10">Coding partner</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/gemini.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/gemini.html">Gemini Workflow Planning</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../../content/Appendices/gemini.html">Appendices</a></li><li class="breadcrumb-item"><a href="../../content/Appendices/gemini.html">Appendix A: Gemini Workflow Planning</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Gemini Workflow Planning</h1>
+<h1 class="title">Appendix A: Gemini Workflow Planning</h1>
 <p class="subtitle lead">Video Clipping and Stitching Workflow</p>
 </div>
 
@@ -1285,6 +1267,224 @@ Note
 <li><p>Type <code>-version</code> after the path and hit Enter.</p></li>
 </ol>
 <p>If you see a wall of text starting with <code>ffmpeg version...</code>, you are officially ready to go!</p>
+</section>
+<section id="prompt-11" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-11">Prompt</h3>
+<p>Please explain, in non-technical terms, the following arguments passed to <code>cmd</code> above: &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -map: select the output from the filter &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -c:v: video codec &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -crf: quality setting for the encoder Do not merely copy/paste from the docs; I need to understand the docs so I know what this routine is doing.</p>
+</section>
+<section id="coding-partner-11" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-11">Coding partner</h3>
+<p>Think of FFmpeg like a massive, automated film studio. You’ve handed it several raw tapes (your GoPro files), and you’ve given the “Director” a list of instructions on how to cut and paste them. These arguments are the specific orders that ensure the final product actually makes it onto the screen in the right way.</p>
+<p>Here is what those specific commands are doing in plain English:</p>
+<ol type="1">
+<li><strong><code>-map "[outv]"</code> (The Final Selection)</strong></li>
+</ol>
+<p>Imagine you are in a professional kitchen with several mixing bowls. You’ve combined your ingredients (video clips) into a specific bowl and stuck a label on it called <code>[outv]</code> (short for “Output Video”).</p>
+<p>Without the <code>-map</code> command, FFmpeg is like a confused waiter who doesn’t know which bowl to bring to the table. It might try to grab the original audio from File 1, or it might get overwhelmed and grab nothing at all (resulting in that 1 KB file).</p>
+<p><strong>In short:</strong> <code>-map "[outv]"</code> tells FFmpeg: “Ignore all the raw ingredients and the messy scraps on the counter. Take the specific finished product inside the <code>[outv]</code> bowl and put it in the final file.”</p>
+<ol start="2" type="1">
+<li><strong><code>-c:v</code> (The Video Translator)</strong></li>
+</ol>
+<p><strong>Codec</strong> stands for <strong>Co</strong>der/<strong>Dec</strong>oder. Think of this as the “language” or “shorthand” the computer uses to write the video data.</p>
+<p>Raw video is massive—too big for any hard drive. A codec is a set of instructions on how to “shrink” that video while keeping it playable.</p>
+<ul>
+<li><p><code>libx264</code> is like standard English: almost every computer and phone in the world understands it.</p></li>
+<li><p><code>h264_nvenc</code> is the same language, but written by a specialized “speed-writer” (your NVIDIA GPU) to get the job done 10 times faster.</p></li>
+</ul>
+<p><strong>In short:</strong> <code>-c:v</code> tells FFmpeg: “Which ‘translator’ should I use to write this final video file?”</p>
+<ol start="3" type="1">
+<li><strong><code>-crf</code> (The Quality-to-Size Goal)</strong></li>
+</ol>
+<p><strong>CRF</strong> (Constant Rate Factor) is like a “Quality Guarantee” slider.</p>
+<p>Instead of telling the computer exactly how much data to use every second (which is hard because a static shot of a board file needs less data than a shot of moving fish), you tell it: “I want the video to look <em>this</em> good; you figure out how much space it needs.”</p>
+<ul>
+<li><p><strong>A low number (like 0–18):</strong> This is “High Fidelity.” You’re telling the encoder, “Don’t take any shortcuts. Keep every tiny detail of the sand and water, even if the file ends up being large.”</p></li>
+<li><p><strong>A high number (like 30–50):</strong> This is “Draft Mode.” You’re saying, “I don’t care if it looks a bit blurry or ‘blocky’; just make the file as small as possible.”</p></li>
+</ul>
+<p><strong>In short:</strong> <code>-crf</code> is the “Master Quality” setting. It balances how much detail you want to keep versus how much disk space you want to save.</p>
+<p><strong>Why this routine is different now</strong></p>
+<p>In the previous (failed) routine, we were just “taping” files together and hoping the computer could figure out where the 8-minute mark was.</p>
+<p>In this new routine, by using these arguments with a <strong>Filter Complex</strong>, we are:</p>
+<ol type="1">
+<li><p>Opening each file individually.</p></li>
+<li><p>Measuring exactly where to cut.</p></li>
+<li><p>“Developing” those pieces into a brand-new stream (<code>[outv]</code>).</p></li>
+<li><p>Ensuring that specific stream is mapped correctly to the output.</p></li>
+</ol>
+<p>This is why the files won’t be 1 KB anymore—we are forcing FFmpeg to actually “draw” the frames into the new file rather than just moving metadata around.</p>
+</section>
+<section id="prompt-12" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-12">Prompt</h3>
+<p>What does <code>'[0:v][1:v][2:v]concat=n=3:v=1[outv]'</code> mean? This is passed to <code>-filter-complex</code> argument.</p>
+</section>
+<section id="coding-partner-12" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-12">Coding partner</h3>
+<p>This string is the “blueprint” for the assembly line we’ve built inside FFmpeg. In the previous step, we told FFmpeg to open several files; now, this string tells it exactly how to stitch them together into one continuous ribbon.</p>
+<p>Let’s break it down piece by piece using the “Label” analogy.</p>
+<ol type="1">
+<li><strong>The Input Labels: <code>[0:v][1:v][2:v]</code></strong></li>
+</ol>
+<p>In FFmpeg, every file you open is assigned a number starting at 0.</p>
+<ul>
+<li><p><code>[0:v]</code> means: “Take the <strong>video</strong> (v) from the <strong>first</strong> file (0).”</p></li>
+<li><p><code>[1:v]</code> means: “Take the <strong>video</strong> (v) from the <strong>second</strong> file (1).”</p></li>
+<li><p><code>[2:v]</code> means: “Take the <strong>video</strong> (v) from the <strong>third</strong> file (2).”</p></li>
+</ul>
+<p>Think of these as “Post-it notes” stuck onto the specific video streams we want to use. We are lining them up at the start of the assembly line.</p>
+<ol start="2" type="1">
+<li><strong>The Action: <code>concat</code></strong></li>
+</ol>
+<p>This is the name of the “machine” we are sending those videos into. <code>concat</code> is short for concatenate, which is just a fancy way of saying “link these together end-to-end.”</p>
+<ol start="3" type="1">
+<li><strong>The Settings: <code>n=3:v=1</code></strong></li>
+</ol>
+<p>These are the instructions for the <code>concat</code> machine so it knows what to expect:</p>
+<ul>
+<li><p><code>n=3</code>: “Hey machine, I am handing you 3 separate input segments.” (If you had 5 files, this would be <code>n=5</code>).</p></li>
+<li><p><code>v=1</code>: “I want you to produce 1 single video stream as the result.”</p></li>
+</ul>
+<ol start="4" type="1">
+<li><strong>The Output Label: <code>[outv]</code></strong></li>
+</ol>
+<p>This is the most important part for the <code>-map</code> command we discussed earlier. After the <code>concat</code> machine finishes “taping” the three clips together, it needs to put a label on the finished product so other parts of the script can find it.</p>
+<p>We decided to name that finished product <code>[outv]</code> (Output Video). You could technically name it <code>[final_movie]</code> or <code>[strawberry_shortcake]</code>, as long as you use the exact same name in your <code>-map</code> command later.</p>
+<p><strong>Putting it all together:</strong></p>
+<p>When you read <code>[0:v][1:v][2:v]concat=n=3:v=1[outv]</code>, you are saying:</p>
+<blockquote class="blockquote">
+<p>“Take the video from my first three files <code>[0:v][1:v][2:v]</code>, run them through the stitching machine <code>concat</code>, tell the machine there are 3 pieces and to make 1 final video <code>n=3:v=1</code>, and slap a label on the result called <code>[outv]</code>.”</p>
+</blockquote>
+<p>This is why your code now works: by explicitly labeling the “pipes,” FFmpeg no longer gets confused about which frames belong to which file. It treats them as a single sequence of images before it ever tries to write them to your hard drive.</p>
+</section>
+<section id="prompt-13" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-13">Prompt</h3>
+<p>Please explain the various components of this string:</p>
+<pre><code>drawtext_filter = (
+    f"[outv]drawtext=fontfile='{font_path}':"
+&nbsp; &nbsp; r"text='%{eif\:t/3600\:d\:2}\:%{eif\:mod(t/60,60)\:d\:2}\:%{eif\:mod(t,60)\:d\:2}\:%{eif\:" + str(fps) + r"*mod(t,1)\:d\:2}':"
+&nbsp; &nbsp; "x=10:y=10:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.5[diagout]"
+)</code></pre>
+</section>
+<section id="coding-partner-13" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-13">Coding partner</h3>
+<p>This string is essentially a series of instructions for a “painter” (the <strong>drawtext</strong> filter) to draw a frame-accurate clock onto every image in your video. Because FFmpeg uses colons to separate its own commands, many of the colons inside the clock are “escaped” with backslashes (<code>\:</code>) so FFmpeg doesn’t get confused.</p>
+<p>Here is the breakdown of the components, separated by their function:</p>
+<ol type="1">
+<li><p><strong>The Labels (The “Pipes”)</strong></p>
+<ul>
+<li><code>[outv]</code>: This is the input label. It tells the filter to take the video coming out of the previous <code>concat</code> step and bring it into this filter.</li>
+<li><code>[diagout]</code>: This is the output label. It gives the “new” video (the one with the clock) a name so the script can find it later for the final save.</li>
+</ul></li>
+<li><p><strong>General Settings</strong></p>
+<ul>
+<li><code>drawtext</code>: The name of the filter.</li>
+<li><code>fontfile='{font_path}'</code>: Points to the specific <code>.ttf</code> file (like Arial) on your computer.</li>
+<li><code>x=10:y=10</code>: The coordinates. This places the text 10 pixels from the left and 10 pixels from the top.</li>
+<li><code>fontsize=48:fontcolor=white</code>: Sets the size and color of the text.</li>
+<li><code>box=1:boxcolor=black@0.5</code>: This draws a semi-transparent black rectangle behind the white text to make it readable regardless of the background.</li>
+</ul></li>
+<li><p><strong>The “Clock” Math (Text Expansion)</strong></p></li>
+</ol>
+<p>The content inside <code>text='...'</code> is where the magic happens. The <code>%{...}</code> syntax tells FFmpeg: “Evaluate the math inside these brackets for every single frame.</p>
+<p>“The function <code>eif</code> (Evaluate Integer Format) is used four times to build the <strong>HH:MM:SS:FF</strong> format. The syntax <code>\:d\:2</code> at the end of each <code>eif</code> tells FFmpeg to <strong>format as a decimal</strong> and a<strong>lways use 2 digits</strong> (so 5 becomes”05”).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 18%">
+<col style="width: 48%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Math</th>
+<th style="text-align: left;">Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Hours</strong></td>
+<td style="text-align: left;"><code>t/3600</code></td>
+<td style="text-align: left;">Takes the current time in seconds (<code>t</code>) and divides by 3600.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Minutes</strong></td>
+<td style="text-align: left;"><code>mod(t/60, 60)</code></td>
+<td style="text-align: left;">Finds the remainder of total minutes divided by 60.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Seconds</strong></td>
+<td style="text-align: left;"><code>mod(t, 60)</code></td>
+<td style="text-align: left;">Finds the remainder of total seconds divided by 60.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Frames</strong></td>
+<td style="text-align: left;"><code>str(fps) * mod(t,1)</code></td>
+<td style="text-align: left;">Takes the fraction of the current second (e.g., <code>.5</code>) and multiplies it by your frame rate (29.97) to get the frame number.</td>
+</tr>
+</tbody>
+</table>
+<ol start="4" type="1">
+<li><strong>Python-Specific Formatting</strong></li>
+</ol>
+<p>You’ll notice the string uses three different Python techniques to keep things clean:</p>
+<ul>
+<li><code>f"..."</code> <strong>(f-string)</strong>: Used at the beginning to inject your variable <code>{font_path}</code> into the string.</li>
+<li><code>r"..."</code> <strong>(raw-string)</strong>: Used for the math section. The <code>r</code> tells Python: “Treat all these backslashes as literal text; don’t try to interpret them.” If we didn’t use <code>r</code>, Python might think <code>\:</code> is a special command.</li>
+<li><code>+ str(fps) +</code>: Because the <code>fps</code> needs to be a specific number (29.97) inside the FFmpeg math, we “pause” the string, stick the number in, and then restart the string.</li>
+</ul>
+<p><strong>The result on your screen:</strong></p>
+<p>Instead of a confusing mess of math, you see a clean, professional-looking <strong>00:08:30:15</strong> that updates perfectly 29.97 times every second.</p>
+</section>
+<section id="prompt-14" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-14">Prompt</h3>
+<p>Now I would like to generate help doc text at the top of the file formatted according to standard python requirements. Do not assume anything you do not know; ask me questions as needed (e.g., author, etc.).</p>
+</section>
+<section id="coding-partner-14" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-14">Coding partner</h3>
+<p>I’d be happy to draft that for you! A well-documented script is like a clean lab bench—it makes the actual work much smoother.</p>
+<p>To make this “standard,” we’ll follow <strong>PEP 257</strong> (docstring conventions) and <strong>PEP 8</strong>. This module-level docstring will live at the very top of your <code>.py</code> file so that anyone running <code>help()</code> on your script gets a clear overview.</p>
+<p>To ensure this is accurate, I have a few questions to fill in the blanks:</p>
+<ol type="1">
+<li><p><strong>Author/Contact:</strong> Who should be listed as the author (Name/Email/Lab)?</p></li>
+<li><p><strong>Project Name:</strong> Does this script belong to a specific research project (e.g., “The Fish Behavior Study 2026”)?</p></li>
+<li><p><strong>Version/Date:</strong> What is the current version number or today’s date?</p></li>
+<li><p><strong>License:</strong> How is this code licensed (e.g., MIT, Proprietary, Creative Commons)?</p></li>
+<li><p><strong>Environment Requirements:</strong> Beyond Python and FFmpeg, are there specific OS requirements we should mention (e.g., “Tested on Windows 10/11”)?</p></li>
+</ol>
+</section>
+<section id="prompt-15" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-15">Prompt</h3>
+<p>[P]lease confirm that [all of these Python and R files] are OS-agnostic. In other words, the script will still work in Mac or Linux environments. Particularly the first quote stripping.</p>
+</section>
+<section id="coding-partner-15" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-15">Coding partner</h3>
+<p>Yes, I can confirm that the logic provided is <strong>OS-agnostic</strong>. The Python script is designed to handle the differences between Windows, macOS, and Linux gracefully.</p>
+<ol type="1">
+<li><strong>The Quote Stripping (<code>.strip('"')</code>)</strong></li>
+</ol>
+<p>This is perfectly safe and highly recommended for cross-platform scripts.</p>
+<ul>
+<li><strong>On Windows:</strong> When a user drags and drops a file into a terminal or a <code>.bat</code> prompt, Windows often wraps the path in double quotes (<strong>e.g.</strong>, <code>"C:\Users\Fish Lab\config.yml"</code>). If you pass those quotes directly to <code>open()</code>, Python will look for a filename that literally starts and ends with a quote mark and fail to find it.</li>
+<li><strong>On macOS/Linux:</strong> While these systems typically use backslashes or single quotes for escaping in the shell, Python’s <code>.strip('"')</code> only removes characters if they exist. If there are no double quotes, the string remains unchanged. It is a non-destructive operation on all platforms.</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Cross-Platform Path Handling</strong></li>
+</ol>
+<p>The rest of the script maintains OS-agnosticism through these standard practices:</p>
+<ul>
+<li><code>os.path.join</code>: This automatically uses a backslash (<code>\</code>) on Windows and a forward slash (<code>/</code>) on Mac/Linux, ensuring paths are always valid.</li>
+<li><code>sys.platform</code>: As we implemented in the <code>get_ffmpeg_command</code> function, the script explicitly checks the OS to decide whether to look for <code>ffmpeg.exe</code> (Windows) or just <code>ffmpeg</code> (Mac/Linux).</li>
+<li><strong>Standard Libraries:</strong> Tools like <code>pandas</code>, ya<code>ml, and</code>tqdm` are cross-platform by design.</li>
+</ul>
+<p><strong>Why OS Consistency Matters for Your Data</strong></p>
+<p>The primary reason to ensure this script works identically across all systems is to protect the <strong>scientific integrity</strong> of your survey video.</p>
+<p>The NTSC (National Television System Committee) was the body that established the standards used for your GoPro’s video timing. Because the NTSC introduced a <strong>29.97 fps</strong> (<span class="math inline">\(30000/1001\)</span>) frame rate in 1953 to make color broadcasts compatible with older black-and-white sets, the math required to clip your videos is not based on whole numbers.</p>
+<p>By using a single, OS-agnostic Python script, you ensure that:</p>
+<ul>
+<li>A researcher on a Mac in the office</li>
+<li>A technician on a Windows laptop in the field</li>
+<li>A server running Linux for batch processing</li>
+</ul>
+<p>…all calculate the “8-minute-on-bottom” start time to the exact same frame. This eliminates “Software Drift” that might occur if different labs used different platform-specific tools to perform the same task.</p>
 
 
 </section>
@@ -1705,7 +1905,7 @@ Note
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/usage.html" class="pagination-link" aria-label="Using the utility">
+      <a href="../../content/usage.html" class="pagination-link" aria-label="Using the utility">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Using the utility</span>
       </a>          
   </div>
@@ -1720,7 +1920,7 @@ Note
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/gemini.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/Appendices/gemini.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://noaa.gov">NOAA</a> <br> <a href="https//fisheries.noaa.gov">NOAA Fisheries</a> <br> <a href="https://www.fisheries.noaa.gov/contact/southeast-fisheries-science-center">Southeast Fisheries Science Center</a></p>
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>. © CC-1.0</p>

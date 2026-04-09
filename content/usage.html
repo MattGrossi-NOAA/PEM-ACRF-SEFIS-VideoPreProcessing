@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Using the utility – SEFIS Video Pre-Processing Documentation</title>
+<title>Using the utility – SEFIS Video Pre-Processing (clip-and-stitch)</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -67,7 +67,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/gemini.html" rel="next">
+<link href="../content/Appendices/gemini.html" rel="next">
 <link href="../content/configuration.html" rel="prev">
 <link href="../theme/images/favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">SEFIS Video Pre-Processing Documentation</span>
+    <span class="navbar-title">SEFIS Video Pre-Processing (clip-and-stitch)</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -400,12 +400,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Using the utility</span></a>
   </div>
 </li>
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 ">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/gemini.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Gemini Workflow Planning</span></a>
+  <a href="../content/Appendices/gemini.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Appendix A: Gemini Workflow Planning</span></a>
   </div>
 </li>
+      </ul>
+  </li>
       </ul>
   </li>
     </ul>
@@ -457,6 +468,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="rstudio-and-r" class="level3">
 <h3 class="anchored" data-anchor-id="rstudio-and-r">RStudio and R</h3>
 <p>For users comfortable using R and RStudio, the <code>process_videos.R</code> script can be run directly from RStudio. Open the project in RStudio and run the <code>process_videos.R</code> script. You will be prompted to select the configurations YAML file to use, and the script will run according to the settings specified in that file.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="A note for R users">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A note for R users
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>process_videos.R</code> script is a launcher/wrapper script that runs the Python video processing utility <code>process_videos.py</code>. It is pre-configured to use the ‘Private Library’ (Virtual Environment) created during setup. You don’t need to manually activate anything; just double-click the Rscript file and provide your configuration file when prompted.</p>
+</div>
+</div>
 </section>
 <section id="python-and-command-line" class="level3">
 <h3 class="anchored" data-anchor-id="python-and-command-line">Python and command line</h3>
@@ -926,8 +950,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/gemini.html" class="pagination-link" aria-label="Gemini Workflow Planning">
-        <span class="nav-page-text">Gemini Workflow Planning</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/Appendices/gemini.html" class="pagination-link" aria-label="Appendix A: Gemini Workflow Planning">
+        <span class="nav-page-text">Appendix A: Gemini Workflow Planning</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
