@@ -7,17 +7,17 @@ order: 1
 ---
 
 :::{.callout-note}
-The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to [Configurations](configurations.qmd) or [Using the Utility](usage.qmd).
+The instructions on this page only need to be carried out once. If you have already installed the required dependencies, skip ahead to [Configurations](configuration.qmd) or [Using the Utility](usage.qmd).
 :::
 
-There are multiple ways to set up and use this utility depending on your familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
+There are multiple ways to set up this utility depending on one's familiarity with Git, R, Python, and/or command line. In order of increasing technical complexity, the options are:
 
 ### No command line
 
 1. [**Download the repository**]({{< meta website.repo-url >}}) by clicking the green "Code" button and selecting "Download ZIP." Extract the contents of the ZIP file to a local directory.
 
    ::: {.callout-warning}
-   This method does not support version control, so you will not be able to easily update the utility as improvements are made. It is recommended to clone the repo using Git if possible as described below.
+   This method does not support version control, so you will not be able to easily update the utility as improvements are made. Cloning the repo, as described [below](#python-and-command-line), is recommended instead.
    :::
 
 2. **Set up the environment and install dependencies**: Open File Explorer (Windows) and navigate to the newly extracted project directory. Run (double-click) the `setup.bat` file. This will do three things behind the scenes:
@@ -40,7 +40,7 @@ For users comfortable using R, RStudio, and Git version control, but unfamiliar 
 
 ### Python and command line
 
-Much of the following is carried out using command line. In the instructions below, "command line terminal" or "terminal" refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell. These use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in [Git for Windows](#git) and allows UNIX commands to be used instead of DOS.
+In the instructions below, "command line terminal" or "terminal" refer to any command line application for the given operating system. For Windows, this is commonly Command Prompt or Windows Powershell, both of which use DOS commands. For UNIX users, Git Bash is a good alternative; it is included in [Git for Windows](#git) and allows UNIX commands to be used instead of DOS.
 
 1. **Install Git, if needed**: If the [Git CLI](https://git-scm.com/downloads) is already installed, there should be a Git Bash program in your Applications. If so, open this program and verify everything is working by typing
 
@@ -64,7 +64,7 @@ Much of the following is carried out using command line. In the instructions bel
    git clone {{< meta website.repo-url >}}
    ```
 
-   This is just personal preference. (Note the difference between the two commands is the dot `.` at the end.)
+   (This is just personal preference. Note the difference between the two commands is the dot `.` at the end.)
   
 3. **Set up the environment and install dependencies**: Run the `setup.bat` file, as above, or manually create your own virtual environment. In a command line terminal, navigate to the repository directory. For example,
 
@@ -99,12 +99,12 @@ Much of the following is carried out using command line. In the instructions bel
    ```
 
    ::: {.callout-important}
-   If you plan to use the `process_videos.bat` or `launcher.R` provided in the repo, you must use a `pip` environment named `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.
+   If you plan to use the `process_videos.bat` or `process_videos.R` provided in the repo, you must use a `pip` environment named `.venv` and place it in the project directory, as these scripts are configured to look for the virtual environment in that location. If you create a virtual environment with a different name or in a different location, you will need to modify those scripts to point to the correct environment.
    :::
 
 3. **Use the utility** as described in [Using the Utility](usage.qmd).
 
-4. When finished, deactivate the virtual environment:
+4. **Deactivate the virtual environment** when finished:
 
    ```{.bash filename="pip environment"}
    deactivate

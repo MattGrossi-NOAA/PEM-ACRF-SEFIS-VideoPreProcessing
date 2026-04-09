@@ -12,9 +12,9 @@ A `configurations.yml` file is an easy way to control tool behavior as well as k
 2. The directory containing the CSV metadata file and the relevant column headers
 3. The directory where the new stitched video should be saved
 
-These and other configuration options are detailed [in the docs](index.qmd#options).
+These and other configuration options are detailed [in the docs](../index.qmd#options).
 
-The configuration file is a YAML file structured as `key: value` pairs. The order in which these entries are presented in the file does not matter, but [all keys need to be included and match exactly](index.qmd#options) as expected (unless otherwise noted [in the docs](index.qmd#options)). For example:
+The configuration file is a YAML file structured as `key: value` pairs. The order in which these entries are presented in the file does not matter, but [all keys need to be included and match exactly](../index.qmd#options) as expected (unless otherwise noted. For example:
 
 ```{.yaml filename="configurations.yml"}
 # ----- PATH SETTINGS -----
@@ -28,7 +28,7 @@ col_timebottom: "timebottom"
 reprocess: false
 diagnostic_mode: false
 clear_log: false
-use_gpu: true
+use_gpu: false
 
 # ----- VIDEO PROCESSING UTILITIES (OPTIONAL) -----
 ffmpeg_path: "ffmpeg/bin/ffmpeg.exe"

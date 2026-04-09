@@ -29,7 +29,7 @@ Some key features:
 
 [^1]: The frame rate is extracted from the video metadata, rather than being hard-coded into the script, in an effort to make the utility camera-agnostic.
 
-An optional diagnostic mode can be used to embed an authoritative video timestamp into the video frames (formatted `HH:MM:SS:FF`) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. This embedded timestamp is fundamentally independent of the timestamp shown in most video players, which is merely a count from the start of the video. A video player would not know, for example, if a bad stitching operation inadvertently skips a frame or chunk of frames. Engaging diagnostic mode will also print out a table of the splice times for each deployment to the console including where in the original video files the segments were taken. To assess the performance of the script, compare the frames in the new video at and around the splice times ("NEW VIDEO TIME") to the appropriate timestamps in the corresponding source files ("SOURCE TIMESTAMP"). If, for example, the stitch caused the same file to be read twice, the video player clock will keep advancing but the embedded timestamp in the video will reset or stutter, indicating a problem with the splice. If the splice is correct, the embedded timestamp will advance monotonically across the splice.
+An optional diagnostic mode can be used to embed an authoritative video timestamp into the video frames (formatted `HH:MM:SS:FF`) to help find the splice times, since some video software do not preserve the original frame rate or fail to display the full time during playback. This embedded timestamp is fundamentally independent of the timestamp shown in most video players, which is merely a count from the start of the video. A video player would not know, for example, if a bad stitching operation inadvertently skips a frame or chunk of frames. Engaging diagnostic mode will also print out a table of the stitch times for each deployment to the console including where in the original video files the segments were taken. To assess the performance of the script, compare the frames in the new video at and around the stitch times ("NEW VIDEO TIME") to the appropriate clip timestamps in the corresponding source files ("SOURCE TIMESTAMP"). If, for example, the stitch caused the same file to be read twice, the video player clock will keep advancing but the embedded timestamp in the video will reset or stutter. If the stitch is correct, the embedded timestamp will advance monotonically across the stitch.
 
 ::: {.callout-note}
 This table is always added to a log file even when diagnostic mode is off, but printing to the screen can be a convenience for evaluation or troubleshooting.
@@ -40,16 +40,16 @@ This table is always added to a log file even when diagnostic mode is off, but p
 Running the script is straightforward. After activating the appropriate Python environment, simply call the script from the command line specifying the configuration YAML file to use:
 
 ```bash
-python clip_and_splice.py configurations.yaml
+python clip_and_stitch.py configurations.yaml
 ```
 
 If the configuration file is not co-located with the script, simply include the path to the file so that the script knows where to find it:
 
 ```bash
-python clip_and_splice.py path/to/configurations.yaml
+python clip_and_stitch.py path/to/configurations.yaml
 ```
 
-Helper files are also included for users unfamiliar or uncomfortable with command line. For more information and instructions, see [Using the Model](content/usage.qmd).
+Helper files are also included for users unfamiliar or uncomfortable with command line. For more information and instructions, see [Using the Utility](content/usage.qmd).
 
 
 ### Options
@@ -60,9 +60,9 @@ All user options are contained in a configuration YAML file (called `configurati
 |:-----------------|:---------------------------------------------------------|
 `input_directory`  | Path to parent folder containing subfolders for set of videos. The subfolders should be named according to the collection number (e.g., `DEPLOYMENT_001`), which will be used to name the new video file, and should contain all of the video files for that deployment.
 `output_directory` | Path to folder where the new video file will be saved. The new video will automatically be named according to the collection number (e.g., `DEPLOYMENT_001.MP4`).
-`csv_path`         | Path (including name) of the "time-on-bottom" CSV metadata file. This file should contain entries for each deployment (subfolder) in rows with deployment name in one column and "time-on-bottom" in a separate column. Any other columns will be ignored. Note that directory and file names are case-sensitive on some operating systems.
+`csv_path`         | Path (including name) of the "time-on-bottom" CSV metadata file. This file should contain entries for each deployment (subfolder) in rows with collection number in one column and "time-on-bottom" in a separate column. All other columns will be ignored. Note that directory and file names are case-sensitive on some operating systems.
 `col_foldername`   | Column name for the column containing the deployment or folder name. Defaults to `foldername` but can be changed here if needed. Case-sensitive.
-`col_timebottom`   | Column name for the column containing the "time-on-bottom" timestamps. Defaults to `time_on_bottom` but can be changed here if needed. Expected format is `HH:MM:SS:FF``.
+`col_timebottom`   | Column name for the column containing the "time-on-bottom" timestamps. Defaults to `timebottom` but can be changed here if needed. Expected format of the timestamps is `HH:MM:SS:FF``.
 : Paths and associated settings
 
 <br>
@@ -88,13 +88,13 @@ All user options are contained in a configuration YAML file (called `configurati
 | Key              | Description                                              |
 |:-----------------|:---------------------------------------------------------|
 `video_extension`  | The file extension for the video files to be processed. Defaults to ".MP4".
-`log_file`         | Path to and name of the log file where processing information will be recorded. Defaults to `./process.log` (present working directory).
+`log_file`         | Path to and name of the log file where processing information will be recorded. Defaults to `./processing-log.txt` (in the present working directory).
 `quality_crf`      | Constant Rate Factor (CRF) for video encoding quality. Lower values mean better quality: 18 is high quality, 23 is standard. Defaults to 23.
 `min_gb_required`  | Minimum required free disk space in GB to start processing. Script will warn if available space is below this threshold. Defaults to 10.
 : Additional settings that can be adjusted if needed or as desired. These can be omitted from the configuration file if the default values are acceptable.
 
 
-::: {.callout-important title="A note on file paths"}
+::: {.callout-tip title="A note on file paths"}
 Use double quotation marks with forward slashes (/) or double backslashes (\\\\) for Windows paths to avoid issues with escape characters and spaces. For example, `"C:/Users/user.name/Documents/configs.yaml"` or `"C:\\Users\\user.name\\Documents\\configs.yaml"`.
 :::
 
