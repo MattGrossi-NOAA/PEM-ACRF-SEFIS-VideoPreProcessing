@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.36">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>HOWTO: Using the SEFSC Quarto Theme – App Name Documentation</title>
+<title>Configuring the Model – SEFIS Video Pre-Processing Documentation</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -23,32 +23,67 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../../">
-<link href="../../content/howto/setup.html" rel="next">
-<link href="../../content/setup.html" rel="prev">
-<link href="../../theme/images/favicon.png" rel="icon" type="image/png">
-<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/popper.min.js"></script>
-<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
-<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-7cd8905afccf9e4aff4836e42671a711.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/usage.html" rel="next">
+<link href="../content/mount.html" rel="prev">
+<link href="../theme/images/favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7cd8905afccf9e4aff4836e42671a711.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -249,8 +284,8 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">App Name Documentation</span>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">SEFIS Video Pre-Processing Documentation</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -301,7 +336,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/docs/index.html">Content</a></li><li class="breadcrumb-item"><a href="../../content/howto/index.html">HOWTO: Using the SEFSC Quarto Theme</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuring the Model</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -315,9 +350,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../../index.html" class="sidebar-logo-link">
-      <img src="../../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       <div class="sidebar-tools-main tools-wide">
     <a href="https://noaa.gov" title="NOAA Home" class="quarto-navigation-tool px-1" aria-label="NOAA Home"><i class="bi bi-house"></i></a>
@@ -343,128 +378,34 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/docs/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Read the Docs</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/setup.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Getting Started</span></a>
-  </div>
-</li>
-          <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../../content/howto/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">HOWTO: Using the SEFSC Quarto Theme</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/howto/setup.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/setup.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Getting Started</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/howto/customizing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Customization</span></a>
+  <a href="../content/mount.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mounting a Drive</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/howto/add-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Add Content</span></a>
+  <a href="../content/configuration.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Configuring the Model</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/howto/publishing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Publishing</span></a>
+  <a href="../content/usage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using the utility</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/howto/code.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Rendering with Code</span></a>
+  <a href="../content/gemini.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gemini Workflow Planning</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/howto/update-theme.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Updating the Theme</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/howto/notebooks.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Jupyter Notebook</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/howto/acknowledgements.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Acknowledgments</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-          <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../../content/about/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">ABOUT: Creating the SEFSC Quarto Theme and Template</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/about.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/quarto.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">About This Project</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/template.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Creating the Documentation Template</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/theme.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Creating the Custom Theme</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/customization.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Customizing the Theme</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/submodules.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Merging the Template and Theme</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../content/about/conclusion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Final Remarks</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
       </ul>
   </li>
     </ul>
@@ -477,18 +418,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#preliminaries" id="toc-preliminaries" class="nav-link active" data-scroll-target="#preliminaries">Preliminaries</a></li>
+  <li><a href="#where-to-save-your-configuration-file" id="toc-where-to-save-your-configuration-file" class="nav-link active" data-scroll-target="#where-to-save-your-configuration-file">Where to save your configuration file</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/howto/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/configuration.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/docs/index.html">Content</a></li><li class="breadcrumb-item"><a href="../../content/howto/index.html">HOWTO: Using the SEFSC Quarto Theme</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/configuration.html">Configuring the Model</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">HOWTO: Using the SEFSC Quarto Theme</h1>
-<p class="subtitle lead">Creating your own documentation page using the SEFSC Quarto Theme</p>
+<h1 class="title">Configuring the Model</h1>
+<p class="subtitle lead">Using the <code>configurations.yml</code> file</p>
 </div>
 
 
@@ -505,21 +446,76 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>The <a href="../../index.html">SEFSC-documentation-quarto-skeleton</a> repository is a template, or “skeleton”, starting point to create a new GitHub-based documentation site that uses the NOAA Fisheries Southeast Fisheries Science Center (SEFSC) <a href="https://github.com/SEFSC/documentation-theme-quarto">documentation-theme-quarto</a> documentation format and functionality. This documentation theme is derived from the NOAA Fisheries Open Science <a href="https://github.com/nmfs-opensci/NOAA-quarto-simple-python">NOAA-quarto-simple-python</a> repository and is inspired by the Integrated Ocean Observing System (IOOS) <a href="https://github.com/ioos/documentation-theme-jekyll">documentation-theme-jekyll</a>, which is used for all <a href="https://ioos.github.io">https://ioos.github.io</a> sites.</p>
-<p>The instructions below will allow you to create a new GitHub Pages site that follows the look and feel/functionality of the documentation theme used by the <a href="https://ioos.github.io">https://ioos.github.io</a> site. You can then add/edit the template markdown documents with your own content.</p>
-<p>The theme has many additional features that have are not demonstrated nor utilized in this preview repository. Check out the <a href="https://quarto.org/docs/websites/">Quarto documentation</a> to learn more.</p>
-<section id="preliminaries" class="level2">
-<h2 class="anchored" data-anchor-id="preliminaries">Preliminaries</h2>
-<p>This Quarto website has Python code in the <code>code.qmd</code> file and has a Jupyter notebook. The GitHub Action will render those for you but note that you need some a special <strong>RAW</strong> block at the top of your ipynb file. Without this, the Jupyter notebook won’t render (code blocks won’t be computed). It looks like this</p>
-<pre><code>---
-title: Jupyter Notebook
-execute:
-  enabled: true
-jupyter: python3
----</code></pre>
-<p>Also you will need to add any modules that your code needs to the <code>requirements.txt</code> file so they are installed by the GitHub Action.</p>
+<p>A <code>configurations.yml</code> file is an easy way to control tool behavior as well as keep a record of the settings used each time. The most important settings in this file to pay attention to are:</p>
+<ol type="1">
+<li>The directory containing the videos to process</li>
+<li>The directory containing the CSV metadata file and the relevant column headers</li>
+<li>The directory where the new stitched video should be saved</li>
+</ol>
+<p>These and other configuration options are detailed <a href="index.qmd#options">in the docs</a>.</p>
+<p>The configuration file is a YAML file structured as <code>key: value</code> pairs. The order in which these entries are presented in the file does not matter, but <a href="index.qmd#options">all keys need to be included and match exactly</a> as expected. For example:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>configurations.yml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="configurations.yml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ----- PATH SETTINGS -----</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">input_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">user.name</span><span class="sc">\\</span><span class="st">Documents</span><span class="sc">\\</span><span class="st">videos"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">output_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">user.name</span><span class="sc">\\</span><span class="st">Documents</span><span class="sc">\\</span><span class="st">videos"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">csv_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:</span><span class="sc">\\</span><span class="st">Users</span><span class="sc">\\</span><span class="st">user.name</span><span class="sc">\\</span><span class="st">Documents</span><span class="sc">\\</span><span class="st">videos</span><span class="sc">\\</span><span class="st">SEFIS test vids.csv"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">col_foldername</span><span class="kw">:</span><span class="at"> </span><span class="st">"foldername"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">col_timebottom</span><span class="kw">:</span><span class="at"> </span><span class="st">"timebottom"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ----- PROCESSING SETTINGS -----</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">reprocess</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">diagnostic_mode</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">clear_log</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">use_gpu</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ----- VIDEO PROCESSING UTILITIES (OPTIONAL) -----</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ffmpeg_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"ffmpeg/bin/ffmpeg.exe"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ffprobe_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"ffmpeg/bin/ffprobe.exe"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="A note on reproducibility">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>A note on reproducibility
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the sake of documenting workflows and facilitating future reproducibility, consider creating new configuration files for each collection of videos processed (for example, one for each parent folder containing multiple deployments). There is no restriction on what this file can be called; you will tell the script which file to use when you <a href="../content/usage.html#running-the-model">execute the script</a>. Thus, some convention like <code>configuration-2025.yml</code> might be sensible. It is best practice to avoid spaces and special characters other than underscores and hyphens in file names to avoid issues with file paths.</p>
+</div>
+</div>
+<section id="where-to-save-your-configuration-file" class="level3">
+<h3 class="anchored" data-anchor-id="where-to-save-your-configuration-file">Where to save your configuration file</h3>
+<p>There are two schools of thought when it comes to organizing configuration files. It is ultimately up to the user to choose whichever convention is best for them.</p>
+<section id="option-1-alongside-the-script" class="level4">
+<h4 class="anchored" data-anchor-id="option-1-alongside-the-script">Option 1: Alongside the script</h4>
+<p>Storing the <code>configurations.yml</code> file in the same directory as the processing script is advantageous when <a href="../content/usage.html#running-the-model">running the model</a> because you will not need to include the full directory path when you specify which configuration file to use. Since you will be executing the model script from the directory that script resides, the system will automatically find the <code>configurations.yml</code> file in that same directory.</p>
+<p>The disadvantage to this option is that your directory may quickly become cluttered with different configuration files for different processing sessions.</p>
+</section>
+<section id="option-2-alongside-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="option-2-alongside-the-data">Option 2: Alongside the data</h4>
+<p>One might opt instead to store the <code>configurations.yml</code> file in the same directory as the videos to be processed or the directory where the new video will be written out. This is helpful for documenting workflows and ensuring reproducibility since it will be easy to see how a given data set was processed.</p>
+<p>The disadvantage to this option is that it will require the full directory path to be included when <a href="../content/usage.html#running-the-model">running the model</a> if executing in command line and specifying the configuration file to use.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These are by no means the only options. Whatever convention is adopted, consistency is key. Your future self will thank you some day.</p>
+</div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -938,13 +934,13 @@ jupyter: python3
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/setup.html" class="pagination-link" aria-label="Getting Started">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Getting Started</span>
+      <a href="../content/mount.html" class="pagination-link" aria-label="Mounting a Drive">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Mounting a Drive</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/howto/setup.html" class="pagination-link" aria-label="Getting Started">
-        <span class="nav-page-text">Getting Started</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/usage.html" class="pagination-link" aria-label="Using the utility">
+        <span class="nav-page-text">Using the utility</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
@@ -956,7 +952,7 @@ jupyter: python3
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/howto/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/configuration.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p><a href="https://noaa.gov">NOAA</a> <br> <a href="https//fisheries.noaa.gov">NOAA Fisheries</a> <br> <a href="https://www.fisheries.noaa.gov/contact/southeast-fisheries-science-center">Southeast Fisheries Science Center</a></p>
 <p>This page is built with <a href="https://quarto.org/">Quarto</a>. © CC-1.0</p>

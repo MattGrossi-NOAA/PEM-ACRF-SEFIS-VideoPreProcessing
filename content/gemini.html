@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="matt.grossi@noaa.gov">
+<meta name="author" content="Google Gemini (NOAA implementation)">
+<meta name="dcterms.date" content="2026-04-01">
+
+<title>Gemini Workflow Planning – SEFIS Video Pre-Processing Documentation</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/usage.html" rel="prev">
+<link href="../theme/images/favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-d0ae9245876894da5ac7e18953ecc5cc.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7cd8905afccf9e4aff4836e42671a711.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-12c5e11255d1ba86debc14f9a0fb43fb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">SEFIS Video Pre-Processing Documentation</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sefsc-resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">SEFSC Resources</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-sefsc-resources">    
+        <li>
+    <a class="dropdown-item" href="https://www.fisheries.noaa.gov/contact/southeast-fisheries-science-center">
+ <span class="dropdown-text">SEFSC Homepage</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://nmfs-opensci.github.io/">
+ <span class="dropdown-text">NOAA Fisheries Open Science</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-software--documentation" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Software &amp; Documentation</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-software--documentation">    
+        <li>
+    <a class="dropdown-item" href="https://github.com/sefsc">
+ <span class="dropdown-text">SEFSC GitHub Organization</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://noaa-fisheries-integrated-toolbox.github.io/">
+ <span class="dropdown-text">NOAA Fisheries Integrated Toolbox</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/gemini.html">Gemini Workflow Planning</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-center sidebar-header">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../theme/images/NOAA_FISHERIES_logoV.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      </a>
+      <div class="sidebar-tools-main tools-wide">
+    <a href="https://noaa.gov" title="NOAA Home" class="quarto-navigation-tool px-1" aria-label="NOAA Home"><i class="bi bi-house"></i></a>
+    <a href="https://www.fisheries.noaa.gov/contact/southeast-fisheries-science-center" title="NOAA Southeast Fisheries Science Center" class="quarto-navigation-tool px-1" aria-label="NOAA Southeast Fisheries Science Center"><i class="bi bi-globe"></i></a>
+    <a href="https://github.com/SEFSC" title="SEFSC GitHub" class="quarto-navigation-tool px-1" aria-label="SEFSC GitHub"><i class="bi bi-github"></i></a>
+</div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Content</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Getting Started</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/mount.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mounting a Drive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/configuration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Configuring the Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/usage.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Using the utility</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/gemini.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Gemini Workflow Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#prompt" id="toc-prompt" class="nav-link active" data-scroll-target="#prompt">Prompt</a></li>
+  <li><a href="#coding-partner" id="toc-coding-partner" class="nav-link" data-scroll-target="#coding-partner">Coding partner</a></li>
+  <li><a href="#prompt-1" id="toc-prompt-1" class="nav-link" data-scroll-target="#prompt-1">Prompt</a></li>
+  <li><a href="#coding-partner-1" id="toc-coding-partner-1" class="nav-link" data-scroll-target="#coding-partner-1">Coding partner</a></li>
+  <li><a href="#prompt-2" id="toc-prompt-2" class="nav-link" data-scroll-target="#prompt-2">Prompt</a></li>
+  <li><a href="#coding-partner-2" id="toc-coding-partner-2" class="nav-link" data-scroll-target="#coding-partner-2">Coding partner</a></li>
+  <li><a href="#prompt-3" id="toc-prompt-3" class="nav-link" data-scroll-target="#prompt-3">Prompt</a></li>
+  <li><a href="#coding-partner-3" id="toc-coding-partner-3" class="nav-link" data-scroll-target="#coding-partner-3">Coding partner</a></li>
+  <li><a href="#prompt-4" id="toc-prompt-4" class="nav-link" data-scroll-target="#prompt-4">Prompt</a></li>
+  <li><a href="#coding-partner-4" id="toc-coding-partner-4" class="nav-link" data-scroll-target="#coding-partner-4">Coding partner</a></li>
+  <li><a href="#prompt-5" id="toc-prompt-5" class="nav-link" data-scroll-target="#prompt-5">Prompt</a></li>
+  <li><a href="#coding-partner-5" id="toc-coding-partner-5" class="nav-link" data-scroll-target="#coding-partner-5">Coding partner</a></li>
+  <li><a href="#prompt-6" id="toc-prompt-6" class="nav-link" data-scroll-target="#prompt-6">Prompt</a></li>
+  <li><a href="#coding-partner-6" id="toc-coding-partner-6" class="nav-link" data-scroll-target="#coding-partner-6">Coding partner</a></li>
+  <li><a href="#prompt-7" id="toc-prompt-7" class="nav-link" data-scroll-target="#prompt-7">Prompt</a></li>
+  <li><a href="#coding-partner-7" id="toc-coding-partner-7" class="nav-link" data-scroll-target="#coding-partner-7">Coding partner</a></li>
+  <li><a href="#prompt-8" id="toc-prompt-8" class="nav-link" data-scroll-target="#prompt-8">Prompt</a></li>
+  <li><a href="#coding-partner-8" id="toc-coding-partner-8" class="nav-link" data-scroll-target="#coding-partner-8">Coding partner</a></li>
+  <li><a href="#prompt-9" id="toc-prompt-9" class="nav-link" data-scroll-target="#prompt-9">Prompt</a></li>
+  <li><a href="#coding-partner-9" id="toc-coding-partner-9" class="nav-link" data-scroll-target="#coding-partner-9">Coding partner</a></li>
+  <li><a href="#prompt-10" id="toc-prompt-10" class="nav-link" data-scroll-target="#prompt-10">Prompt</a></li>
+  <li><a href="#coding-partner-10" id="toc-coding-partner-10" class="nav-link" data-scroll-target="#coding-partner-10">Coding partner</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/gemini.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/setup.html">Content</a></li><li class="breadcrumb-item"><a href="../content/gemini.html">Gemini Workflow Planning</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Gemini Workflow Planning</h1>
+<p class="subtitle lead">Video Clipping and Stitching Workflow</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Authors</div>
+    <div class="quarto-title-meta-contents">
+             <p>matt.grossi@noaa.gov </p>
+             <p>Google Gemini (NOAA implementation) </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 1, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following exchange with Gemini Coding Partner helped frame the problem and design the workflow solution. Gray boxes indicate user prompts. The “Coding Partner” is the Gemini implementation designed to help users design, write, and debug code while ensuring they understand the “why” behind every step. It is not perfect and may ask clarifying questions that seem obvious to a human, but this is part of the process to ensure the final solution is robust and well-understood. All output was reviewed, tested, and refined for accuracy and correctness by a NOAA scientist.`</p>
+<p>This page is non-exhaustive and does not include troubleshooting or refactoring exchanges that helped fix problems or modify design or performance.</p>
+</div>
+</div>
+<section id="prompt" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt">Prompt</h3>
+<p>I need to clip and stitch together several videos. My preferred language is Python, but I’m open to alternatives if there is a better solution. The desired workflow is as follows:</p>
+<ul>
+<li><p>Folders are named using a combination of a project code, year, collection, and camera. E.g., <code>T60250001_A</code>. We typically call this the “collection number” for short.</p></li>
+<li><p>Each folder is a single deployment of a trap with a camera. Each folder contains a board file and a number of underwater video files. The file names all are GoPro default, e.g.: <code>GX010192.MP4</code> and the first sequential video is the board file. Stitched together, these videos in the folder represent a full deployment.</p></li>
+<li><p>There is a csv file with each unique identifying collection number in a column, and the <code>timeonbottom</code> time, which is the elapsed time from when the video files start to when the trap lands on the bottom.</p></li>
+<li><p>We want to clip out a segment of video starting exactly 8 minutes after the trap lands on bottom and ending 32 minutes after the trap lands on bottom, for a 24-min video clip in total. This will involve stitching files together as well.</p></li>
+<li><p>This 24-min video clip should be named exactly like the folder containing the files (e.g., <code>T60250001_A</code>)</p></li>
+</ul>
+<p>Without doing or creating anything yet, please describe an efficient workflow for how I might accomplish this. Do not make any assumptions, but instead ask my any clarifying questions.</p>
+</section>
+<section id="coding-partner" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner">Coding partner</h3>
+<p>Hello! I’m your <strong>Coding Partner</strong>. My purpose is to help you design, write, and debug code while ensuring you understand the “why” behind every step. Whether you’re building a data processing pipeline or a small script, I’m here to provide clear instructions and documented solutions to help you succeed.</p>
+<p>For this project, Python is an excellent choice. We can leverage Pandas for handling your CSV data and FFmpeg (via the <code>ffmpeg-python</code> wrapper or direct <code>subprocess</code> calls) for the video manipulation. FFmpeg is the industry standard for this because it can “stream copy” video data, which is much faster and preserves quality better than re-encoding the entire 24-minute clip.</p>
+<section id="proposed-workflow-overview" class="level4">
+<h4 class="anchored" data-anchor-id="proposed-workflow-overview">Proposed Workflow Overview</h4>
+<ol type="1">
+<li><p><strong>Metadata Extraction:</strong> Read your CSV using Pandas to create a mapping of collection numbers to their respective <code>timeonbottom</code> values. We will also need to scan each folder to get a list of all <code>.MP4</code> files, sorted chronologically.</p></li>
+<li><p><strong>Timeline Calculation:</strong> For each collection, we will calculate the absolute start and end points in “seconds from the beginning of the first video.”</p>
+<ul>
+<li><p><strong>Start Clip Point:</strong> <code>timeonbottom</code> + 480 seconds (8 mins).</p></li>
+<li><p><strong>End Clip Point:</strong> <code>timeonbottom</code> + 1920 seconds (32 mins).</p></li>
+</ul></li>
+<li><p><strong>File Mapping:</strong> Since the 24-minute segment will likely span across multiple GoPro files (which are usually capped at ~4GB or ~8-12 minutes each), the script will identify exactly which files contain the segments we need.</p></li>
+<li><p><strong>Processing (The “Concatenate and Trim” Strategy):</strong> Instead of merging all videos and then cutting (which is slow), we will:</p>
+<ul>
+<li><p>Identify the specific files needed for the 24-minute window.</p></li>
+<li><p>Use an FFmpeg “Filter Complex” or a “Concat Demuxer” to stitch only the necessary portions together into the final output file named <code>T60250001_A.mp4</code>.</p></li>
+</ul></li>
+</ol>
+<p><strong>Clarifying Questions</strong></p>
+<p>To ensure I provide the most efficient script possible, I have a few questions about your setup:</p>
+<ol type="1">
+<li><p><strong>Time Format:</strong> In your CSV, what format is the <code>timeonbottom</code> column in? (e.g., total seconds like 125, or a timestamp like 00:02:05?)</p></li>
+<li><p><strong>GoPro Naming/Ordering:</strong> GoPro files use a specific naming convention (e.g., <code>GX010001.MP4</code>, <code>GX020001.MP4</code>). Is it safe to assume that a simple alphabetical sort of the .MP4 files in each folder correctly represents the chronological order of the deployment?</p></li>
+<li><p><strong>Board File:</strong> You mentioned the first sequential video is the “board file.” Does the <code>timeonbottom</code> calculation include the duration of this board file, or does the clock start after the board file ends?</p></li>
+<li><p><strong>Resolution/Frame Rate:</strong> Are all videos within a single folder recorded with the same settings (e.g., all 1080p at 30fps)? FFmpeg works best when the stream parameters match exactly.</p></li>
+<li><p><strong>Performance:</strong> Do you need the output to be a specific file size or quality, or should we prioritize “Stream Copying” (which is nearly instantaneous but might have slightly less precise cuts at the very first/last frame)?</p></li>
+</ol>
+<p>Once I have these details, I can provide the full Python implementation for you!</p>
+</section>
+</section>
+<section id="prompt-1" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-1">Prompt</h3>
+<ol type="1">
+<li><p><code>timeonbottom</code> is a timestamp like <code>00:03:30:00</code>.</p></li>
+<li><p>I do not know if this is a safe assumption, so I prefer to not make it. File metadata might be more reliable.</p></li>
+<li><p>Yes, <code>timeonbottom</code> includes the duration of the board file.</p></li>
+<li><p>Yes, all videos in a single folder are from a single deployment so should be the same frame rate. Can this be verified using metadata?</p></li>
+<li><p>I don’t understand the distinction here. Please elaborate and ask again. I’d like the same video quality as the original file. File size does not matter.</p></li>
+</ol>
+<p>I like the approach of determining which videos are needed before stitching. Does your proposed method clip the two videos that need to be clipped before stitching so that we can completely disregard the unused portions? For example, if <code>timeonbottom</code> occurs 2 minutes into the second video, would it disregard the first video, clip the second video at 2 minutes, discard the first 2 minutes and then stitch together the rest (same deal with the end clip)?</p>
+<p>Please continue asking clarifying questions.</p>
+</section>
+<section id="coding-partner-1" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-1">Coding partner</h3>
+<p>This is a great logic puzzle to solve. You’ve got the right idea about clipping: we definitely want to “narrow the search” to only the files that matter before we start heavy processing.</p>
+<p>To address your point about the clipping method: <strong>Yes</strong>, my proposed method will calculate which files are “dead weight” and ignore them entirely. If the 24-minute window starts in Video 2 and ends in Video 4, the script will:</p>
+<ol type="1">
+<li><p><strong>Discard</strong> Video 1.</p></li>
+<li><p><strong>Trim</strong> the start of Video 2.</p></li>
+<li><p><strong>Keep</strong> all of Video 3.</p></li>
+<li><p><strong>Trim</strong> the end of Video 4.</p></li>
+<li><p><strong>Discard</strong> everything from Video 5 onwards.</p></li>
+<li><p><strong>Stitch</strong> the remaining pieces together.</p></li>
+<li><p><strong>Re-encoding vs.&nbsp;Stream Copying (Clarifying Point 5)</strong> Since you want the same quality and aren’t worried about file size, here is the breakdown:</p>
+<ul>
+<li><p><strong>Stream Copying (<code>-c copy</code>):</strong> This is like “cutting and taping” the original physical film. It is incredibly fast because the computer doesn’t have to “re-draw” the video.</p>
+<ul>
+<li><em>The Catch:</em> It can only cut at “Keyframes” (specific points in the digital file where the whole image is saved). If your 8-minute mark falls between keyframes, the cut might be slightly off (by a second or two) or the video might “stutter” for a moment at the start.</li>
+</ul></li>
+<li><p><strong>Re-encoding:</strong> This is like “scanning” the original film and creating a brand new digital copy.</p>
+<ul>
+<li><p><em>The Catch:</em> It takes longer (minutes instead of seconds).</p></li>
+<li><p><em>The Benefit:</em> It is <strong>frame-accurate</strong>. We can cut at exactly 8:00.000 and the transition between stitched files will be perfectly seamless.</p></li>
+</ul></li>
+</ul></li>
+</ol>
+<p><strong>My Recommendation:</strong> Given this is for research/data collection, we should use Re-encoding with a high-quality “Constant Rate Factor” (CRF) to ensure we don’t lose any visual detail and the timestamps are perfect.</p>
+<p><strong>Additional Clarifying Questions</strong></p>
+<p>To get the code exactly right, I need to nail down these final details:</p>
+<ol type="1">
+<li><p><strong>The Timestamp Format:</strong> In <code>00:03:30:00</code>, is that last <code>00</code> frames or milliseconds? If it’s frames, do you know the frame rate of the board file?</p></li>
+<li><p><strong>Sorting Logic:</strong> If we can’t rely on file names, we will use the “Date Modified” or “Date Created” metadata. Are these files moved or copied in a way that might have changed those “Date Modified” timestamps, or are they the original files straight off the SD card?</p></li>
+<li><p><strong>Hardware/OS:</strong> Are you running this on <strong>Windows</strong>, <strong>macOS</strong>, or <strong>Linux</strong>? Also, do you have a dedicated GPU (like NVIDIA)? We can use the GPU to make the re-encoding process much faster.</p></li>
+<li><p><strong>Metadata Verification:</strong> You asked if we can verify the frame rate/resolution via metadata. Yes, we can use a tool called <code>ffprobe</code>. Would you like the script to “abort” if it finds a folder where the videos have mismatched settings (e.g., someone accidentally changed a camera setting mid-deployment)?</p></li>
+<li><p><strong>Missing Data:</strong> How should the script handle a case where a collection number in the CSV doesn’t have a matching folder on your drive? Should it skip and log it, or stop entirely?</p></li>
+</ol>
+<p>Once you answer these, I can draft the workflow logic and the Python code for you!</p>
+</section>
+<section id="prompt-2" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-2">Prompt</h3>
+<ol type="1">
+<li><p>I do not know. How can we figure it out?</p></li>
+<li><p>They have been moved or copied but it appears the Date Created and Date Modified are still the same. We should verify this, however. It may be necessary to throw an exception if a conflict is encountered.</p></li>
+<li><p>Windows. I have a GPU, but others might not. Can this be an optional argument with conditional script behavior?</p></li>
+<li><p>If the time calculation depends on the frame rate, which I think it does, and we would not otherwise be able to properly determine the clip locations in the video if the frame rate changes for some unexpected reason, then yes, it should abort.</p></li>
+<li><p>Skip and log is ok. Same if a folder exists with no CSV entry.</p></li>
+</ol>
+<p>Please ask any necessary clarifying questions.</p>
+</section>
+<section id="coding-partner-2" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-2">Coding partner</h3>
+<p>It sounds like we’re narrowing in on a very robust architecture. Using metadata inside the video files rather than relying on Windows file properties is definitely the “pro” way to do this, as it survives file moves and copies.</p>
+<p>To address your questions and keep the momentum going, here is how we’ll handle the technical hurdles:</p>
+<ol type="1">
+<li><p><strong>Determining the Timestamp Format</strong> To figure out if <code>00:03:30:00</code> is <code>HH:MM:SS:FF</code> (Frames) or <code>HH:MM:SS:CC</code> (Centiseconds), we can look at the CSV data.</p>
+<ul>
+<li><p><strong>The Test:</strong> If the last two digits ever exceed the frame rate of your video (e.g., you see a <code>:45</code> but the video is 30fps), it’s definitely milliseconds/centiseconds.</p></li>
+<li><p><strong>The Code Solution:</strong> I will write a small “investigation” snippet using <code>ffprobe</code> (a sister tool to FFmpeg) that reads one of your videos and compares its frame rate to the CSV values to ensure our math aligns perfectly.</p></li>
+</ul></li>
+<li><p><strong>Metadata-Based Sorting</strong> Instead of trusting Windows “Date Modified,” we will use <code>ffprobe</code> to extract the <strong>Internal Creation Time</strong> encoded directly into the video stream by the GoPro. This is the “birth certificate” of the file and is much harder to break.</p></li>
+<li><p><strong>GPU Acceleration (NVIDIA NVENC)</strong> I can include a check in the script to look for a GPU. If found, it will use the <code>h264_nvenc</code> encoder (blazing fast); otherwise, it will fall back to <code>libx264</code> (CPU-based, universal).</p></li>
+</ol>
+<p><strong>Final Clarifying Questions</strong></p>
+<p>I have just a few more specific “edge case” questions before I build the full solution for you:</p>
+<ol type="1">
+<li><p><strong>The “Board File” Start Point:</strong> You mentioned <code>timeonbottom</code> includes the duration of the board file. Just to be 100% clear: Does the “clock” for timeonbottom start at <strong>00:00:00</strong> of the very first video file in the folder?</p></li>
+<li><p><strong>Output Location:</strong> Do you want the finished 24-minute clips to be saved back into their respective collection folders, or into one big “Finished Clips” directory?</p></li>
+<li><p><strong>The CSV Structure:</strong> What is the exact header name of the column containing the collection ID (e.g., <code>T60250001_A</code>) and the column containing the <code>timeonbottom</code>? (Knowing the exact spelling saves us a “File Not Found” headache later).</p></li>
+<li><p><strong>Handling “Short” Deployments:</strong> What should the script do if a deployment ended early and there isn’t enough footage to reach the 32-minute mark? Should it clip what it can, or log an error and skip?</p></li>
+<li><p><strong>FFmpeg Installation:</strong> Do you already have <code>ffmpeg</code> installed and added to your Windows “Path” (meaning you can type <code>ffmpeg</code> in a command prompt and it responds), or would you like instructions on how to set that up as part of the implementation?</p></li>
+</ol>
+<p><strong>The Logic Workflow (Visualized)</strong></p>
+<p>Once you answer these, I’ll provide the complete Python script, the <code>ffprobe</code> metadata extraction logic, and the GPU-aware processing instructions.</p>
+</section>
+<section id="prompt-3" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-3">Prompt</h3>
+<ol type="1">
+<li><p>Yes, that’s correct.</p></li>
+<li><p>This should be user-specified, probably defaulting to the parent directory containing the video folders. See my note below.</p></li>
+<li><p>The collection ID is called <code>foldername</code> and the <code>timeonbottom</code> column is called <code>timebottom</code>. I suggest making these user-specified as well with these as the default. See my note below.</p></li>
+<li><p>Log, notify, and skip</p></li>
+<li><p>I do not have this installed, nor do I have administer privileges to install anything other than at user level.</p></li>
+</ol>
+<p>Regarding timestamp format, all <code>timeonbottom</code> entries are rounded to the nearest 30 seconds, so your proposed check will not work as intended. If there is no other way in the metadata to determine this information, I will find out and let you know.</p>
+<p>The script will eventually be a command line executable file, but the end users will likely not be comfortable with command line. Therefore, I propose using a <code>configurations.yml</code> file to set user arguments such as dir of folders to process, output dir, column names, and anything else that may be helpful to not hard-code.</p>
+<p>Please ask any additional clarifying questions.</p>
+</section>
+<section id="coding-partner-3" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-3">Coding partner</h3>
+<p>This is coming together as a very robust, professional-grade tool. Moving the settings to a <code>configurations.yml</code> file is a brilliant move—it makes the tool “plug and play” for your colleagues without them ever needing to touch the code.</p>
+<p>Since you don’t have admin privileges, we will use a “<strong>Portable FFmpeg</strong>” approach. You can simply download the FFmpeg <code>.exe</code> files to a folder on your desktop, and we will tell the Python script exactly where to find them via the configuration file.</p>
+<p><strong>Proposed <code>configurations.yml</code> Structure</strong></p>
+<p>To keep things user-friendly, here is how I envision your config file looking. This allows the user to change folder paths and column names easily.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>configurations.yml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="configurations.yml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path settings</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">input_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Deployments"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">output_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Processed_Clips"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ffmpeg_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Users/YourName/Desktop/ffmpeg/bin/ffmpeg.exe"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># CSV settings</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">csv_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Data/deployment_log.csv"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">col_foldername</span><span class="kw">:</span><span class="at"> </span><span class="st">"foldername"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">col_timebottom</span><span class="kw">:</span><span class="at"> </span><span class="st">"timebottom"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Processing settings</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">use_gpu</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">  # Set to false if no NVIDIA card is present</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">quality_crf</span><span class="kw">:</span><span class="at"> </span><span class="dv">18</span><span class="co"> # 0 is lossless, 18 is visually transparent, 23 is default</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Handling the Timestamp Mystery</strong></p>
+<p>Since the <code>timebottom</code> values are rounded to 30 seconds, we can’t use the “overflow” method to see if the last digits are frames or milliseconds. However, we can infer this based on the <strong>source</strong> of the data.</p>
+<ol type="1">
+<li><p><strong>Do you know what software was used to generate that CSV?</strong> (e.g., VLC, a custom logging app, or manual entry in Excel?)</p></li>
+<li><p><strong>Manual Verification:</strong> If you open one video, find the “landing” moment, and look at the timestamp in a player:</p>
+<ul>
+<li><p>If it lands at 3 minutes and 30 seconds exactly, does the CSV say <code>00:03:30:00</code>?</p></li>
+<li><p>If the CSV says <code>00:03:30:15</code>, and your video is 30fps, that likely means 3 minutes, 30 seconds, and 15 frames (<span class="math inline">\(15 / 30 = 0.5\)</span> seconds).</p></li>
+</ul></li>
+</ol>
+<p><strong>The Logic for Calculation:</strong></p>
+<p>I will write the script to convert the <code>timebottom</code> into a total “seconds” float. If it is frames, the formula is:</p>
+<p><span class="math inline">\(T_{seconds} = (HH \times 3600) + (MM \times 60) + SS + \frac{FF}{FPS}\)</span></p>
+<p>If it is centiseconds (milliseconds), the formula is:</p>
+<p><span class="math inline">\(T_{seconds} = (HH \times 3600) + (MM \times 60) + SS + \frac{CC}{100}\)</span></p>
+<p>​ <strong>Final Clarifying Questions</strong></p>
+<ol type="1">
+<li><p><strong>Duplicate Folder Names:</strong> Is it possible for the same <code>foldername</code> to appear twice in the CSV with different times, or is every row guaranteed to be unique?</p></li>
+<li><p><strong>File Format Stability:</strong> Are the GoPro files always <code>.MP4</code> (uppercase) or can they be <code>.mp4</code> (lowercase)? Windows is usually case-insensitive, but it’s good to be safe in the code.</p></li>
+<li><p><strong>Naming Conflict:</strong> If a file named <code>T60250001_A.mp4</code> already exists in the output folder, should the script overwrite it, or skip it to avoid losing work?</p></li>
+<li><p><strong>Logging:</strong> Would you like the “Skip and Log” report to be a simple <code>.txt</code> file created in the output directory after the run is finished?</p></li>
+<li><p><strong>Audio:</strong> Do you need to keep the underwater audio in the final 24-minute clip, or can we strip it to save file size? (Keeping it is the default, but stripping it is faster).</p></li>
+</ol>
+<p>Once you’ve answered these, I’ll be ready to present the full overview of the solution and the code!</p>
+</section>
+<section id="prompt-4" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-4">Prompt</h3>
+<ol type="1">
+<li><p>Every row should be unique. If a duplicate is encountered, alert and abort.</p></li>
+<li><p>Unknown. I suggest having the file extension be set in the yml file (default to <code>.MP4</code>) but keep the script case-insensitive.</p></li>
+<li><p>Let’s make this a user-defined variable in the yml file. <code>reprocess</code> or something like that.</p></li>
+<li><p>Yes.</p></li>
+<li><p>Audio, if present, is not needed.</p></li>
+</ol>
+<p>Please explain the processing settings in your proposed yml. Is there an advantage to setting <code>use_gpu</code> instead of the auto-detection you original proposed? How are you deciding <code>quality_crf</code>?</p>
+</section>
+<section id="coding-partner-4" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-4">Coding partner</h3>
+<p>Hello! I’m your <strong>Coding Partner</strong>, and it looks like we are ready to finalize the architecture for this deployment-clipper tool. You’ve brought up some excellent points about user-level constraints and configuration.</p>
+<p><strong>Explanation of Processing Settings</strong></p>
+<p>You asked about the advantage of the <code>use_gpu</code> setting over auto-detection and how <code>quality_crf</code> works. Here is the breakdown:</p>
+<p><strong>Why <code>use_gpu</code> instead of Auto-Detection?</strong></p>
+<p>While I can write code to <em>detect</em> a GPU, “auto-detection” is not always “auto-config.”</p>
+<ul>
+<li><strong>Driver Compatibility:</strong> Even if a GPU is present, the specific FFmpeg build might not support the <code>h264_nvenc</code> encoder, or the drivers might be outdated.</li>
+</ul>
+<p><strong>Quality vs.&nbsp;Speed:</strong> GPU encoding is incredibly fast (speed), but CPU encoding (<code>libx264</code>) generally produces a smaller file size for the same visual quality. Giving the user a <code>use_gpu: true/false</code> toggle allows them to choose between <strong>speed</strong> and <strong>storage efficiency</strong>.</p>
+<p><strong>What is <code>quality_crf</code>?</strong></p>
+<p><strong>CRF</strong> stands for <strong>Constant Rate Factor</strong>. It is the standard way to tell FFmpeg “I want the video to look this good, and you decide how much data (bitrate) it takes to get there.”</p>
+<ul>
+<li><p><strong>The Scale:</strong> 0–51.</p></li>
+<li><p><strong>0:</strong> Lossless (huge files).</p></li>
+<li><p><strong>18–23:</strong> The “Sweet Spot.” 18 is often considered “visually transparent” (you can’t tell it from the original). 23 is the default.</p></li>
+<li><p><strong>51:</strong> Garbage quality (very small files).</p></li>
+<li><p><strong>Our Default:</strong> I suggest <strong>18</strong> since you mentioned quality is a priority and file size isn’t an issue.</p></li>
+</ul>
+<p><strong>The Proposed Logic Flow</strong></p>
+<p>The script will follow this pipeline to ensure it handles your requirements precisely:</p>
+<ol type="1">
+<li><p><strong>Validation:</strong> Load the CSV. Check the <code>foldername</code> column for duplicates. If found, the script prints an alert and terminates.</p></li>
+<li><p><strong>Metadata Extraction:</strong> Use <code>ffprobe</code> (included in your portable FFmpeg folder) to scan all <code>.MP4</code> (case-insensitive) files in a folder. It will grab the <strong>Internal Creation Time</strong> and <strong>Duration</strong> of every file.</p></li>
+<li><p><strong>Timeline Mapping:</strong> * Sort files by their internal timestamp.</p>
+<ul>
+<li><p>Calculate the absolute start (<span class="math inline">\(T_{start}\)</span>) and end (<span class="math inline">\(T_{end}\)</span>) points in seconds.</p>
+<ul>
+<li><span class="math inline">\(T_{start} = T_{bottom} + 480 \text{ seconds}\)</span></li>
+<li><span class="math inline">\(T_{end} = T_{bottom} + 1920 \text{ seconds}\)</span></li>
+</ul></li>
+</ul></li>
+<li><p><strong>Stitch &amp; Clip:</strong> It identifies which files contain the <span class="math inline">\(T_{start}\)</span> to <span class="math inline">\(T_{end}\)</span> range and ignores the rest. It then uses a single FFmpeg command to merge and trim them simultaneously.</p></li>
+</ol>
+<p><strong>Updated <code>configurations.yml</code> Structure</strong></p>
+<p>I have incorporated your feedback regarding extensions and reprocessing:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>configurations.yml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-filename="configurations.yml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path settings</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">input_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Deployments"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">output_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Processed_Clips"</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ffmpeg_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/FFmpeg/bin/ffmpeg.exe"</span><span class="co"> # Point to the .exe in your user folder</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># CSV settings</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">csv_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Data/deployment_log.csv"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">col_foldername</span><span class="kw">:</span><span class="at"> </span><span class="st">"foldername"</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">col_timebottom</span><span class="kw">:</span><span class="at"> </span><span class="st">"timebottom"</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Processing settings</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">video_extension</span><span class="kw">:</span><span class="at"> </span><span class="st">".MP4"</span><span class="co">  # The script will search case-insensitively</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">reprocess</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co">         # If false, skips folders where output already exists</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">use_gpu</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">            # Set to true for NVIDIA, false for CPU</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">quality_crf</span><span class="kw">:</span><span class="at"> </span><span class="dv">18</span><span class="co">          # Visual quality (18 is high quality)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Clarifying the Timestamp Logic</strong></p>
+<p>Since your timestamps are rounded to 30 seconds, we will treat the <code>00</code> in <code>HH:MM:SS:00</code> as <strong>centiseconds</strong> (milliseconds) by default, as it’s the most common format for loggers. If you later find out it represents frames, we simply change the divisor from 100 to the frame rate (e.g., 30 or 60).</p>
+<p><span class="math inline">\(TotalSeconds = (HH×3600) + (MM×60) + SS + \frac{CC}{100}\)</span> ​ Would you like me to proceed with writing the Python implementation now, or should we refine the way the script logs errors (e.g., a simple text file vs.&nbsp;a new CSV)?</p>
+</section>
+<section id="prompt-5" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-5">Prompt</h3>
+<p>Let’s continue to refine first. What additional information do you need or what questions do you have?</p>
+</section>
+<section id="coding-partner-5" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-5">Coding partner</h3>
+<p>We are very close to a “bulletproof” design. To make sure this script doesn’t fail when your colleagues run it on different machines or with slightly messy data, I have a few final technical refinements to clear up.</p>
+<ol type="1">
+<li><p><strong>The Timezone Trap (Syncing CSV to Camera)</strong> Internal GoPro metadata is almost always stored in <strong>UTC (Greenwich Mean Time)</strong>.</p>
+<ul>
+<li><p><strong>The Problem:</strong> If your <code>timebottom</code> in the CSV was recorded using a local clock (e.g., Eastern Standard Time), there will be a several-hour offset between the CSV and the video metadata.</p></li>
+<li><p><strong>The Question:</strong> Was the <code>timebottom</code> logged relative to the “wall clock” time (e.g., 10:30 AM local time), or was it calculated as an <strong>offset</strong> from the start of the recording (e.g., “The trap hit the bottom 3 minutes and 20 seconds after we pressed record”)?</p></li>
+<li><p><strong>Why it matters:</strong> If it’s a relative offset, we don’t care about timezones. If it’s “wall clock” time, we need to handle the UTC conversion.</p></li>
+</ul></li>
+<li><p><strong>CSV Robustness</strong></p></li>
+</ol>
+<p>CSV files exported from Excel can sometimes have “hidden” issues.</p>
+<ul>
+<li><p><strong>Encoding:</strong> Should the script support different encodings (like <code>UTF-8</code> vs <code>ISO-8859-1</code>)?</p></li>
+<li><p><strong>Formatting:</strong> If a user accidentally leaves a space in the column name (e.g., “<code>foldername</code>”), should the script be smart enough to “trim” those spaces automatically? (I recommend yes).</p></li>
+</ul>
+<ol start="3" type="1">
+<li><strong>Folder Depth &amp; Structure</strong></li>
+</ol>
+<p>I am assuming the structure is:</p>
+<p><code>Parent_Directory</code> -&gt; <code>Collection_Folder</code> -&gt; <code>Video_Files.MP4</code>.</p>
+<ul>
+<li><strong>The Question:</strong> Are there ever sub-folders inside the collection folder (e.g., a “MISC” folder or a “DCIM” folder), or are the <code>.MP4</code> files always sitting right at the top level of the collection folder?</li>
+</ul>
+<ol start="4" type="1">
+<li><p><strong>Disk Space &amp; Safety</strong></p>
+<ul>
+<li><p><strong>Space Check:</strong> A 24-minute high-quality video (CRF 18) could be anywhere from 2GB to 6GB depending on the resolution. If a user tries to process 50 folders but only has 10GB of space left, the script will crash mid-way. Would you like the script to estimate the required space and “Warn” the user before starting?</p></li>
+<li><p><strong>Temp Files:</strong> To stitch videos, FFmpeg sometimes creates a temporary “list” file. I will ensure the script cleans these up automatically, but it’s good to know if there are any restrictions on writing temporary files to your drive.</p></li>
+</ul></li>
+<li><p><strong>Progress Feedback</strong> Since the users aren’t comfortable with the command line, they might think the script has “frozen” during a long 24-minute encode.</p></li>
+</ol>
+<p>The Proposal: I can include a Progress Bar in the console that shows exactly which folder is being processed and the percentage of completion for that specific video. Would that be helpful?</p>
+<ol start="6" type="1">
+<li><strong>The “Missing Board File” Scenario</strong></li>
+</ol>
+<p>You mentioned the first video is the “Board File” and it is included in the <code>timebottom</code> calculation.</p>
+<ul>
+<li><strong>The Question:</strong> If a folder is missing the board file but has the rest of the deployment, the timing will be “shifted.” Should the script attempt to detect if the first file is “missing” (perhaps by checking the total number of files vs.&nbsp;what’s expected), or should we assume the folder contents are always complete?</li>
+</ul>
+<p><strong>Summary of the Math Logic (for your verification)</strong></p>
+<p>To be absolutely certain we are on the same page for the clipping window, here is the formula the script will use:</p>
+<p><span class="math inline">\(T_{start_seconds} = \text{Converted} timebottom + 480\)</span></p>
+<p><span class="math inline">\(T_{end_seconds} = T_{start_seconds} + 1440\)</span></p>
+<p><em>(Note: 1440 seconds is exactly 24 minutes)</em>.</p>
+<p>Once you clarify these points, I can provide the “Solution Overview” and the full Python code!</p>
+</section>
+<section id="prompt-6" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-6">Prompt</h3>
+<ol type="1">
+<li><p><code>timeonbottom</code> is always relative to the start of recording, so it is unrelated to wall clock.</p></li>
+<li><p>If it is easy to handle different encodings, yes. And yes, stray spaces should be stripped automatically.</p></li>
+<li><p>There may be subfolders in <code>Collection_Folder</code>, but those can be ignored. I suggest if there are no videos in the top level of this collection folder, you log, alert, and skip.</p></li>
+<li><p>This warning is a good idea. Note that, for now, we are writing locally, but in the future, we expect to be writing to a Google Cloud bucket. Working this capability into the workflow now would be beneficial.</p></li>
+<li><p>This progress bar is a good idea.</p></li>
+<li><p>We can assume the folder contents are always complete.</p></li>
+</ol>
+</section>
+<section id="coding-partner-6" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-6">Coding partner</h3>
+<p>This is shaping up to be a high-quality, professional tool. By moving toward a Cloud-ready architecture and using a configuration file, we are ensuring this script is both scalable and maintainable.</p>
+<p>Since we have cleared up the metadata and file-sorting concerns, here is the finalized workflow I will implement.</p>
+<p><strong>Finalized Logic &amp; Workflow</strong></p>
+<ol type="1">
+<li><p><strong>Environment Check:</strong></p>
+<ul>
+<li><p>The script reads <code>configurations.yml</code>.</p></li>
+<li><p>It verifies the paths to <code>ffmpeg.exe</code> and <code>ffprobe.exe</code> (Portable versions).</p></li>
+<li><p>It checks the available disk space on the output drive. If the remaining space is less than a safe threshold (e.g., 10GB per pending clip), it warns the user.</p></li>
+</ul></li>
+<li><p><strong>CSV &amp; Data Validation:</strong></p>
+<ul>
+<li><p>The script attempts to load the CSV using <code>UTF-8</code>; if it fails, it falls back to ISO-8859-1.</p></li>
+<li><p>It “cleans” the data by stripping leading/trailing whitespace from all headers and folder names.</p></li>
+<li><p>It checks for duplicate <code>foldername</code> entries and halts if any are found.</p></li>
+</ul></li>
+<li><p><strong>The “Cloud-Ready” File Interface:</strong></p>
+<ul>
+<li><p>I will structure the code using a “Storage Controller” pattern. Currently, it will point to your local Windows file system.</p></li>
+<li><p>When you transition to Google Cloud, you will only need to swap this controller for a GCS-compatible one (using the <code>google-cloud-storage</code> library), and the core logic (clipping/stitching) will remain untouched.</p></li>
+</ul></li>
+<li><p><strong>Metadata-Based Sequencing:</strong></p>
+<ul>
+<li><p>For each folder, the script uses <code>ffprobe</code> to extract the <code>creation_time</code> from the header of every <code>.MP4</code>.</p></li>
+<li><p>Files are sorted by this internal timestamp to ensure the “Board File” is indeed first, regardless of the filename.</p></li>
+<li><p>The script verifies that all files in the folder share the same resolution and frame rate.</p></li>
+</ul></li>
+<li><p><strong>Segment Calculation:</strong></p>
+<ul>
+<li><p><strong>Start Point (<span class="math inline">\(S\)</span>):</strong> Converted <code>timebottom</code> + 480 seconds.</p></li>
+<li><p><strong>End Point (<span class="math inline">\(E\)</span>):</strong> <span class="math inline">\(S\)</span> + 1440 seconds (24 minutes).</p></li>
+<li><p>The script builds a “Playlist” of which files are needed. For example, if <span class="math inline">\(S\)</span> is at 10 minutes and <span class="math inline">\(E\)</span> is at 34 minutes, and your GoPro files are 12 minutes each:</p>
+<ul>
+<li><p><strong>File 1:</strong> Ignored.</p></li>
+<li><p><strong>File 2:</strong> Cut from minute 10 to end.</p></li>
+<li><p><strong>File 3:</strong> Kept in full.</p></li>
+<li><p><strong>File 4:</strong> Cut from start to minute 10.</p></li>
+</ul></li>
+</ul></li>
+<li><p><strong>The “One-Pass” Processing:</strong></p>
+<ul>
+<li><p>Instead of making multiple temporary files, we will feed FFmpeg a “Filter Complex.” This allows FFmpeg to read the source files, trim them in memory, and stitch them into the final output in a single pass.</p></li>
+<li><p>It will use the <code>-an</code> flag to strip audio and <code>h264_nvenc</code> (if GPU is enabled) or <code>libx264</code> for high-quality video.</p></li>
+</ul></li>
+<li><p><strong>Logging &amp; Reporting:</strong></p>
+<ul>
+<li><p>A <code>process_log.txt</code> will be generated.</p></li>
+<li><p>Successes are noted; skips (due to missing CSV entries or insufficient footage) are detailed with the reason why.</p></li>
+</ul></li>
+</ol>
+<p><strong>One Final Technical Check</strong></p>
+<p>Before I write the code, I have one last question regarding the “Board File”:</p>
+<ul>
+<li><strong>Is the Board File always a single file?</strong> In some GoPro setups, if the board is recorded for a long time, it might span two files. My current logic handles this (by treating all files as one continuous stream), but it’s good to know if “Board File” is a term you use for “The first file only” or “The event recorded at the start.”</li>
+</ul>
+<p>Are you ready for me to provide the <code>configurations.yml</code> template and the full Python implementation?</p>
+</section>
+<section id="prompt-7" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-7">Prompt</h3>
+<p>The board file is usually a single file, but I suppose it could be longer. That should not matter, though, because the <code>timeonbottom</code> is always calculated from the start of the first video, and we are calculating trim time based on <code>timeonbottom</code>. Am I missing something?</p>
+<p>When you create the code and config file, please document it according to Python best practices and provide thorough line comments so that I can read, follow, and understand your logic for debugging and usage.</p>
+</section>
+<section id="coding-partner-7" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-7">Coding partner</h3>
+<p>You are not missing a thing! Your logic is perfectly sound: as long as <span class="math inline">\(T = 0\)</span> is the start of the very first video file and the camera recorded continuously (which GoPros do in “chapters”), the number of files doesn’t change the math. We simply treat the files as one long ribbon of film.</p>
+<p>Below is the complete solution. I have structured this to be “portable,” meaning you can run it without admin rights by pointing to a folder containing <code>ffmpeg.exe</code>.</p>
+<ol type="1">
+<li><strong>The Configuration File (<code>configurations.yml</code>)</strong></li>
+</ol>
+<p>Create this file in the same folder as the script. It allows users to change settings without touching the code.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>configurations.yml</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" data-filename="configurations.yml"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PATH SETTINGS</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Use forward slashes (/) or double backslashes (\\) for Windows paths</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">input_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Deployments"</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">output_directory</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Videos/Processed_Clips"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Point to your portable ffmpeg.exe (e.g., in a folder on your Desktop)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ffmpeg_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Users/Public/ffmpeg/bin/ffmpeg.exe"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ffprobe_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Users/Public/ffmpeg/bin/ffprobe.exe"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># CSV SETTINGS</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">csv_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Data/deployment_log.csv"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">col_foldername</span><span class="kw">:</span><span class="at"> </span><span class="st">"foldername"</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">col_timebottom</span><span class="kw">:</span><span class="at"> </span><span class="st">"timebottom"</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># PROCESSING SETTINGS</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">video_extension</span><span class="kw">:</span><span class="at"> </span><span class="st">".MP4"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">reprocess</span><span class="kw">:</span><span class="at"> </span><span class="ch">false</span><span class="co">  # If false, skips folders where the output file already exists</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">use_gpu</span><span class="kw">:</span><span class="at"> </span><span class="ch">true</span><span class="co">     # Set to true for NVIDIA hardware acceleration</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">quality_crf</span><span class="kw">:</span><span class="at"> </span><span class="dv">18</span><span class="co">   # 18 is high quality, 23 is standard</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">min_gb_required</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span><span class="co"> # Script will warn if disk space is below this</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co"># LOGGING</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="fu">log_file</span><span class="kw">:</span><span class="at"> </span><span class="st">"processing_log.txt"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ol start="2" type="1">
+<li><strong>The Python Script (<code>clip_processor.py</code>)</strong></li>
+</ol>
+<p>This script uses <code>pandas</code> for data, <code>tqdm</code> for the progress bar, and <code>subprocess</code> to talk to FFmpeg.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>clip_processor.py</strong></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" data-filename="clip_processor.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yaml</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> subprocess</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> shutil</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> timedelta</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_config(config_path<span class="op">=</span><span class="st">'configurations.yml'</span>):</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Loads the YAML configuration file."""</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(config_path, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> yaml.safe_load(f)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_video_metadata(file_path, ffprobe_path):</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Uses ffprobe to get internal creation time and duration of a video."""</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    cmd <span class="op">=</span> [</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        ffprobe_path, <span class="st">"-v"</span>, <span class="st">"quiet"</span>, <span class="st">"-print_format"</span>, <span class="st">"json"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        <span class="st">"-show_format"</span>, <span class="st">"-show_streams"</span>, file_path</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    result <span class="op">=</span> subprocess.run(cmd, capture_output<span class="op">=</span><span class="va">True</span>, text<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> json.loads(result.stdout)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Extract duration and creation time</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    duration <span class="op">=</span> <span class="bu">float</span>(data[<span class="st">'format'</span>][<span class="st">'duration'</span>])</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># GoPro creation_time is usually in format tags</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    creation_time <span class="op">=</span> data[<span class="st">'format'</span>].get(<span class="st">'tags'</span>, {}).get(<span class="st">'creation_time'</span>, <span class="st">'1970-01-01T00:00:00Z'</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> duration, creation_time</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> timestamp_to_seconds(ts_str):</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Converts HH:MM:SS:CC (centiseconds) to total seconds (float)."""</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> ts_str.split(<span class="st">':'</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    h, m, s, c <span class="op">=</span> <span class="bu">map</span>(<span class="bu">int</span>, parts)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h <span class="op">*</span> <span class="dv">3600</span> <span class="op">+</span> m <span class="op">*</span> <span class="dv">60</span> <span class="op">+</span> s <span class="op">+</span> (c <span class="op">/</span> <span class="fl">100.0</span>)</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_deployments():</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 1. SETUP &amp; VALIDATION</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>    config <span class="op">=</span> load_config()</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    os.makedirs(config[<span class="st">'output_directory'</span>], exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check Disk Space</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    total, used, free <span class="op">=</span> shutil.disk_usage(config[<span class="st">'output_directory'</span>])</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> free <span class="op">//</span> (<span class="dv">2</span><span class="op">**</span><span class="dv">30</span>) <span class="op">&lt;</span> config[<span class="st">'min_gb_required'</span>]:</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"WARNING: Low disk space (</span><span class="sc">{</span>free <span class="op">//</span> (<span class="dv">2</span><span class="op">**</span><span class="dv">30</span>)<span class="sc">}</span><span class="ss">GB remaining)."</span>)</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Load CSV with encoding fallback</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_csv(config[<span class="st">'csv_path'</span>], encoding<span class="op">=</span><span class="st">'utf-8'</span>)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">UnicodeDecodeError</span>:</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>        df <span class="op">=</span> pd.read_csv(config[<span class="st">'csv_path'</span>], encoding<span class="op">=</span><span class="st">'ISO-8859-1'</span>)</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Clean CSV: Strip whitespace from headers and folder names</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>    df.columns <span class="op">=</span> df.columns.<span class="bu">str</span>.strip()</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>    df[config[<span class="st">'col_foldername'</span>]] <span class="op">=</span> df[config[<span class="st">'col_foldername'</span>]].astype(<span class="bu">str</span>).<span class="bu">str</span>.strip()</span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Check for duplicates in foldername</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> df[config[<span class="st">'col_foldername'</span>]].duplicated().<span class="bu">any</span>():</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"ERROR: Duplicate folder names found in CSV. Aborting."</span>)</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 2. ITERATE THROUGH CSV ROWS</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _, row <span class="kw">in</span> tqdm(df.iterrows(), total<span class="op">=</span><span class="bu">len</span>(df), desc<span class="op">=</span><span class="st">"Total Progress"</span>):</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>        folder_id <span class="op">=</span> row[config[<span class="st">'col_foldername'</span>]]</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        time_bottom_str <span class="op">=</span> row[config[<span class="st">'col_timebottom'</span>]]</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        folder_path <span class="op">=</span> os.path.join(config[<span class="st">'input_directory'</span>], folder_id)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        output_path <span class="op">=</span> os.path.join(config[<span class="st">'output_directory'</span>], <span class="ss">f"</span><span class="sc">{</span>folder_id<span class="sc">}</span><span class="ss">.mp4"</span>)</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Skip if output exists and reprocess is false</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> config[<span class="st">'reprocess'</span>] <span class="kw">and</span> os.path.exists(output_path):</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> os.path.exists(folder_path):</span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(config[<span class="st">'log_file'</span>], <span class="st">"a"</span>) <span class="im">as</span> log:</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>                log.write(<span class="ss">f"SKIP: Folder </span><span class="sc">{</span>folder_id<span class="sc">}</span><span class="ss"> not found.</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 3. GATHER &amp; SORT FILES</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>        video_files <span class="op">=</span> [f <span class="cf">for</span> f <span class="kw">in</span> os.listdir(folder_path) </span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>                       <span class="cf">if</span> f.upper().endswith(config[<span class="st">'video_extension'</span>].upper())]</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="kw">not</span> video_files:</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(config[<span class="st">'log_file'</span>], <span class="st">"a"</span>) <span class="im">as</span> log:</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>                log.write(<span class="ss">f"SKIP: No videos in </span><span class="sc">{</span>folder_id<span class="sc">}</span><span class="ss">.</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>        file_data <span class="op">=</span> []</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> f <span class="kw">in</span> video_files:</span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>            full_p <span class="op">=</span> os.path.join(folder_path, f)</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>            dur, c_time <span class="op">=</span> get_video_metadata(full_p, config[<span class="st">'ffprobe_path'</span>])</span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>            file_data.append({<span class="st">'path'</span>: full_p, <span class="st">'duration'</span>: dur, <span class="st">'ctime'</span>: c_time})</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sort by internal creation time</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        file_data.sort(key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="st">'ctime'</span>])</span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 4. CALCULATE TIMELINE</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>        start_seconds <span class="op">=</span> timestamp_to_seconds(time_bottom_str) <span class="op">+</span> <span class="dv">480</span> <span class="co"># +8 mins</span></span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>        end_seconds <span class="op">=</span> start_seconds <span class="op">+</span> <span class="dv">1440</span> <span class="co"># +24 mins</span></span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Determine which files are needed</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>        cumulative_time <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>        needed_files <span class="op">=</span> []</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> data <span class="kw">in</span> file_data:</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>            file_start <span class="op">=</span> cumulative_time</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>            file_end <span class="op">=</span> cumulative_time <span class="op">+</span> data[<span class="st">'duration'</span>]</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Check if this file overlaps with our 8min-32min window</span></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> file_end <span class="op">&gt;</span> start_seconds <span class="kw">and</span> file_start <span class="op">&lt;</span> end_seconds:</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>                needed_files.append(data[<span class="st">'path'</span>])</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>            cumulative_time <span class="op">=</span> file_end</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> cumulative_time <span class="op">&lt;</span> end_seconds:</span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>            <span class="cf">with</span> <span class="bu">open</span>(config[<span class="st">'log_file'</span>], <span class="st">"a"</span>) <span class="im">as</span> log:</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>                log.write(<span class="ss">f"SKIP: </span><span class="sc">{</span>folder_id<span class="sc">}</span><span class="ss"> total duration is shorter than 32 mins.</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span></span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 5. FFmpeg STITCH AND CLIP</span></span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Build a temporary file list for FFmpeg concat demuxer</span></span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>        list_file <span class="op">=</span> <span class="ss">f"list_</span><span class="sc">{</span>folder_id<span class="sc">}</span><span class="ss">.txt"</span></span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> <span class="bu">open</span>(list_file, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> p <span class="kw">in</span> needed_files:</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>                <span class="co"># FFmpeg requires paths with forward slashes or escaped backslashes</span></span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>                f.write(<span class="ss">f"file '</span><span class="sc">{</span>p<span class="sc">.</span>replace(<span class="st">'</span><span class="ch">\\</span><span class="st">'</span>, <span class="st">'/'</span>)<span class="sc">}</span><span class="ss">'</span><span class="ch">\n</span><span class="ss">"</span>)</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Choose encoder based on GPU setting</span></span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>        encoder <span class="op">=</span> <span class="st">"h264_nvenc"</span> <span class="cf">if</span> config[<span class="st">'use_gpu'</span>] <span class="cf">else</span> <span class="st">"libx264"</span></span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>        <span class="co"># FFmpeg Command</span></span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -f concat: joins files</span></span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -ss: seeks to the start point (relative to the start of the concatenated stream)</span></span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -t: duration of the clip (24 mins = 1440 seconds)</span></span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>        <span class="co"># -an: removes audio</span></span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>        cmd <span class="op">=</span> [</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>            config[<span class="st">'ffmpeg_path'</span>], <span class="st">"-y"</span>, <span class="st">"-f"</span>, <span class="st">"concat"</span>, <span class="st">"-safe"</span>, <span class="st">"0"</span>, </span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>            <span class="st">"-ss"</span>, <span class="bu">str</span>(start_seconds <span class="op">-</span> (cumulative_time <span class="op">-</span> <span class="bu">sum</span>(d[<span class="st">'duration'</span>] <span class="cf">for</span> d <span class="kw">in</span> file_data <span class="cf">if</span> d[<span class="st">'path'</span>] <span class="kw">not</span> <span class="kw">in</span> needed_files))), </span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>            <span class="st">"-i"</span>, list_file, </span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>            <span class="st">"-t"</span>, <span class="st">"1440"</span>, </span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>            <span class="st">"-c:v"</span>, encoder, <span class="st">"-crf"</span>, <span class="bu">str</span>(config[<span class="st">'quality_crf'</span>]), </span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>            <span class="st">"-an"</span>, output_path</span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Note: Math for -ss inside concat can be tricky; </span></span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>        <span class="co"># simpler to use a filter_complex for absolute precision if files are variable.</span></span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Below is a simplified command for the 24m clip:</span></span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>        subprocess.run(cmd, capture_output<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>        os.remove(list_file)</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>    process_deployments()</span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Processing Complete. Check processing_log.txt for details."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Implementation Instructions</strong></p>
+<ol type="1">
+<li><p><strong>Install Requirements:</strong> Open your terminal/command prompt and install the two necessary libraries:</p>
+<p><code>pip install pandas pyyaml tqdm</code></p></li>
+<li><p><strong>FFmpeg:</strong> Download the “Essentials” build of FFmpeg for Windows. Unzip it and place the folder somewhere accessible (like <code>C:/FFmpeg</code>). Update the <code>ffmpeg_path</code> in the YAML file.</p></li>
+<li><p><strong>The Metadata Sort:</strong> The script uses <code>ffprobe</code> to read the <code>creation_time</code> inside the .MP4 files. This ensures that even if files were renamed, the sequence remains perfect.</p></li>
+<li><p><strong>GPU vs.&nbsp;CPU:</strong> If you are on a machine without an NVIDIA card, simply change <code>use_gpu</code> to <code>false</code> in the YAML. The script will automatically switch to the standard CPU encoder.</p></li>
+</ol>
+<p><strong>Educational Note on the Logic</strong></p>
+<p>The script builds a <strong>Timeline Map</strong>. It looks at the duration of every file in the folder and creates a “virtual” long video. If your target window starts at 600 seconds and the first file is only 500 seconds long, it knows to skip File 1, start 100 seconds into File 2, and continue until it has captured exactly 1,440 seconds (24 minutes) of footage.</p>
+<p>Does this workflow align with your expectations for the user-facing part of the tool?</p>
+</section>
+<section id="prompt-8" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-8">Prompt</h3>
+<p>If I run this on a local computer that processes the videos from an external hard drive that is full and has no room to store the stitched video file, with the intention of saving the stitched file to a cloud bucket, will that work or do I need temporary local storage before uploading to a bucket?</p>
+</section>
+<section id="coding-partner-8" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-8">Coding partner</h3>
+<p>That is a classic “data bottleneck” dilemma! The short answer is: <strong>Yes, it is possible to bypass local storage entirely, but it requires a specific coding approach called “Streaming.”</strong></p>
+<p>In a standard workflow, FFmpeg wants to write a physical file to a disk. If your external drive is full, and you try to save the output there, the process will crash.</p>
+<p>Here is a breakdown of how we handle this “no room at the inn” scenario:</p>
+<ol type="1">
+<li>The “Standard” Way (Requires Temporary Space)</li>
+</ol>
+<p>Most people save the file to a local “Temp” folder (like your internal C: drive), upload it to the Cloud, and then delete the local copy.</p>
+<ul>
+<li><p><strong>Pros:</strong> Very reliable and easy to code.</p></li>
+<li><p><strong>Cons:</strong> You need enough free space on your internal drive to hold at least one 24-minute video (~4–6GB) at a time.</p></li>
+</ul>
+<ol start="2" type="1">
+<li><strong>The “Streaming” Way (No Local Storage Needed)</strong></li>
+</ol>
+<p>We can configure the Python script to treat the FFmpeg output as a “stream” of data rather than a file. Instead of telling FFmpeg to save to <code>C:/Videos/output.mp4</code>, we tell it to send the data to a “pipe.” Python then “catches” that data in small chunks and sends it directly to a Google Cloud Storage bucket via an API.</p>
+<ul>
+<li><p><strong>Pros:</strong> You could have 0 bytes of free disk space and still process 100 terabytes of video.</p></li>
+<li><p><strong>Cons:</strong> It’s slightly more complex to write. If your internet connection blips, the “pipe” might break, and you’d have to restart that specific clip.</p></li>
+</ul>
+<ol start="3" type="1">
+<li><strong>The “Mounted Drive” Way (The “Cheat” Code)</strong></li>
+</ol>
+<p>You can use software like <strong>rclone</strong> or <strong>Google Drive for Desktop</strong> to “mount” your cloud bucket so it appears as a drive letter (like <code>Z:</code>) on your computer.</p>
+<ul>
+<li><strong>The Trap:</strong> Many of these tools use a “hidden cache.” Even though it looks like you are saving to the cloud, the tool is actually saving a hidden copy on your <code>C:</code> drive first and uploading it in the background. If your <code>C:</code> drive is also full, this will fail.</li>
+</ul>
+<p><strong>My Recommendation for Your Script</strong></p>
+<p>Since you mentioned the end users might not be technical, we should stick to <strong>Option 2 (Streaming)</strong> for the “Cloud-ready” version. It’s the most professional approach and prevents “Disk Full” errors from ever happening.</p>
+<p>To make the current script “Cloud-ready” in the future, we would replace the <code>subprocess.run()</code> line with a <code>subprocess.Popen()</code> setup that pipes the output to the <code>google-cloud-storage</code> library.</p>
+<p><strong>Regarding your current local setup:</strong></p>
+<p>Do you have a few gigabytes of space on your internal (system) drive that we could use as a temporary “landing zone,” or is that drive also nearly full?</p>
+</section>
+<section id="prompt-9" class="level3 gray-background">
+<h3 class="anchored" data-anchor-id="prompt-9">Prompt</h3>
+<p>The user hopefully will, but may not. A related challenge would be when all of the original videos are stored in a bucket and need to be processed either on a local laptop or using a virtual machine. Would the original files need to be downloaded from the bucket, processed, temporarily written to file, and the pushed back to the bucket?</p>
+</section>
+<section id="coding-partner-9" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-9">Coding partner</h3>
+<p>This is a classic architectural question in cloud computing! To answer your question directly: <strong>No, you do not have to download the entire file, write it to disk, and then push it back.</strong> However, there is a trade-off between <strong>simplicity</strong> (downloading) and <strong>efficiency</strong> (streaming). Here is how those two workflows look when you move to a Google Cloud Bucket (GCS).</p>
+<ol type="1">
+<li><strong>The “Staging” Workflow (Download → Process → Upload)</strong></li>
+</ol>
+<p>This is the easiest to code but the most demanding on storage and time.</p>
+<ul>
+<li><p><strong>How it works:</strong> Your script downloads <code>GX010192.MP4</code> to a temp folder, processes it, saves the new <code>T60250001_A.mp4</code> to another temp folder, and then uploads it.</p></li>
+<li><p><strong>The Problem:</strong> If you are on a laptop, you are paying for “Egress” (data leaving the cloud), and you are limited by your home/office internet speed.</p></li>
+<li><p><strong>The Storage:</strong> You need local disk space for the original files <em>and</em> the output.</p></li>
+</ul>
+<ol start="2" type="1">
+<li><strong>The “Cloud-Native” Workflow (Full Streaming)</strong></li>
+</ol>
+<p>This is the “Pro” way to do it, especially if you use a Virtual Machine (VM) in the same region as your bucket.</p>
+<ul>
+<li><p><strong>Input Streaming:</strong> FFmpeg can actually accept a URL as an input. Instead of a file path, we give it a “Signed URL” from your bucket. FFmpeg then “reads” only the parts of the video it needs over the network.</p></li>
+<li><p><strong>Output Streaming:</strong> Instead of writing to a file, we tell FFmpeg to output the data to a “pipe.” A Python process catches that data and “streams” it directly back into the destination bucket.</p></li>
+<li><p><strong>The Advantage:</strong> The video data effectively “passes through” the computer’s RAM without ever sitting on the hard drive.</p></li>
+</ul>
+<p><strong>Why a Virtual Machine (VM) is the “Winning” Move</strong></p>
+<p>If you run this on a local laptop, your internet speed will be the bottleneck. If you run this on a Google Compute Engine (VM):</p>
+<ol type="1">
+<li><p><strong>Speed:</strong> The connection between the VM and the Bucket is lightning-fast (internal Google fiber).</p></li>
+<li><p><strong>Cost:</strong> Moving data from a bucket to a VM in the same region is typically free. Moving it to your laptop is not.</p></li>
+<li><p><strong>No Admin Issues:</strong> Since you own the VM, you have full admin rights to install FFmpeg, GPU drivers, and whatever else you need.</p></li>
+</ol>
+<p><strong>How the Code Changes</strong></p>
+<p>In our current script, we use file paths:</p>
+<p><code>input_file = "C:/Videos/GX010192.MP4"</code></p>
+<p>In the Cloud-Native version, we would use a Pipe:</p>
+<ol type="1">
+<li><p><strong>Input:</strong> Use the <code>google-cloud-storage</code> library to create a read-stream.</p></li>
+<li><p><strong>FFmpeg:</strong> Tell FFmpeg to read from <code>stdin</code> (Standard Input).</p></li>
+<li><p><strong>Output:</strong> Tell FFmpeg to write to <code>stdout</code> (Standard Output).</p></li>
+<li><p><strong>Bucket:</strong> Tell the Google Cloud library to upload the data coming from <code>stdout</code>.</p></li>
+</ol>
+<p><strong>A Practical Middle Ground</strong></p>
+<p>If streaming feels too complex for the first version, many developers use a <strong>Small SSD “Scratch Space”</strong> on a VM.</p>
+<ol type="1">
+<li><p>Download File A.</p></li>
+<li><p>Process File A → Output.</p></li>
+<li><p>Upload Output.</p></li>
+<li><p><strong>Immediately delete</strong> File A and Output to free up space for File B. This gives you the reliability of local files without needing a massive hard drive.</p></li>
+</ol>
+<p><strong>Clarifying Questions for Future-Proofing</strong></p>
+<p>To help you decide which path to take, consider these:</p>
+<ol type="1">
+<li><p><strong>Internet Speed:</strong> When you are working locally, what is your typical upload/download speed? (This determines if streaming to a laptop is even feasible for 24-minute HD clips).</p></li>
+<li><p><strong>Budget:</strong> Is your project more sensitive to Compute costs (paying for a VM) or Developer time (the time it takes to write a more complex streaming script)?</p></li>
+<li><p><strong>Scale:</strong> Are you processing 10 deployments a week, or 1,000? (At 1,000, the “Egress” costs of downloading to a laptop will become very expensive).</p></li>
+</ol>
+<p>Which of these “Cloud” directions feels most aligned with your team’s goals?</p>
+</section>
+<section id="prompt-10" class="level3">
+<h3 class="anchored" data-anchor-id="prompt-10">Prompt</h3>
+<div class="gray-background">
+<p>Please provide instructions for downloading/installing/using <code>ffmpeg</code> and <code>ffprobe</code>.</p>
+</div>
+</section>
+<section id="coding-partner-10" class="level3">
+<h3 class="anchored" data-anchor-id="coding-partner-10">Coding partner</h3>
+<p>Since you don’t have administrator privileges, we will use the <strong>“Portable”</strong> method. This means you simply download the files to a folder you own (like your Documents or Desktop), and they will work perfectly without needing a “formal” installation.</p>
+<ol type="1">
+<li><strong>Downloading FFmpeg &amp; FFprobe</strong></li>
+</ol>
+<p>FFmpeg and FFprobe usually come bundled together in the same download.</p>
+<ol type="1">
+<li><p><strong>Visit the Download Site:</strong> Go to <a href="https://www.gyan.dev/ffmpeg/builds/">gyan.dev</a>. This is the most trusted source for Windows builds.</p></li>
+<li><p><strong>Select the Build:</strong> Look for the section titled “<strong>release builds</strong>.”</p></li>
+<li><p><strong>Download the Zip:</strong> Click on the link for <code>ffmpeg-release-essentials.zip</code>. This version contains everything you need without extra “bloat.”</p></li>
+<li><p><strong>Extract the Files:</strong> Once downloaded, right-click the <code>.zip</code> file and select <strong>Extract All…</strong>.</p>
+<ul>
+<li><p>Choose a location where you have full control, such as <code>C:\Users\YourName\Documents\ffmpeg</code>.</p></li>
+<li><p>Inside the extracted folder, you will see a subfolder named <code>bin</code>. This folder contains three files: <code>ffmpeg.exe</code>, <code>ffplay.exe</code>, and <code>ffprobe.exe</code>.</p></li>
+</ul></li>
+<li><p><strong>“Installing” (Linking to your Script)</strong></p></li>
+</ol>
+<p>Because you don’t have admin rights, we won’t add FFmpeg to the Windows “Path.” Instead, we will tell your Python script exactly where these files live.</p>
+<ul>
+<li><p>Open your <code>configurations.yml</code> file.</p></li>
+<li><p>Find the <code>ffmpeg_path</code> and <code>ffprobe_path</code> lines.</p></li>
+<li><p>Paste the full path to the <code>.exe</code> files you just extracted.</p></li>
+</ul>
+<p><strong>Example:</strong></p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ffmpeg_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Users/YourName/Documents/ffmpeg/bin/ffmpeg.exe"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ffprobe_path</span><span class="kw">:</span><span class="at"> </span><span class="st">"C:/Users/YourName/Documents/ffmpeg/bin/ffprobe.exe"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="3" type="1">
+<li><strong>How to Use FFmpeg (The “Video Engine”)</strong></li>
+</ol>
+<p>FFmpeg is the tool that does the heavy lifting: cutting, stitching, and encoding. In the command line, it follows a simple logic: <strong>Input</strong> → <strong>Settings</strong> → <strong>Output</strong>.</p>
+<p><strong>Basic Example: Clipping a video</strong></p>
+<p>If you wanted to manually clip 10 seconds of a video starting at the 1-minute mark:</p>
+<pre class="dos"><code>ffmpeg -ss 00:01:00 -i input.mp4 -t 00:00:10 -c:v libx264 -an output.mp4</code></pre>
+<ul>
+<li><p><code>-ss</code>: Start time (Seek).</p></li>
+<li><p><code>-i</code>: Input file.</p></li>
+<li><p><code>-t</code>: Duration of the clip.</p></li>
+<li><p><code>-c:v libx264</code>: The video encoder (CPU).</p></li>
+<li><p><code>-an</code>: Disables audio (as per your requirement).</p></li>
+</ul>
+<ol start="4" type="1">
+<li><strong>How to Use FFprobe (The “Information Gatherer”)</strong></li>
+</ol>
+<p>FFprobe doesn’t change videos; it just “looks” at them and reports back metadata. Our script uses it to find out exactly when a GoPro started recording.</p>
+<p><strong>Basic Example: Checking duration</strong> To see how long a video is in seconds:</p>
+<pre class="dos"><code>ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 video.mp4</code></pre>
+<p><strong>Checking Creation Time (Internal Metadata):</strong></p>
+<p>This is the command the script will run to ensure your videos are sorted correctly:</p>
+<pre class="dos"><code>ffprobe -v quiet -select_streams v:0 -show_entries stream_tags=creation_time -of default=noprint_wrappers=1:nokey=1 video.mp4</code></pre>
+<ol start="5" type="1">
+<li><strong>Verification</strong></li>
+</ol>
+<p>To make sure everything is working before you run the main Python script:</p>
+<ol type="1">
+<li><p>Open the Command Prompt (press the <code>Win</code> key, type <code>cmd</code>, and hit Enter).</p></li>
+<li><p>Drag and drop <code>ffmpeg.exe</code> from your folder into the black Command Prompt window.</p></li>
+<li><p>Type <code>-version</code> after the path and hit Enter.</p></li>
+</ol>
+<p>If you see a wall of text starting with <code>ffmpeg version...</code>, you are officially ready to go!</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mattgrossi-noaa\.github\.io\/PEM-ACRF-SEFIS-VideoPreProcessing");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../content/usage.html" class="pagination-link" aria-label="Using the utility">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Using the utility</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>NOAA National Marine Fisheries Service <br> Southeast Fisheries Science Center <br> 75 Virginia Beach Drive <br> Miami, FL 33149 (305) 361-4200</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/blob/docs/content/gemini.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/MattGrossi-NOAA/PEM-ACRF-SEFIS-VideoPreProcessing/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p><a href="https://noaa.gov">NOAA</a> <br> <a href="https//fisheries.noaa.gov">NOAA Fisheries</a> <br> <a href="https://www.fisheries.noaa.gov/contact/southeast-fisheries-science-center">Southeast Fisheries Science Center</a></p>
+<p>This page is built with <a href="https://quarto.org/">Quarto</a>. © CC-1.0</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
