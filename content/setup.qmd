@@ -58,7 +58,7 @@ Much of the following is carried out using command line. In the instructions bel
    git clone {{< meta website.repo-url >}} .
    ```
 
-   or, if you want the repo contents to be downloaded into a new subdirectory called `{{< meta repo-name >}}`, use: 
+   or, if you want the repo contents to be downloaded into a new subdirectory called `PEM-ACRF-SEFIS-VideoPreProcessing`, use: 
    
    ```bash
    git clone {{< meta website.repo-url >}}
