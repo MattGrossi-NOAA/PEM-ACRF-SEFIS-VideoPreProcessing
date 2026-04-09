@@ -6,10 +6,10 @@ page-layout: full
 
 ### About
 
-This is a Python utility used for merging GoPro videos collected during SEFIS video surveys. GoPro cameras are deployed and record continuously for about an hour at a time, but the video files are automatically split into 4GB chunks by GoPro video processing software, with each file containing approximately 15 minutes of footage. Current science protocol involves processing a 24-minute video segment from each deployment relative to the time the camera reaches the bottom:
+This is a Python utility used for merging GoPro videos collected during SEFIS video surveys. GoPro cameras are deployed and record continuously for about an hour at a time. These video files are automatically split into 4GB chunks by GoPro video processing software to prevent data loss, with each file containing approximately 15 minutes of footage. Current science protocol involves processing a 24-minute video segment from each deployment relative to the time the camera reaches the bottom:
 
-* Video folders are named using a "collection number" consisting of a combination of a project code, year, collection, and camera.
-* Each folder is a single deployment of a trap with a camera. Each folder contains a board file (a brief video prior to deployment showing metadata information) and a number of underwater video files.
+* Video folders are named using a "collection number" convention consisting of a combination of a project code, year, collection, and camera.
+* Each folder is a single deployment of a trap with a camera and contains a board file (a brief video prior to deployment showing metadata information) and a number of underwater video files.
 * A metadata CSV file contains a "time on bottom" timestamp for each unique identifying collection number indicating the elapsed time from when the video files start to when the trap lands on the bottom.
 * The objective is to extract a segment of video **starting exactly 8 minutes** after the trap lands on bottom and **ending 24 minute later**, or 32 minutes after the trap lands on bottom. This involves slicing some videos and stitching relevant segments together.
 * The new stitched video is named exactly like the folder containing the files (*i.e.*, the collection number).
