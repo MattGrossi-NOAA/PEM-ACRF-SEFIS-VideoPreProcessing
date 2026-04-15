@@ -41,10 +41,11 @@ from datetime import datetime
 import pandas as pd
 import shutil
 import yaml
-import os
-import sys
-import re
 import json
+import os
+import re
+import sys
+import time
 import argparse
 import subprocess
 from tqdm import tqdm
@@ -183,7 +184,7 @@ def get_gopro_sort_key(filename):
         return (int(rec_id), int(chapter))
     return (0, 0)
 
-def process_deployments(config_path):
+def process_deployments(config_path='configurations.yml'):
     # Strip quotes that Windows adds when dragging/dropping files
     config_path = config_path.strip('"')
     
@@ -207,7 +208,9 @@ def process_deployments(config_path):
     timeout = config['timeout_min'] * 60 if config['timeout_min'] else None
 
     # Video quality setting (18 is high quality, 23 is standard)
-    config['quality_crf'] = config.get('quality_crf', 18)
+    # Default is 10 which, based on trial and error, produces bit rate and file
+    # size most similar to those of the original GoPro files.
+    config['quality_crf'] = config.get('quality_crf', 10)
     
     # Minimum disk space required to run script (in GB). Script will warn if
     # available space is below this threshold.
@@ -248,6 +251,9 @@ def process_deployments(config_path):
 
     # 2. ITERATE THROUGH EACH VIDEO FOLDER
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Total Progress"):
+        # Start timer for this video
+        iter_start = time.perf_counter()
+
         folder_id = str(row[config['col_foldername']]).strip()
         time_bottom_str = str(row[config['col_timebottom']]).strip()
 
@@ -495,6 +501,13 @@ def process_deployments(config_path):
         if result.returncode != 0:
             with open(config['log_file'], "a") as log:
                 log.write(f"ERROR in {folder_id}: {result.stderr}\n")
+        
+        # Calculate and print elapsed time
+        iter_duration = time.perf_counter() - iter_start
+        if iter_duration > 60:
+            print(f"  > Created {f"{folder_id}{config['video_extension']}"} in {iter_duration/60:.2f} minutes.\n", flush=True)
+        else:
+            print(f"  > Created {f"{folder_id}{config['video_extension']}"} in {iter_duration:.2f} seconds.\n", flush=True)
     
     # Add space to end of log file for readability between runs
     with open(config['log_file'], "a") as log:
