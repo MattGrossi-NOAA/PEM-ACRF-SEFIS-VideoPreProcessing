@@ -205,11 +205,14 @@ def process_deployments(config_path='configurations.yml'):
     config['diagnostic_mode'] = config.get('diagnostic_mode', False)
     config['use_gpu'] = config.get('use_gpu', False)
     config['timeout_min'] = config.get('timeout_min', None)
-    timeout = config['timeout_min'] * 60 if config['timeout_min'] else None
+    
+    # Bug Fix: Ensure timeout multiplication only happens if value is not None
+    timeout = config['timeout_min'] * 60 if config.get('timeout_min') else None
 
     # Video quality setting (18 is high quality, 23 is standard)
     # Default is 10 which, based on trial and error, produces bit rate and file
-    # size most similar to those of the original GoPro files.
+    # size most similar to those of the original GoPro files when `use_gpu` is
+    # False.
     config['quality_crf'] = config.get('quality_crf', 10)
     
     # Minimum disk space required to run script (in GB). Script will warn if
@@ -399,23 +402,6 @@ def process_deployments(config_path='configurations.yml'):
 
             # Add a diagnostic timestamp overlay in the top-left corner of the
             # video with format HH:MM:SS:FF
-            #   - [outv]: input label telling the filter to take the video
-            #         coming out of the previous concat step and bring it into
-            #         this filter.
-            #   - drawtext: name of the filter to draw text on the video
-            #   - fontfile='{font_path}': points to the specific font .ttf file
-            #   - text='%...': construct the timer in HH:MM:SS:FF format using
-            #         ffmpeg's expression evaluation to calculate hours,
-            #         minutes, seconds, and frames from the current time (t) in
-            #         seconds
-            #   - x=10:y=10: coordinates for the text (10 pixels from the left
-            #         and 10 pixels from the top)
-            #   - fontsize=48:fontcolor=white: sets the text size and color
-            #   - box=1:boxcolor=black@0.5: draws a semi-transparent black rectangle
-            #         behind the white text to make it readable regardless of
-            #         the background.
-            #   - [diagout]: output label giving the new video a name so the
-            #         script can find it later for the final save
             drawtext_filter = (
                 f"[outv]drawtext=fontfile='{font_path}':"
                 r"text='%{eif\:t/3600\:d\:2}\:%{eif\:mod(t/60,60)\:d\:2}\:%{eif\:mod(t,60)\:d\:2}\:%{eif\:" + str(fps) + r"*mod(t,1)\:d\:2}':"
@@ -473,31 +459,51 @@ def process_deployments(config_path='configurations.yml'):
         #   -filter_complex: complex filter to trim and concatenate an
         #       arbitrary number of input files
         #   -map: select the output from the filter
-        #   -c:v: video codec (coder/decoder) to use for encoding
+        #   -c:v: video codec (coder/decoder) to use for encoding. Depends on
+        #         whether GPU acceleration is enabled.
+        #   -rc: use Variable Bit Rate mode for NVENC
         #   -crf: constant rate factor; quality setting for the encoder
+        #   -preset: encoding preset; higher quality presets take longer to
+        #         encode. Use "p7" for highest quality.
+        #   -cq: constant quantizer; quality setting for NVENC
         #   -an: exclude audio from new file
         #   -t: duration of the output video (1440 seconds = 24 minutes)
+        if config['use_gpu']:
+            encoder_args = [
+                "-c:v", "h264_nvenc",
+                "-rc", "vbr",       # Use Variable Bit Rate mode
+                "-cq", str(config['quality_crf']), # NVENC uses -cq, not -crf
+                "-preset", "p7",    # Highest quality preset for NVENC
+            ]
+        else:
+            encoder_args = [
+                "-c:v", "libx264",
+                "-crf", str(config['quality_crf']),
+                "-preset", "medium",
+            ]
+        
+        # Bug Fix: Removed audio mapping and codecs as they are not needed for no-audio version
         cmd = [
             ffmpeg_exe, "-y"
         ] + input_args + [
             "-filter_complex", filter_str,
             "-map", maparg,
-            "-c:v", encoder,
-            "-crf", str(config['quality_crf']),
-            "-an", 
+            "-an"
+        ] + encoder_args + [
             "-t", "1440",
             output_path
         ]
-        
+
         # Run the command and log any errors
         print(f"  > Clipping and stitching... This may take some time.\n", flush=True)
         try:
-            # Adding a timeout (e.g., 60 seconds) prevents infinite hangs
+            # Adding a timeout prevents infinite hangs
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
         except subprocess.TimeoutExpired:
-            print(f"\nERROR: ffprobe timed out on {file_path}. Is the network drive disconnected?")
-            # Return dummy data to avoid crashing the whole script
-            return str(datetime.today())
+            # Bug Fix: Corrected variable and changed return to continue
+            print(f"\nERROR: ffmpeg timed out on {folder_id}. Is the network drive disconnected?")
+            continue
+            
         if result.returncode != 0:
             with open(config['log_file'], "a") as log:
                 log.write(f"ERROR in {folder_id}: {result.stderr}\n")
