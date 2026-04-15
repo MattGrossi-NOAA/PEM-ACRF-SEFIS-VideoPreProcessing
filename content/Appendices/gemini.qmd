@@ -1086,7 +1086,7 @@ If your end user insists on no quality loss whatsoever, you should change the `q
 
 If the user truly wants "no loss," update your configurations.yml:
 
-```{.yaml file=configurations.yml}
+```{.yaml filename="configurations.yml"}
 quality_crf: 0
 use_gpu: false  # Note: NVIDIA's nvenc (GPU) often does not support true CRF 0; use libx264 for perfect losslessness.
 ```
