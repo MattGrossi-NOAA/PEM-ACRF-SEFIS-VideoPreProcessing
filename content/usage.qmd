@@ -69,3 +69,7 @@ Users comfortable with command line and Python can run the `process_videos.py` s
    ```{.bash filename="conda environment"}
    conda deactivate
    ```
+
+::: {.callout-tip title="Want audio?"}
+The script `clip_and_stitch.py` does not include audio in the stitched output video. To include audio in the new video, use `clip_and_stitch_waudio.py` instead. Everything else remains the same, including the configuration settings.
+:::
