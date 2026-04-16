@@ -152,6 +152,22 @@ def get_ffmpeg_command(config, tool="ffmpeg"):
     # 3. Last resort: assume it is in the system PATH
     return tool
 
+def time_ceiling(time_str: str) -> str:
+    """Round time stamp up to the nearest 30 seconds"""
+    # Strip frame from the string
+    time_split, _, frame = time_str.rpartition(':')
+
+    # Use pandas to round up the time to the nearest 30 seconds
+    new_time = pd.to_datetime(time_split, format="%H:%M:%S")
+    if int(frame) > 0:
+        new_time += pd.Timedelta(seconds=1)
+    new_time = new_time.ceil('30s')
+    
+    # Revert to str and append frame
+    new_time_str = new_time.strftime("%H:%M:%S") + ":00"
+    
+    return new_time_str
+
 def timestamp_to_seconds(ts_str, fps):
     """Converts HH:MM:SS:FF (frames) to total seconds (float)."""
     parts = ts_str.split(':')
@@ -202,13 +218,17 @@ def process_deployments(config_path='configurations.yml'):
     config['clear_log'] = config.get('clear_log', False)
     config['diagnostic_mode'] = config.get('diagnostic_mode', False)
     config['log_file'] = config.get('log_file', 'processing_log.txt')
-    config['video_extension'] = config.get('video_extension', '.MP4')
+    config['preread_time_min'] = config.get('preread_time_min', 8)
     config['reprocess'] = config.get('reprocess', False)
     config['timeout_min'] = config.get('timeout_min', None)
     config['use_gpu'] = config.get('use_gpu', False)
+    config['video_duration_min'] = config.get('video_duration_min', 24)
+    config['video_extension'] = config.get('video_extension', '.MP4')
     
     # Convert timeout to seconds
-    timeout = config['timeout_min'] * 60 if config.get('timeout_min') else None
+    timeout = int(config['timeout_min']) * 60 if config.get('timeout_min') else None
+    preread_time_sec = int(config['preread_time_min']) * 60
+    video_duration_sec = int(config['video_duration_min']) * 60
 
     # Video encoding quality. Lower values mean better quality:
     #   -> 18 is high quality, 23 is standard
@@ -246,8 +266,10 @@ def process_deployments(config_path='configurations.yml'):
         print("ERROR: CSV file appears to be empty.")
         return
 
-    # Clean CSV: Strip whitespace from headers and folder names
+    # Clean and append to CSV
     df.columns = df.columns.str.strip()
+    df[config['col_foldername']] = df[config['col_foldername']].str.strip()
+    df['timebottom_ceil'] = df[config['col_timebottom']].apply(time_ceiling)    
 
     # Check for duplicates in foldername
     if df[config['col_foldername']].duplicated().any():
@@ -260,7 +282,7 @@ def process_deployments(config_path='configurations.yml'):
         iter_start = time.perf_counter()
 
         folder_id = str(row[config['col_foldername']]).strip()
-        time_bottom_str = str(row[config['col_timebottom']]).strip()
+        time_bottom_ceil = str(row['timebottom_ceil']).strip()
 
         # Input and output directories
         folder_path = os.path.join(config['input_directory'], folder_id)
@@ -310,10 +332,12 @@ def process_deployments(config_path='configurations.yml'):
             file_data.append({'path': full_p, 'duration': dur, 'fps': fps})
 
         # 4. CALCULATE TIMELINE
-        # Start time is 8 minutes (480 seconds) from the time on the bottom,
-        # end time is 24 minutes (1440 seconds) after the start time
-        start_seconds = timestamp_to_seconds(time_bottom_str, fps) + 480
-        end_seconds = start_seconds + 1440
+        # Start time is `preread_time_min` minutes (default 8) from the time on
+        # the bottom rounded up to the nearest 30 seconds
+        # End time is `video_duration_min` minutes (default 24) after the start
+        # time
+        start_seconds = timestamp_to_seconds(time_bottom_ceil, fps) + preread_time_sec
+        end_seconds = start_seconds + video_duration_sec
         
         # Check the start times and durations of each video to determine which
         # files are needed to stitch together and where to clip partial videos
