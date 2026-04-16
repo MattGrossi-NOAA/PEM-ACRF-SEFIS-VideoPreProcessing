@@ -518,7 +518,7 @@ Note
 <li><p>We want to clip out a segment of video starting exactly 8 minutes after the trap lands on bottom and ending 32 minutes after the trap lands on bottom, for a 24-min video clip in total. This will involve stitching files together as well.</p></li>
 <li><p>This 24-min video clip should be named exactly like the folder containing the files (e.g., <code>T60250001_A</code>)</p></li>
 </ul>
-<p>Without doing or creating anything yet, please describe an efficient workflow for how I might accomplish this. Do not make any assumptions, but instead ask my any clarifying questions.</p>
+<p>Without doing or creating anything yet, please describe an efficient workflow for how I might accomplish this. Do not make any assumptions, but instead ask me any clarifying questions.</p>
 </section>
 <section id="coding-partner" class="level3">
 <h3 class="anchored" data-anchor-id="coding-partner">Coding partner</h3>
@@ -1053,7 +1053,11 @@ Note
 </section>
 <section id="prompt-11" class="level3 gray-background">
 <h3 class="anchored" data-anchor-id="prompt-11">Prompt</h3>
-<p>Please explain, in non-technical terms, the following arguments passed to <code>cmd</code> above: &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -map: select the output from the filter &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -c:v: video codec &nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -crf: quality setting for the encoder Do not merely copy/paste from the docs; I need to understand the docs so I know what this routine is doing.</p>
+<p>Please explain, in non-technical terms, the following arguments passed to <code>cmd</code> above:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -map: select the output from the filter<br>
+&nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -c:v: video codec<br>
+&nbsp; &nbsp; &nbsp; &nbsp; # &nbsp; &nbsp; -crf: quality setting for the encoder<br>
+Do not merely copy/paste from the docs; I need to understand the docs so I know what this routine is doing.</p>
 </section>
 <section id="coding-partner-11" class="level3">
 <h3 class="anchored" data-anchor-id="coding-partner-11">Coding partner</h3>
@@ -1141,11 +1145,11 @@ Note
 <section id="prompt-13" class="level3 gray-background">
 <h3 class="anchored" data-anchor-id="prompt-13">Prompt</h3>
 <p>Please explain the various components of this string:</p>
-<pre><code>drawtext_filter = (
-    f"[outv]drawtext=fontfile='{font_path}':"
-&nbsp; &nbsp; r"text='%{eif\:t/3600\:d\:2}\:%{eif\:mod(t/60,60)\:d\:2}\:%{eif\:mod(t,60)\:d\:2}\:%{eif\:" + str(fps) + r"*mod(t,1)\:d\:2}':"
-&nbsp; &nbsp; "x=10:y=10:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.5[diagout]"
-)</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>drawtext_filter <span class="op">=</span> (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"[outv]drawtext=fontfile='</span><span class="sc">{</span>font_path<span class="sc">}</span><span class="ss">':"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>&nbsp; &nbsp; <span class="vs">r"text='%{eif</span><span class="ch">\:</span><span class="vs">t/3600</span><span class="ch">\:</span><span class="vs">d</span><span class="ch">\:</span><span class="vs">2}</span><span class="ch">\:</span><span class="vs">%{eif</span><span class="ch">\:</span><span class="vs">mod</span><span class="kw">(</span><span class="vs">t/60,60</span><span class="kw">)</span><span class="ch">\:</span><span class="vs">d</span><span class="ch">\:</span><span class="vs">2}</span><span class="ch">\:</span><span class="vs">%{eif</span><span class="ch">\:</span><span class="vs">mod</span><span class="kw">(</span><span class="vs">t,60</span><span class="kw">)</span><span class="ch">\:</span><span class="vs">d</span><span class="ch">\:</span><span class="vs">2}</span><span class="ch">\:</span><span class="vs">%{eif</span><span class="ch">\:</span><span class="vs">"</span> <span class="op">+</span> <span class="bu">str</span>(fps) <span class="op">+</span> <span class="vs">r"</span><span class="op">*</span><span class="vs">mod</span><span class="kw">(</span><span class="vs">t,1</span><span class="kw">)</span><span class="ch">\:</span><span class="vs">d</span><span class="ch">\:</span><span class="vs">2}':"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>&nbsp; &nbsp; <span class="st">"x=10:y=10:fontsize=48:fontcolor=white:box=1:boxcolor=black@0.5[diagout]"</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="coding-partner-13" class="level3">
 <h3 class="anchored" data-anchor-id="coding-partner-13">Coding partner</h3>
@@ -1304,12 +1308,20 @@ Note
 <ol type="1">
 <li><strong>Metadata that influences Quality</strong></li>
 </ol>
-<p>Your <strong>get_video_metadata</strong> function already extracts key information that impacts how the video is reconstructed, but two specific fields are most relevant to quality: * <strong>Bitrate (<code>bit_rate</code>):</strong> This is found in <code>data['format']['bit_rate']</code>. It tells you the total data per second. If your output bitrate is lower than the source, data has been discarded. * <strong>Chroma Subsampling (<code>pix_fmt</code>):</strong> Most GoPros use <code>yuv420p</code>. To maintain quality, the encoder must match this format.</p>
+<p>Your <strong>get_video_metadata</strong> function already extracts key information that impacts how the video is reconstructed, but two specific fields are most relevant to quality:</p>
+<ul>
+<li><strong>Bitrate (<code>bit_rate</code>):</strong> This is found in <code>data['format']['bit_rate']</code>. It tells you the total data per second. If your output bitrate is lower than the source, data has been discarded.</li>
+<li><strong>Chroma Subsampling (<code>pix_fmt</code>):</strong> Most GoPros use <code>yuv420p</code>. To maintain quality, the encoder must match this format.</li>
+</ul>
 <ol start="2" type="1">
 <li><strong>The “True Lossless” Solution: CRF 0</strong></li>
 </ol>
-<p>If your end user insists on no quality loss whatsoever, you should change the <code>quality_crf</code> in your <code>configurations.yml</code> to 0. * <strong>CRF 18:</strong> Considered “visually lossless.” The human eye usually cannot tell the difference between this and the original. * <strong>CRF 0:</strong> This is <strong>mathematically lossless</strong> for the <code>libx264</code> encoder. It ensures that every pixel coming out of the GoPro file is preserved exactly in the stitched file.</p>
-<p><strong>Warning:</strong> Using <code>crf: 0</code> will result in file sizes that are likely larger than the original GoPro files. This is because the original files were compressed using the camera’s hardware constraints; a lossless re-encode must store all that data without any of the clever shortcuts the camera used.</p>
+<p>If your end user insists on no quality loss whatsoever, you should change the <code>quality_crf</code> in your <code>configurations.yml</code> to 0.</p>
+<ul>
+<li><p><strong>CRF 18:</strong> Considered “visually lossless.” The human eye usually cannot tell the difference between this and the original.</p></li>
+<li><p><strong>CRF 0:</strong> This is <strong>mathematically lossless</strong> for the <code>libx264</code> encoder. It ensures that every pixel coming out of the GoPro file is preserved exactly in the stitched file.</p>
+<p><strong>Warning:</strong> Using <code>crf: 0</code> will result in file sizes that are likely larger than the original GoPro files. This is because the original files were compressed using the camera’s hardware constraints; a lossless re-encode must store all that data without any of the clever shortcuts the camera used.</p></li>
+</ul>
 <ol start="3" type="1">
 <li><strong>Comparison of Quality Settings</strong></li>
 </ol>
