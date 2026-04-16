@@ -34,7 +34,7 @@ I need to clip and stitch together several videos. My preferred language is Pyth
 
 - This 24-min video clip should be named exactly like the folder containing the files (e.g., `T60250001_A`)
 
-Without doing or creating anything yet, please describe an efficient workflow for how I might accomplish this. Do not make any assumptions, but instead ask my any clarifying questions.
+Without doing or creating anything yet, please describe an efficient workflow for how I might accomplish this. Do not make any assumptions, but instead ask me any clarifying questions.
 
 :::
 
@@ -787,10 +787,10 @@ If you see a wall of text starting with `ffmpeg version...`, you are officially 
 
 ::: {.gray-background}
 ### Prompt
-Please explain, in non-technical terms, the following arguments passed to `cmd` above:
-        #     -map: select the output from the filter
-        #     -c:v: video codec
-        #     -crf: quality setting for the encoder
+Please explain, in non-technical terms, the following arguments passed to `cmd` above:  
+        #     -map: select the output from the filter  
+        #     -c:v: video codec  
+        #     -crf: quality setting for the encoder  
 Do not merely copy/paste from the docs; I need to understand the docs so I know what this routine is doing.
 :::
 
@@ -901,7 +901,7 @@ This is why your code now works: by explicitly labeling the "pipes," FFmpeg no l
 ### Prompt
 Please explain the various components of this string:
 
-```
+```python
 drawtext_filter = (
     f"[outv]drawtext=fontfile='{font_path}':"
     r"text='%{eif\:t/3600\:d\:2}\:%{eif\:mod(t/60,60)\:d\:2}\:%{eif\:mod(t,60)\:d\:2}\:%{eif\:" + str(fps) + r"*mod(t,1)\:d\:2}':"
@@ -1062,12 +1062,14 @@ To achieve **mathematically lossless** video where the quality is identical to t
 1. **Metadata that influences Quality**
 
 Your **get_video_metadata** function already extracts key information that impacts how the video is reconstructed, but two specific fields are most relevant to quality:
-*  **Bitrate (`bit_rate`):** This is found in `data['format']['bit_rate']`. It tells you the total data per second. If your output bitrate is lower than the source, data has been discarded.
-*  **Chroma Subsampling (`pix_fmt`):** Most GoPros use `yuv420p`. To maintain quality, the encoder must match this format.
+
+* **Bitrate (`bit_rate`):** This is found in `data['format']['bit_rate']`. It tells you the total data per second. If your output bitrate is lower than the source, data has been discarded.
+* **Chroma Subsampling (`pix_fmt`):** Most GoPros use `yuv420p`. To maintain quality, the encoder must match this format.
 
 2. **The "True Lossless" Solution: CRF 0**
 
 If your end user insists on no quality loss whatsoever, you should change the `quality_crf` in your `configurations.yml` to 0.
+
 * **CRF 18:** Considered "visually lossless." The human eye usually cannot tell the difference between this and the original.
 * **CRF 0:** This is **mathematically lossless** for the `libx264` encoder. It ensures that every pixel coming out of the GoPro file is preserved exactly in the stitched file.
 
