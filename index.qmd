@@ -111,25 +111,26 @@ It is best practice to avoid spaces and special characters other than underscore
 
 This project requires the following software and libraries:
 
-* [Python](https://www.python.org/downloads/) >= 3.14
-* `ffmpeg` and `ffprobe` >= 6.1
+* [**Python**](https://www.python.org/downloads/) >= 3.14
 
-<!-- Both `ffmpeg` and `ffprobe` utilities are included in the `ffmpeg` download available [here](https://ffmpeg.org/download.html). -->
+  Be sure to check the box to add Python to your system PATH during installation, or [add it manually](https://realpython.com/add-python-to-path/) yourself after installation. This will allow you to run Python from the command line and ensure that the utility can find the Python executable when running.
+
+* **`ffmpeg` and `ffprobe`** >= 6.1
+
+  The `ffmpeg` and `ffprobe` utilities are automatically downloaded when the [setup script is run](content/setup.qmd); otherwise, they are available [here](https://ffmpeg.org/download.html). Both utilities are included in the `ffmpeg` download. 
 
 #### Python Libraries
 
-* pandas >= 3.0.2
-* pyyaml >= 6.0.3
-* tqdm >= 4.67.3
-
-These can be installed from the accompanying `requirements.txt` file. See [Getting Started](content/setup.qmd) for installation and setup instructions.
+* **pandas** >= 3.0.2
+* **pyyaml** >= 6.0.3
+* **tqdm** >= 4.67.3
 
 #### Recommendations
 
-* [Git CLI](https://cli.github.com/) for repository cloning and version control via command line  
+* [**Git CLI**](https://cli.github.com/) for repository cloning and version control via command line  
   **or**  
-  [GitHub Desktop](https://desktop.github.com/) for repository cloning and version control via GUI
-* [Anaconda](https://www.anaconda.com/download) for virtual environment implementation
+  [**GitHub Desktop**](https://desktop.github.com/) for repository cloning and version control via GUI
+* [**Anaconda**](https://www.anaconda.com/download) for virtual environment implementation
 
 
 ### Release Notes
