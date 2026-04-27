@@ -626,7 +626,7 @@ Note
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><code>quality_crf</code></td>
-<td style="text-align: left;">(int or “auto”) Constant Rate Factor (CRF) for video encoding quality. Lower values mean better quality: 18 is high quality, 23 is standard. 10 with <code>use_gpu: false</code> or 11 with <code>use_gpu: true</code> produced bit rate and file size most similar to those of the original GoPro files during trial and error testing. Often machine (hardware) dependent. If set to “auto”, the input video bit rate will be used to dynamically calculate a target bitrate for the output video. Defaults to “auto”.</td>
+<td style="text-align: left;">(int or “auto”) Constant Rate Factor (CRF) for video encoding quality. Lower values mean better quality: 18 is high quality, 23 is standard. 10 with <code>use_gpu: false</code> or 11 with <code>use_gpu: true</code> produced bit rate and file size most similar to those of the original GoPro files during trial and error testing. Often machine (hardware) dependent. If <code>quality_crf: "auto"</code>, the input video bit rate will be used to dynamically calculate a target bitrate for the output video. Defaults to “auto”.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><code>video_duration_minutes</code></td>
