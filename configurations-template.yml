@@ -1,3 +1,11 @@
+# =============================================================================
+#
+# SEE THE DOCS FOR A FULL LIST OF POSSIBLE CONFIGURATION OPTIONS WITH
+# DESCRIPTIONS, DEFAULT VALUES, AND HOW TO SET AND USE EACH ONE:
+# https://sefsc.github.io/PEM-ACRF-SEFIS-VideoPreProcessing/
+#
+# =============================================================================
+
 # ----- PATH SETTINGS -----
 # Use forward slashes (/) or double backslashes (\\) for Windows paths
 
