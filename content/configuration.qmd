@@ -28,7 +28,6 @@ col_timebottom: "timebottom"
 clear_log: false
 diagnostic_mode: false
 reprocess: false
-quality_crf: 10
 use_gpu: false
 
 # ----- VIDEO PROCESSING UTILITIES (OPTIONAL) -----
