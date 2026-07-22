@@ -25,8 +25,8 @@ set "CONFIG_FILE=%~1"
 
 :: Always prompt the user via Windows File Explorer if no file was passed directly
 if "%CONFIG_FILE%"=="" (
-    echo [->] Opening Windows File Explorer...
-    echo [->] Please select the target YAML configuration file for this run.
+    echo [-^>] Opening Windows File Explorer...
+    echo [-^>] Please select the target YAML configuration file for this run.
     echo.
     
     :: Inline call to Windows Forms to launch a native File Explorer dialog
@@ -53,7 +53,7 @@ if not exist "%CONFIG_FILE%" (
 )
 
 echo [+] Selected Config File: %CONFIG_FILE%
-echo [->] Extracting target parameters from file...
+echo [-^>] Extracting target parameters from file...
 
 :: Parse 'gcp_bucket_path' from the selected YAML file
 for /f "tokens=1,* delims=:" %%A in ('findstr /i /c:"gcp_bucket_path:" "%CONFIG_FILE%"') do (
@@ -150,16 +150,16 @@ echo.
 :: LOCAL DIRECTORY VALIDATION
 :: ============================================================================
 if not exist "%LOCAL_SOURCE%" (
-    echo [->] Local output folder "%LOCAL_SOURCE%" not found.
-    echo [->] Creating local directory structure automatically...
+    echo [-^>] Local output folder "%LOCAL_SOURCE%" not found.
+    echo [-^>] Creating local directory structure automatically...
     mkdir "%LOCAL_SOURCE%"
     echo [+] Directory created successfully.
     echo.
 )
 
 if not exist "%LOG_DIR%" (
-    echo [->] Log folder "%LOG_DIR%" not found.
-    echo [->] Creating log directory structure automatically...
+    echo [-^>] Log folder "%LOG_DIR%" not found.
+    echo [-^>] Creating log directory structure automatically...
     mkdir "%LOG_DIR%"
     echo [+] Log directory created successfully.
     echo.
@@ -178,7 +178,7 @@ set "WIN_TAR=C:\Windows\System32\tar.exe"
 :: ============================================================================
 :: RCLONE INSTALL, IF NEEDED
 :: ============================================================================
-echo [->] Scanning system for existing rclone installations...
+echo [-^>] Scanning system for existing rclone installations...
 
 if exist "%RCLONE_EXE%" (
     echo [+] Standardized user-level rclone installation detected.
@@ -198,7 +198,7 @@ if not exist "%SHARED_RCLONE_DIR%" mkdir "%SHARED_RCLONE_DIR%"
 set "TEMP_ZIP=%TEMP%\rclone_download.zip"
 set "TEMP_EXTRACT=%TEMP%\rclone_extract"
 
-echo [->] Fetching clean production binary via native Win32 curl...
+echo [-^>] Fetching clean production binary via native Win32 curl...
 %WIN_CURL% -L "https://downloads.rclone.org/rclone-current-windows-amd64.zip" -o "%TEMP_ZIP%"
 if !errorlevel! neq 0 (
     echo [!] FATAL ERROR: Network download via system curl failed. 
@@ -206,7 +206,7 @@ if !errorlevel! neq 0 (
     exit /b 1
 )
 
-echo [->] Unpacking application assets via native Win32 tar...
+echo [-^>] Unpacking application assets via native Win32 tar...
 if exist "%TEMP_EXTRACT%" rmdir /s /q "%TEMP_EXTRACT%"
 mkdir "%TEMP_EXTRACT%"
 
@@ -217,7 +217,7 @@ if !errorlevel! neq 0 (
     exit /b 1
 )
 
-echo [->] Deploying engine to centralized user directory...
+echo [-^>] Deploying engine to centralized user directory...
 for /r "%TEMP_EXTRACT%" %%F in (rclone.exe) do (
     if exist "%%F" move /y "%%F" "%SHARED_RCLONE_DIR%\" >nul
 )
@@ -231,7 +231,7 @@ if not exist "%RCLONE_EXE%" (
     exit /b 1
 )
 
-echo [->] Registering rclone path into active session environment...
+echo [-^>] Registering rclone path into active session environment...
 set "PATH=%SHARED_RCLONE_DIR%;%PATH%"
 echo [+] Centralized rclone engine successfully deployed.
 
@@ -243,7 +243,7 @@ if not exist "%RCLONE_CONFIG_DIR%" mkdir "%RCLONE_CONFIG_DIR%"
 
 :: Initialize or update rclone.conf with explicit GCS parameters
 if not exist "%RCLONE_CONFIG_FILE%" (
-    echo [->] Initializing base rclone config file...
+    echo [-^>] Initializing base rclone config file...
     (
     echo [gcp_remote]
     echo type = google cloud storage
@@ -269,7 +269,7 @@ if exist "%RCLONE_CONFIG_FILE%" (
 )
 
 :: WRITE TEST: Create a temporary local file and attempt to write it to GCS
-echo [->] Performing instant pre-flight WRITE access test on GCS bucket...
+echo [-^>] Performing preliminary WRITE access test on GCS bucket...
 set "WRITE_TEST_LOCAL=%TEMP%\.rclone_write_test.tmp"
 echo gcp_write_test > "%WRITE_TEST_LOCAL%"
 
@@ -289,14 +289,14 @@ echo ==========================================================================
 echo  ACTION REQUIRED: Google Cloud Storage authorization needed
 echo ==========================================================================
 echo [!] Read permissions succeeded, but rclone was unable to WRITE files.
-echo [->] Re-authenticating browser OAuth connection with Google Cloud...
+echo [-^>] Re-authenticating browser OAuth connection with Google Cloud...
 echo.
 
 :: Launch interactive reconnect to request full write permissions
 call rclone config reconnect gcp_remote:
 
 :: Re-verify WRITE access
-echo [->] Re-testing bucket WRITE access...
+echo [-^>] Re-testing bucket WRITE access...
 echo gcp_write_test > "%WRITE_TEST_LOCAL%"
 rclone copyto "%WRITE_TEST_LOCAL%" "gcp_remote:%GCP_BUCKET_PATH%/.rclone_write_test.tmp" --gcs-bucket-policy-only
 if %errorlevel% neq 0 (
@@ -342,7 +342,6 @@ rclone copy "%LOCAL_SOURCE%" "gcp_remote:%GCP_BUCKET_PATH%" ^
     --gcs-bucket-policy-only ^
     --log-file "%LOG_FILE%" ^
     --log-level INFO ^
-    -v ^
     -P ^
     -M ^
     --fast-list ^
@@ -350,15 +349,32 @@ rclone copy "%LOCAL_SOURCE%" "gcp_remote:%GCP_BUCKET_PATH%" ^
     --ignore-existing ^
     --bwlimit "Mon-00:00,!OFF_HRS_BW! Mon-07:00,!WORKDAY_BW! Mon-17:00,!OFF_HRS_BW! Tue-00:00,!OFF_HRS_BW! Tue-07:00,!WORKDAY_BW! Tue-17:00,!OFF_HRS_BW! Wed-00:00,!OFF_HRS_BW! Wed-07:00,!WORKDAY_BW! Wed-17:00,!OFF_HRS_BW! Thu-00:00,!OFF_HRS_BW! Thu-07:00,!WORKDAY_BW! Thu-17:00,!OFF_HRS_BW! Fri-00:00,!OFF_HRS_BW! Fri-07:00,!WORKDAY_BW! Fri-17:00,!OFF_HRS_BW! Sat-00:00,!OFF_HRS_BW! Sat-07:00,!WORKDAY_BW! Sat-17:00,!OFF_HRS_BW! Sun-00:00,!OFF_HRS_BW! Sun-07:00,!WORKDAY_BW! Sun-17:00,!OFF_HRS_BW!"
 
-:: Write session footer marker to log file
-echo. >> "%LOG_FILE%"
-echo ARCHIVE SESSION COMPLETED: %DATE% %TIME% >> "%LOG_FILE%"
-echo ----------------------------------------------------------------------- >> "%LOG_FILE%"
+:: Capture exit code immediately after rclone completes
+set "TRANSFER_STATUS=%ERRORLEVEL%"
 
-echo.
-echo --------------------------------------------------------------------------
-echo [+] Upload complete. Terminal window safe to close.
-echo [+] Execution log saved to: "%LOG_FILE%"
-echo ==========================================================================
+if !TRANSFER_STATUS! equ 0 (
+    :: Log success marker
+    echo. >> "%LOG_FILE%"
+    echo ARCHIVE SESSION COMPLETED SUCCESSFULLY: %DATE% %TIME% >> "%LOG_FILE%"
+    echo ----------------------------------------------------------------------- >> "%LOG_FILE%"
+
+    echo.
+    echo --------------------------------------------------------------------------
+    echo [+] Upload complete. Terminal window safe to close.
+    echo [+] Execution log saved to: "%LOG_FILE%"
+    echo ==========================================================================
+) else (
+    :: Log failure marker
+    echo. >> "%LOG_FILE%"
+    echo ARCHIVE SESSION FAILED (Exit Code: !TRANSFER_STATUS!): %DATE% %TIME% >> "%LOG_FILE%"
+    echo ----------------------------------------------------------------------- >> "%LOG_FILE%"
+
+    echo.
+    echo --------------------------------------------------------------------------
+    echo [!] FATAL ERROR: Upload transaction failed with error code !TRANSFER_STATUS!.
+    echo [!] Please inspect the log file for details: "%LOG_FILE%"
+    echo ==========================================================================
+)
+
 echo.
 pause
