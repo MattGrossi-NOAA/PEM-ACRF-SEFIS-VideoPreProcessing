@@ -11,6 +11,7 @@ __pycache__/
 _videos/
 ffmpeg/
 *log*.txt
+*.log
 *.yml
 !configurations-template.yml
 
