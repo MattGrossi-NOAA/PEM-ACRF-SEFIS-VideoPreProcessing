@@ -16,5 +16,6 @@ README_files/
 
 **/*.quarto_ipynb
 
-*log*.txt
+*log*.
+*.log
 ffmpeg/
