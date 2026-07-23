@@ -21,7 +21,7 @@ col_foldername: "foldername"
 col_timebottom: "timebottom"
 
 # Path to log file where processing details and errors will be recorded
-log_file: "N:\\VIDEO_DATA\\2025_SEFIS_STITCHING_CLIPPING\\processing_log.txt"
+log_file: "N:\\VIDEO_DATA\\2025_SEFIS_STITCHING_CLIPPING\\processing.log"
 
 # ----- PROCESSING SETTINGS -----
 # These settings control how the videos are processed. Adjust as needed.
