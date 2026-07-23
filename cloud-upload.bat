@@ -123,7 +123,7 @@ if defined YAML_LOG_PATH (
 )
 
 :: Define final rclone log destination inside the target processing folder
-set "LOG_FILE=%LOG_DIR%rclone_upload_archive.log"
+set "LOG_FILE=%LOG_DIR%cloud_upload_rclone.log"
 
 :: Verify required parameters were found inside the chosen YAML
 if "%GCP_BUCKET_PATH%"=="" (
