@@ -27,7 +27,7 @@ echo Processing: "%config_file%"
 echo -----------------------------------------------------------
 
 :: Execute using the hidden .venv folder
-.venv\Scripts\python clip-and-stitch.py "%config_file%"
+.venv\Scripts\python py-scripts\clip-and-stitch.py "%config_file%"
 
 echo.
 echo -----------------------------------------------------------
