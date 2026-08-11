@@ -123,7 +123,7 @@ def clean_and_validate_config(config: dict):
     }
     
     unrecognized = []
-    for key in config.keys():
+    for key in config:
         if key not in VALID_KEYS:
             matches = difflib.get_close_matches(key, list(VALID_KEYS), n=1, cutoff=0.6)
             suggestion = f" (Did you mean '{matches[0]}'?)" if matches else ""
@@ -152,9 +152,8 @@ def clean_and_validate_config(config: dict):
                 config[key] = False
     
     # Ensure video extension always starts with a leading dot
-    if 'video_extension' in config and isinstance(config['video_extension'], str):
-        if not config['video_extension'].startswith('.'):
-            config['video_extension'] = '.' + config['video_extension']
+    if 'video_extension' in config and isinstance(config['video_extension'], str) and not config['video_extension'].startswith('.'):
+        config['video_extension'] = '.' + config['video_extension']
     
     # Ensure GCP bucket ends with a "/" to be treated as a prefix
     if config.get('gcp_upload', False) and 'gcp_bucket_path' in config:
@@ -415,8 +414,8 @@ def seconds_to_timestamp(seconds: float | int, fps: float | int) -> str:
     total_frames = int(seconds * fps + 1e-6)
     
     # Calculate components from total frames
-    f = total_frames % int(round(fps))
-    total_seconds = total_frames // int(round(fps))
+    f = total_frames % round(fps)
+    total_seconds = total_frames // round(fps)
     
     s = total_seconds % 60
     total_minutes = total_seconds // 60
@@ -719,7 +718,7 @@ def process_single_deployment(row: dict, config: dict, ffmpeg_exe: str, ffprobe_
         # Calculate discrete frames for this segment by removing the nudge from
         # the count
         actual_t = segment['t'] - (nudge * time_scaling if i == 0 else 0)
-        segment_frames = int(round(actual_t * segment['fps']))
+        segment_frames = round(actual_t * segment['fps'])
         
         # Hard-cap to prevent padding 'leakage' into the table report
         if (cumulative_output_frames + segment_frames) > target_total_frames:
@@ -921,26 +920,32 @@ def process_deployments(config_path: str = 'configurations.yml', process=True):
     process_start = time.perf_counter()
     
     # SETTINGS THAT CAN ALSO BE SET IN THE YAML CONFIG FILE
+    # Define and merge default settings into configuration file
+    # (If a key exists in both dictionaries, the value from the second dictionary,
+    # `config`, replaces the value from the first dictionary, the default value.)
     config = load_config(config_path.strip('"'))
-    config['clear_log'] = config.get('clear_log', False)
-    config['delete_local_after_upload'] = config.get('delete_local_after_upload', False)
-    config['diagnostic_mode'] = config.get('diagnostic_mode', False)
-    config['gcp_upload'] = config.get('gcp_upload', False)
-    config['log_file'] = config.get('log_file', 'processing_log.txt')
-    config['include_audio'] = config.get('include_audio', False)
-    config['max_retries'] = config.get('max_retries', 2)
-    config['min_gb_required'] = config.get('min_gb_required', 10)
-    config['num_workers'] = config.get('num_workers', 1)
-    config['output_fps'] = config.get('output_fps', 'auto')
-    config['time_buffer_minutes'] = config.get('time_buffer_minutes', -2)
-    config['quality_crf'] = config.get('quality_crf', 'auto')
-    config['reprocess'] = config.get('reprocess', False)
-    config['skip_partial_videos'] = config.get('skip_partial_videos', True)
-    config['start_time_fps'] = config.get('start_time_fps', 30)
-    config['timeout_minutes'] = config.get('timeout_minutes', 60)
-    config['use_gpu'] = config.get('use_gpu', False)
-    config['video_duration_minutes'] = config.get('video_duration_minutes', 24)
-    config['video_extension'] = config.get('video_extension', '.MP4')
+    CONFIG_DEFAULTS = {
+        'clear_log': False,
+        'delete_local_after_upload': False,
+        'diagnostic_mode': False,
+        'gcp_upload': False,
+        'include_audio': False,
+        'log_file': 'processing_log.txt',
+        'max_retries': 2,
+        'min_gb_required': 10,
+        'num_workers': 1,
+        'output_fps': 'auto',
+        'quality_crf': 'auto',
+        'reprocess': False,
+        'skip_partial_videos': True,
+        'start_time_fps': 30,
+        'time_buffer_minutes': -2,
+        'timeout_minutes': 60,
+        'use_gpu': False,
+        'video_duration_minutes': 24,
+        'video_extension': '.MP4'
+    }
+    config = CONFIG_DEFAULTS | config
     
     ffmpeg_exe = get_ffmpeg_command(config=config, tool="ffmpeg")
     ffprobe_exe = get_ffmpeg_command(config=config, tool="ffprobe")
