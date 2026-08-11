@@ -14,7 +14,7 @@ if exist ".venv\Scripts\python.exe" (
 :: We always run this because it quickly verifies that requirements are satisfied.
 echo [INFO] Verifying Python requirements...
 .venv\Scripts\python -m pip install --upgrade pip >nul
-.venv\Scripts\pip install pandas PyYAML tqdm >nul
+.venv\Scripts\pip install -r requirements.txt >nul
 echo [INFO] Python libraries are ready.
 
 :: 3. CHECK FOR FFMPEG
