@@ -58,7 +58,7 @@ echo.
 echo Press any key to open the download page and exit...
 pause >nul
 start https://www.python.org/downloads/
-exit /b
+exit /b 1
 
 :VersionOK
 echo [INFO] Python detected.
@@ -94,7 +94,7 @@ IF NOT EXIST ".venv\" (
         echo.
         echo Please check your internet connection and try running this script again.
         pause
-        exit /b
+        exit /b 1
     )
 ) ELSE (
     echo [INFO] Environment found. Activating...
@@ -102,7 +102,6 @@ IF NOT EXIST ".venv\" (
 )
 
 :: ENSURE LIBRARIES ARE INSTALLED
-:: We always run this because it quickly verifies that requirements are satisfied.
 echo [INFO] Verifying Python requirements...
 .venv\Scripts\python -m pip install --upgrade pip >nul
 .venv\Scripts\pip install -r requirements.txt >nul
@@ -111,32 +110,71 @@ echo [INFO] Verifying Python requirements...
 echo [INFO] Verifying FFmpeg installation...
 if exist "ffmpeg\bin\ffmpeg.exe" (
     echo [SKIP] FFmpeg installation found.
-) else (
-    echo [INFO] FFmpeg not found. Downloading portable version...
-    
-    :: Use curl to download
-    curl -L -o ffmpeg.zip https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
-    
-    echo [INFO] Extracting FFmpeg...
-    tar -xf ffmpeg.zip
-    
-    :: Find any folder that contains a 'bin' subfolder and move it to 'ffmpeg'
-    for /r %%d in (bin) do (
-        if exist "%%d\ffmpeg.exe" (
-            set "found_path=%%~dpd"
-            :: Remove the trailing backslash
-            setlocal enabledelayedexpansion
-            set "found_path=!found_path:~0,-1!"
-            move "!found_path!" ffmpeg
-            endlocal
-            goto :cleanup
-        )
-    )
-
-    :cleanup
-    echo [INFO] Cleaning up download...
-    del ffmpeg.zip
+    goto :FFmpegReady
 )
+
+echo [INFO] FFmpeg not found. Downloading portable version...
+curl -L -o ffmpeg.zip https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip
+
+echo [INFO] Extracting FFmpeg...
+tar -xf ffmpeg.zip
+
+:: Find any folder that contains a 'bin' subfolder and move it to 'ffmpeg'
+for /r %%d in (bin) do (
+    if exist "%%d\ffmpeg.exe" (
+        set "found_path=%%~dpd"
+        setlocal enabledelayedexpansion
+        set "found_path=!found_path:~0,-1!"
+        move "!found_path!" ffmpeg
+        endlocal
+    )
+)
+
+if exist ffmpeg.zip del ffmpeg.zip >nul 2>&1
+
+:FFmpegReady
+
+:: CHECK FOR GCLOUD CLI
+echo [INFO] Verifying Google Cloud SDK installation...
+
+if exist "%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin" set "PATH=%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+if exist "%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin" set "PATH=%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+if exist "%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin" set "PATH=%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+if exist "%CD%\google-cloud-sdk\bin" set "PATH=%CD%\google-cloud-sdk\bin;%PATH%"
+
+call gcloud --version >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo [SKIP] Google Cloud SDK CLI found.
+    goto :GCloudReady
+)
+
+echo [INFO] gcloud CLI not found. Downloading standalone Google Cloud SDK...
+curl -L -o gcloud-cli.zip https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-windows-x86_64.zip
+
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Failed to download Google Cloud CLI. Please check your internet connection.
+    pause
+    exit /b 1
+)
+
+echo [INFO] Extracting Google Cloud SDK...
+tar -xf gcloud-cli.zip
+if exist gcloud-cli.zip del gcloud-cli.zip >nul 2>&1
+
+if exist "google-cloud-sdk\install.bat" (
+    echo [INFO] Initializing Google Cloud SDK setup...
+    call google-cloud-sdk\install.bat --quiet --usage-reporting=false --path-update=true --command-completion=true >nul 2>&1
+    set "PATH=%CD%\google-cloud-sdk\bin;%PATH%"
+)
+
+call gcloud --version >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo [INFO] Google Cloud SDK installed successfully.
+) else (
+    echo [WARNING] Google Cloud SDK downloaded, but could not be verified automatically.
+)
+
+:GCloudReady
 
 echo [INFO] Setup verification complete!
 echo.
@@ -147,7 +185,6 @@ echo SEFIS Video Utility
 echo -----------------------------------------------------------
 
 :: 1. Show the instruction Message Box first
-:: [void] suppresses the numeric return value of the button click
 powershell -noprofile -command "Add-Type -AssemblyName System.Windows.Forms; [void][System.Windows.Forms.MessageBox]::Show('Click OK to select the configuration YAML file to use.', 'SEFIS Video Utility', 'OK', 'Information')"
 
 echo Attempting to open file explorer...
@@ -159,7 +196,7 @@ for /f "usebackq delims=" %%I in (`powershell -noprofile -command "Add-Type -Ass
 if "%config_file%"=="" (
     echo ERROR: No configuration file provided. 
     pause
-    exit /b
+    exit /b 1
 )
 
 echo.
