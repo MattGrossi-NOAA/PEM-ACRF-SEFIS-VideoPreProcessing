@@ -4,8 +4,13 @@
 #' input (source) directory and the Google Cloud Project (GCP) storage bucket
 #' using the same configuration YAML file as the original script.
 #'
-#' Author:  Southeast Fishery Independent Survey (SEFIS)
-#' Version: 2026.1.1
+#' Author:  matt.grossi at noaa.gov with creation and refactoring assistance from
+#'          Google Gemini Coding Partner
+#' Project: Southeast Fishery Independent Survey (SEFIS)
+#' Version: 2026.2.0
+#' Note:    Gemini Coding Partner was used to assist with developing this code.
+#'          The code has been reviewed, edited, validated, and documented by NOAA
+#'          Fisheries staff. 
 
 # Ensure the required yaml package is available
 if (!requireNamespace("yaml", quietly = TRUE)) {
@@ -83,6 +88,8 @@ extract_gcp_prefix <- function(bucket_path) {
 
 get_cloud_manifest <- function(bucket_path, extension = NULL) {
   #' Queries GCP bucket using gcloud CLI and returns data in a named list.
+  #' Automatically prompts for 'gcloud auth login' if authentication tokens 
+  #' have expired or require refreshing.
   clean_path <- gsub("[/*]+$", "", bucket_path)
   gcloud_target_path <- paste0(clean_path, "/*")
   
@@ -90,8 +97,8 @@ get_cloud_manifest <- function(bucket_path, extension = NULL) {
   
   gcloud_exec <- Sys.which("gcloud")
   if (gcloud_exec == "") {
-    cat("\nERROR: 'gcloud' command not found. Is Google Cloud SDK installed and in your PATH?\n")
-    return(FALSE)
+    cat("\n❌ ERROR: 'gcloud' command not found. Is Google Cloud SDK installed and in your PATH?\n")
+    stop(status = 1)
   }
   
   cmd_args <- c(
@@ -100,9 +107,42 @@ get_cloud_manifest <- function(bucket_path, extension = NULL) {
     "--format=csv[no-heading](name,size)"
   )
   
+  # Run gcloud command
   result <- system2(gcloud_exec, args = cmd_args, stdout = TRUE, stderr = TRUE)
-  
   status <- attr(result, "status")
+  
+  # Check for authentication or token refresh failures
+  if (!is.null(status) && status != 0) {
+    stderr_text <- tolower(paste(result, collapse = "\n"))
+    auth_triggers <- c(
+      "reauthentication failed", 
+      "gcloud auth login", 
+      "refreshing your current auth tokens",
+      "invalid_grant"
+    )
+    
+    if (any(sapply(auth_triggers, function(trig) grepl(trig, stderr_text, fixed = TRUE)))) {
+      cat("\n==========================================================================\n")
+      cat("  ACTION REQUIRED: Google Cloud Re-authentication Needed\n")
+      cat("==========================================================================\n")
+      cat("[!] GCP credentials expired or require re-authentication.\n")
+      cat("[->] Launching interactive 'gcloud auth login'...\n\n")
+      
+      # Execute interactive login (without stdout/stderr capture so standard terminal handles prompts)
+      auth_status <- system2(gcloud_exec, args = c("auth", "login"))
+      
+      if (is.null(auth_status) || auth_status == 0) {
+        cat("\n[+] Re-authentication successful! Retrying cloud bucket inventory check...\n\n")
+        result <- system2(gcloud_exec, args = cmd_args, stdout = TRUE, stderr = TRUE)
+        status <- attr(result, "status")
+      } else {
+        cat("\n❌ ERROR: Google Cloud authentication failed or was canceled.\n")
+        stop(status = 1)
+      }
+    }
+  }
+  
+  # If execution failed after re-auth attempt or failed for a non-auth reason
   if (!is.null(status) && status != 0) {
     cat(sprintf("\n❌ ERROR running gcloud command:\n%s\n", paste(result, collapse = "\n")))
     stop(status = 1)
