@@ -138,6 +138,58 @@ if exist "ffmpeg\bin\ffmpeg.exe" (
     del ffmpeg.zip
 )
 
+:: CHECK FOR GCLOUD CLI
+echo [INFO] Verifying Google Cloud SDK (gcloud) installation...
+
+:: Add standard installation paths to active session PATH if they exist
+if exist "%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin" (
+    set "PATH=%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+)
+if exist "%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin" (
+    set "PATH=%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+)
+if exist "%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin" (
+    set "PATH=%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%"
+)
+if exist "%CD%\google-cloud-sdk\bin" (
+    set "PATH=%CD%\google-cloud-sdk\bin;%PATH%"
+)
+
+:: Test if gcloud is accessible
+gcloud --version >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo [SKIP] Google Cloud SDK ^(gcloud^) found.
+) else (
+    echo [INFO] gcloud CLI not found. Downloading standalone Google Cloud SDK...
+    
+    :: Download Google Cloud CLI standalone archive
+    curl -L -o gcloud-cli.zip https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-windows-x86_64.zip
+    
+    if %ERRORLEVEL% NEQ 0 (
+        echo [ERROR] Failed to download Google Cloud CLI. Please check your internet connection.
+        pause
+        exit /b 1
+    )
+    
+    echo [INFO] Extracting Google Cloud SDK...
+    tar -xf gcloud-cli.zip
+    del gcloud-cli.zip >nul 2>&1
+    
+    if exist "google-cloud-sdk\install.bat" (
+        echo [INFO] Initializing Google Cloud SDK setup...
+        call google-cloud-sdk\install.bat --quiet --usage-reporting=false --path-update=true --command-completion=true >nul 2>&1
+        set "PATH=%CD%\google-cloud-sdk\bin;%PATH%"
+    )
+    
+    :: Verify installation success
+    gcloud --version >nul 2>&1
+    if %ERRORLEVEL% EQU 0 (
+        echo [INFO] Google Cloud SDK installed successfully.
+    ) else (
+        echo [WARNING] Google Cloud SDK downloaded, but could not be verified automatically.
+    )
+)
+
 echo [INFO] Setup verification complete!
 echo.
 
