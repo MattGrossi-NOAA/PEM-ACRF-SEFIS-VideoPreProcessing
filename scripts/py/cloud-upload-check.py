@@ -11,7 +11,7 @@ Usage:
 Author:  matt.grossi at noaa.gov with creation and refactoring assistance from
          Google Gemini Coding Partner
 Project: Southeast Fishery Independent Survey (SEFIS)
-Version: 2026.2.0
+Version: 2026.3.0
 Note:    Gemini Coding Partner was used to assist with developing this code.
          The code has been reviewed, edited, validated, and documented by NOAA
          Fisheries staff.
@@ -89,6 +89,37 @@ def extract_gcp_prefix(bucket_path):
     prefix = posixpath.dirname(clean_path)
     return f"{prefix.rstrip('/')}/" if prefix else ""
 
+def find_gcloud_executable():
+    """Locates the 'gcloud' executable via system PATH or standard install paths.
+    
+    Returns
+    -------
+    str or None: Absolute path to gcloud executable if found, otherwise None.
+    """
+    # 1. First check if gcloud is already available in the active session PATH
+    gcloud_exec = shutil.which("gcloud")
+    if gcloud_exec:
+        return gcloud_exec
+
+    # 2. Define standard fallback installation directories on Windows/Linux/macOS
+    exec_name = "gcloud.cmd" if sys.platform.startswith("win") else "gcloud"
+    possible_dirs = [
+        os.path.join(os.getcwd(), "google-cloud-sdk", "bin"),
+        os.path.expandvars(r"%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin"),
+        os.path.expandvars(r"%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin"),
+        os.path.expandvars(r"%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin"),
+    ]
+
+    # 3. Search fallback directories
+    for folder in possible_dirs:
+        candidate = os.path.join(folder, exec_name)
+        if os.path.exists(candidate):
+            # Prepend directory to active session PATH for sub-processes
+            os.environ["PATH"] = folder + os.pathsep + os.environ.get("PATH", "")
+            return candidate
+
+    return None
+
 def get_cloud_manifest(bucket_path, extension=None):
     """Queries GCP bucket and returns data in a dictionary.
     
@@ -107,7 +138,7 @@ def get_cloud_manifest(bucket_path, extension=None):
     bucket_path = f"{bucket_path.rstrip('/*')}/*"
     print(f"Fetching cloud bucket inventory from {bucket_path}...")
     
-    gcloud_exec = shutil.which("gcloud")
+    gcloud_exec = find_gcloud_executable()
     if not gcloud_exec:
         print("\n❌ ERROR: 'gcloud' command not found. Is Google Cloud SDK installed and in your PATH?")
         sys.exit(1)
