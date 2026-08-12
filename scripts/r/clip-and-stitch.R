@@ -10,7 +10,7 @@
 # 1. Environment Configuration
 # Fix: Path updated to match the hidden '.venv' folder created by setup.bat
 python_path <- file.path(".venv", "Scripts", "python.exe")
-script_path <- "clip-and-stitch.py"
+script_path <- "../py/clip-and-stitch.py"
 
 # 2. Sanity Checks
 if (!file.exists(python_path)) {
@@ -18,7 +18,7 @@ if (!file.exists(python_path)) {
 }
 
 if (!file.exists(script_path)) {
-  stop("Main script 'clip-and-stitch.py' not found in the current directory.")
+  stop("Main script 'clip-and-stitch.py' not found in the expected directory.")
 }
 
 # 3. User Interaction

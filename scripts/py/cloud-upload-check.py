@@ -11,7 +11,7 @@ Usage:
 Author:  matt.grossi at noaa.gov with creation and refactoring assistance from
          Google Gemini Coding Partner
 Project: Southeast Fishery Independent Survey (SEFIS)
-Version: 2026.1.0
+Version: 2026.3.0
 Note:    Gemini Coding Partner was used to assist with developing this code.
          The code has been reviewed, edited, validated, and documented by NOAA
          Fisheries staff.
@@ -84,21 +84,47 @@ def extract_gcp_prefix(bucket_path):
     -------
     Returns the file prefix only
     """
-    # Parse the gs:// URI safely (separates bucket from path) and remove
-    # leading slash
-    # urlparse("gs://my-bucket/folder/*.MP4").path -> "/folder/*.MP4"
     parsed_path = urlparse(bucket_path).path
     clean_path = parsed_path.lstrip('/')
-    
-    # Isolate just the directory tree structure, ignoring trailing wildcards or
-    # filenames
     prefix = posixpath.dirname(clean_path)
-
-    # Return with a trailing slash, or empty string if it's the bucket root
     return f"{prefix.rstrip('/')}/" if prefix else ""
+
+def find_gcloud_executable():
+    """Locates the 'gcloud' executable via system PATH or standard install paths.
+    
+    Returns
+    -------
+    str or None: Absolute path to gcloud executable if found, otherwise None.
+    """
+    # 1. First check if gcloud is already available in the active session PATH
+    gcloud_exec = shutil.which("gcloud")
+    if gcloud_exec:
+        return gcloud_exec
+
+    # 2. Define standard fallback installation directories on Windows/Linux/macOS
+    exec_name = "gcloud.cmd" if sys.platform.startswith("win") else "gcloud"
+    possible_dirs = [
+        os.path.join(os.getcwd(), "google-cloud-sdk", "bin"),
+        os.path.expandvars(r"%LOCALAPPDATA%\Google\Cloud SDK\google-cloud-sdk\bin"),
+        os.path.expandvars(r"%ProgramFiles%\Google\Cloud SDK\google-cloud-sdk\bin"),
+        os.path.expandvars(r"%ProgramFiles(x86)%\Google\Cloud SDK\google-cloud-sdk\bin"),
+    ]
+
+    # 3. Search fallback directories
+    for folder in possible_dirs:
+        candidate = os.path.join(folder, exec_name)
+        if os.path.exists(candidate):
+            # Prepend directory to active session PATH for sub-processes
+            os.environ["PATH"] = folder + os.pathsep + os.environ.get("PATH", "")
+            return candidate
+
+    return None
 
 def get_cloud_manifest(bucket_path, extension=None):
     """Queries GCP bucket and returns data in a dictionary.
+    
+    Automatically prompts for 'gcloud auth login' if authentication tokens 
+    have expired or require refreshing.
     
     Arguments
     ---------
@@ -108,41 +134,64 @@ def get_cloud_manifest(bucket_path, extension=None):
     Returns
     -------
     dict of file names and sizes 
-    
     """
     bucket_path = f"{bucket_path.rstrip('/*')}/*"
     print(f"Fetching cloud bucket inventory from {bucket_path}...")
-    # Use gcloud CLI to retrieve names and sizes of all objects in the bucket
-    # Use shutil.which to find the actual path of gcloud (handles .cmd on Windows)
-    gcloud_exec = shutil.which("gcloud")
     
+    gcloud_exec = find_gcloud_executable()
     if not gcloud_exec:
-        print("\nERROR: 'gcloud' command not found. Is Google Cloud SDK installed and in your PATH?")
-        return False
+        print("\n❌ ERROR: 'gcloud' command not found. Is Google Cloud SDK installed and in your PATH?")
+        sys.exit(1)
+
     cmd = [
         gcloud_exec, "storage", "objects", "list", 
         bucket_path, 
         '--format=csv[no-heading](name, size)'
     ]
     
-    # Run gcloud and capture stdout directly into memory
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"\n❌ ERROR running gcloud command: {e.stderr}")
-        sys.exit(1)
-    except FileNotFoundError:
-        print("\n❌ ERROR: 'gcloud' CLI tool not found. Make sure it's installed and in your PATH.")
+    # Execute gcloud command
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    # Check for authentication or token refresh failures
+    if result.returncode != 0:
+        stderr_text = result.stderr or ""
+        auth_triggers = [
+            "reauthentication failed", 
+            "gcloud auth login", 
+            "refreshing your current auth tokens",
+            "invalid_grant"
+        ]
+        
+        if any(trigger in stderr_text.lower() for trigger in auth_triggers):
+            print("\n==========================================================================")
+            print("  ACTION REQUIRED: Google Cloud Re-authentication Needed")
+            print("==========================================================================")
+            print("[!] GCP credentials expired or require re-authentication.")
+            print("[->] Launching interactive 'gcloud auth login'...\n")
+            
+            # Run gcloud auth login interactively (allows browser prompt)
+            auth_cmd = [gcloud_exec, "auth", "login"]
+            auth_result = subprocess.run(auth_cmd)
+            
+            if auth_result.returncode == 0:
+                print("\n[+] Re-authentication successful! Retrying cloud bucket inventory check...\n")
+                result = subprocess.run(cmd, capture_output=True, text=True)
+            else:
+                print("\n❌ ERROR: Google Cloud authentication failed or was canceled.")
+                sys.exit(1)
+
+    # If execution failed after re-auth attempt or failed for a non-auth reason
+    if result.returncode != 0:
+        print(f"\n❌ ERROR running gcloud command: {result.stderr}")
         sys.exit(1)
 
-    # Parse the text string using Python's csv reader and store as dict
+    # Parse output string into dictionary
     cloud_data = {}
     ext_lower = f".{extension.lstrip('.').lower()}" if extension else None
     reader = csv.reader(result.stdout.strip().splitlines())
     for row in reader:
         if row:
             path, size = row[0].strip(), row[1].strip()
-        
             if not ext_lower or path.lower().endswith(ext_lower):
                 cloud_data[path] = int(size)
             
@@ -171,7 +220,6 @@ def get_local_manifest(local_path, prefix, extension=None):
         if os.path.isfile(full_path) and (not ext_lower or file.lower().endswith(ext_lower)):
             try:
                 size = os.path.getsize(full_path)
-                # Format to match the cloud path structure
                 gcp_style_path = f"{prefix}{file}".replace("//", "/")
                 local_data[gcp_style_path] = size
             except Exception as e:
@@ -194,11 +242,9 @@ def compare_inventories(local, cloud, extension):
 
     print("\nAnalyzing discrepancies...")
     
-    # Check for missing files in either location
     missing_in_cloud = [p for p in local if p not in cloud]
     missing_in_local = [p for p in cloud if p not in local]
 
-    # Check for size mismatches
     size_mismatches = []
     for p, local_size in local.items():
         if p in cloud and cloud[p] != local_size:
@@ -237,11 +283,9 @@ def compare_inventories(local, cloud, extension):
                 print(f"  ... and {len(size_mismatches)-10} more.")
 
 if __name__ == "__main__":
-    # Load configuration file
     args = parse_args()
     config = load_config(args.config_path)
 
-    # Fetch cloud and local inventory
     cloud_inventory = get_cloud_manifest(
         bucket_path=config['gcp_bucket_path'],
         extension=config['video_extension']
@@ -253,7 +297,6 @@ if __name__ == "__main__":
         extension=config['video_extension']
         )
     
-    # Compare and Print
     compare_inventories(
         local=local_inventory,
         cloud=cloud_inventory,
