@@ -992,11 +992,11 @@ def process_deployments(config_path: str = 'configurations.yml', process=True):
         if not failed_uploads:
             upload_duration = time.perf_counter() - upload_timer
             if upload_duration > (60 * 60):
-                upload_msg = f"  > Uploaded {len(upload_queue)} videos in {upload_duration/60/60:.2f} hours.\n"
+                upload_msg = f"  Uploaded {len(upload_queue)} videos in {upload_duration/60/60:.2f} hours.\n"
             elif upload_duration > 60:
-                upload_msg = f"  > Uploaded {len(upload_queue)} videos in {upload_duration/60:.2f} minutes.\n"
+                upload_msg = f"  Uploaded {len(upload_queue)} videos in {upload_duration/60:.2f} minutes.\n"
             else:
-                upload_msg = f"  > Uploaded {len(upload_queue)} videos in {upload_duration:.2f} seconds.\n"
+                upload_msg = f"  Uploaded {len(upload_queue)} videos in {upload_duration:.2f} seconds.\n"
             log_and_print(upload_msg, config['log_file'])
             pbar_up.close()
             
