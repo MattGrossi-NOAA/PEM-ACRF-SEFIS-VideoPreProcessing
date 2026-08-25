@@ -176,6 +176,48 @@ if %ERRORLEVEL% EQU 0 (
 
 :GCloudReady
 
+:: CHECK FOR RCLONE CLI
+echo [INFO] Verifying rclone installation...
+
+if exist "%LOCALAPPDATA%\Programs\rclone\rclone.exe" set "PATH=%LOCALAPPDATA%\Programs\rclone;%PATH%"
+if exist "%ProgramFiles%\rclone\rclone.exe" set "PATH=%ProgramFiles%\rclone;%PATH%"
+if exist "%CD%\rclone\rclone.exe" set "PATH=%CD%\rclone;%PATH%"
+
+rclone --version >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo [SKIP] rclone CLI found.
+    goto :RCloneReady
+)
+
+echo [INFO] rclone CLI not found. Downloading standalone rclone...
+curl -L -o rclone-cli.zip https://downloads.rclone.org/rclone-current-windows-amd64.zip
+
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Failed to download rclone. Please check your internet connection.
+    pause
+    exit /b 1
+)
+
+echo [INFO] Extracting rclone...
+if not exist "rclone" mkdir "rclone"
+tar -xf rclone-cli.zip -C rclone
+if exist rclone-cli.zip del rclone-cli.zip >nul 2>&1
+
+:: Extract binary from nested subfolder to top-level rclone directory
+for /r "rclone" %%F in (rclone.exe) do (
+    if exist "%%F" move /y "%%F" "rclone\" >nul 2>&1
+)
+set "PATH=%CD%\rclone;%PATH%"
+
+rclone --version >nul 2>&1
+if %ERRORLEVEL% EQU 0 (
+    echo [INFO] rclone installed successfully.
+) else (
+    echo [WARNING] rclone downloaded, but could not be verified automatically.
+)
+
+:RCloneReady
+
 echo [INFO] Setup verification complete!
 echo.
 
